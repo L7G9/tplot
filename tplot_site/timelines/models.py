@@ -37,7 +37,7 @@ class Timeline(models.Model):
     # date_created = models.
     # date_updated = models.
     title = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000)
+    description = models.CharField(max_length=1000, blank=True)
 
     # scale
     scale_length = models.PositiveSmallIntegerField(
@@ -54,8 +54,8 @@ class Timeline(models.Model):
     )
     page_scale_position = models.PositiveSmallIntegerField(default=0)
 
-    def__str__(self):
-        return f"{self.title}"
+    def __str__(self):
+        return self.title
 
 
 class TimelineArea(models.Model):
@@ -63,25 +63,30 @@ class TimelineArea(models.Model):
     name = models.CharField(max_length=100)
     weight = models.PositiveSmallIntegerField(default=1)
 
-    def__str__(self):
-        return f"{self.name}"
+    def __str__(self):
+        return self.name
 
 
 class Tag(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
     name = models.CharField(max_length=20)
 
-    def__str__(self):
-        return f"{self.name}"
+    def __str__(self):
+        return self.name
 
 
 class Event(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000)
-    tags = models.ManyToManyField(Tag)
-    timeline_area = models.ForeignKey(TimelineArea, null=True, on_delete=models.SET_NULL)
+    description = models.CharField(max_length=1000, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
+    timeline_area = models.ForeignKey(
+        TimelineArea,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL
+    )
     has_end = models.BooleanField(default=False)
 
-    def__str__(self):
-        return f"{self.title}"
+    def __str__(self):
+        return self.title
