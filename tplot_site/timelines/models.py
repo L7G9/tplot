@@ -54,16 +54,25 @@ class Timeline(models.Model):
     )
     page_scale_position = models.PositiveSmallIntegerField(default=0)
 
+    def__str__(self):
+        return f"{self.title}"
+
 
 class TimelineArea(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     weight = models.PositiveSmallIntegerField(default=1)
 
+    def__str__(self):
+        return f"{self.name}"
+
 
 class Tag(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
     name = models.CharField(max_length=20)
+
+    def__str__(self):
+        return f"{self.name}"
 
 
 class Event(models.Model):
@@ -73,3 +82,6 @@ class Event(models.Model):
     tags = models.ManyToManyField(Tag)
     timeline_area = models.ForeignKey(TimelineArea, null=True, on_delete=models.SET_NULL)
     has_end = models.BooleanField(default=False)
+
+    def__str__(self):
+        return f"{self.title}"
