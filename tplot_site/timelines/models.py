@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class Timeline(models.model):
+class Timeline(models.Model):
 
     PAGE_SIZES = [
         ("3", "A3"),
@@ -55,21 +55,21 @@ class Timeline(models.model):
     page_scale_position = models.PositiveSmallIntegerField(default=0)
 
 
-class TimelineArea(models.model):
+class TimelineArea(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     weight = models.PositiveSmallIntegerField(default=1)
 
 
-class Tag(models.model):
+class Tag(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
     name = models.CharField(max_length=20)
 
 
-class Event(models.model):
+class Event(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000)
     tags = models.ManyToManyField(Tag)
-    timeline_area = models.ForeignKey(TimelineArea)
+    timeline_area = models.ForeignKey(TimelineArea, null=True, on_delete=models.SET_NULL)
     has_end = models.BooleanField(default=False)
