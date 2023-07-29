@@ -14,6 +14,9 @@ class AgeTimeline(timelines.Timeline):
     ]
     scale_unit = models.PositiveSmallIntegerField(choices=SCALE_UNITS, default=3)
 
+    def __str__(self):
+        return self.title
+
 
 class AgeEvent(timelines.Event):
     age_timeline = models.ForeignKey(AgeTimeline, on_delete=models.CASCADE)
@@ -21,3 +24,23 @@ class AgeEvent(timelines.Event):
     start_month = models.SmallIntegerField(default=0)
     end_year = models.SmallIntegerField(default=0)
     end_month = models.SmallIntegerField(default=0)
+
+    def age_description(self, years, months):
+        if months == 0:
+            return f"{years} Years"
+        elif years == 0:
+            return f"{months} Months"
+        else:
+            return f"{years} Years {months} Months"
+
+    def start_description(self):
+        return f"{self.age_description(self.start_year, self.start_month)}"
+
+    def start_end_description(self):
+        return f"{self.age_description(self.start_year, self.start_month)} to {self.age_description(self.end_year, self.end_month)}"
+
+    def __str__(self):
+        if self.has_end:
+            return f"{self.start_end_description()} : {self.title}"
+        else:
+            return f"{self.start_description()} : {self.title}"
