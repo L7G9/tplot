@@ -1,0 +1,22 @@
+{% extends "timelines/base.html" %}
+
+{% block title %}TPlot - Your Timelines{% endblock %}
+
+{% block content %}
+    <h1>Your Timelines</h1>
+    <h2>Age Timelines</h2>
+    <ul>
+    {% for age_timeline in age_timeline_list %}
+        <li><a href="{% url 'age_timelines:age_timeline_edit' age_timeline.id %}">{{ age_timeline.title }} : {{ age_timeline.description }}</a></li>
+    {% endfor %}
+    </ul>
+
+    <h2>Date and Time Timelines</h2>
+
+
+    <h2>Historical Timelines</h2>
+
+
+    <h2>Scientific Timelines</h2>
+
+{% endblock %}
