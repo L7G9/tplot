@@ -1,0 +1,11 @@
+{% extends "timelines/timeline_edit.html" %}
+
+{% block title %}TPlot - Edit Age Timeline{% endblock %}
+
+{% block timeline_type %}Age Timeline{% endblock %}
+
+{% block events %}
+{% for age_event in age_timeline.ageevent_set.all %}
+    <li><a href="">{{ age_event }}</a></li>
+{% endfor %}
+{% endblock %}
