@@ -12,7 +12,10 @@ class AgeTimeline(timelines.Timeline):
         (50, "50 Years"),
         (100, "100 Years"),
     ]
-    scale_unit = models.PositiveSmallIntegerField(choices=SCALE_UNITS, default=3)
+    scale_unit = models.PositiveSmallIntegerField(
+        choices=SCALE_UNITS,
+        default=10
+    )
 
     def __str__(self):
         return self.title
@@ -37,7 +40,9 @@ class AgeEvent(timelines.Event):
         return f"{self.age_description(self.start_year, self.start_month)}"
 
     def start_end_description(self):
-        return f"{self.age_description(self.start_year, self.start_month)} to {self.age_description(self.end_year, self.end_month)}"
+        start = self.age_description(self.start_year, self.start_month)
+        end = self.age_description(self.end_year, self.end_month)
+        return f"{start} to {end}"
 
     def __str__(self):
         if self.has_end:
