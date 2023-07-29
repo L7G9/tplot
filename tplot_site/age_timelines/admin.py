@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import AgeTimeline, AgeEvent
+
+
+admin.site.register(AgeTimeline)
+admin.site.register(AgeEvent)
