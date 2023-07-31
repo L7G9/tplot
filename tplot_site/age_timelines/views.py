@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-from .models import AgeTimeline
+from .models import AgeEvent, AgeTimeline
 
 
 def age_timeline_edit(request, age_timeline_id):
@@ -17,13 +17,13 @@ def age_timeline_edit(request, age_timeline_id):
 
 
 AGE_TIMELINE_FIELD_ORDER = [
-        'title',
-        'description',
-        'scale_unit',
-        'scale_length',
-        'page_size',
-        'page_orientation',
-        'page_scale_position',
+    'title',
+    'description',
+    'scale_unit',
+    'scale_length',
+    'page_size',
+    'page_orientation',
+    'page_scale_position',
 ]
 
 
@@ -49,3 +49,36 @@ class AgeTimelineUpdateView(UpdateView):
 class AgeTimelineDeleteView(DeleteView):
     model = AgeTimeline
     success_url = reverse_lazy("timelines:user-timelines")
+
+
+AGE_EVENT_FIELD_ORDER = [
+    'title',
+    'description',
+    'start_year',
+    'start_month',
+    'has_end',
+    'end_year',
+    'end_month',
+    'tags',
+    'timeline_area',
+]
+
+
+class AgeEventCreateView(CreateView):
+    model = AgeEvent
+    fields = AGE_EVENT_FIELD_ORDER
+
+
+class AgeEventUpdateView(UpdateView):
+    model = AgeEvent
+    fields = AGE_EVENT_FIELD_ORDER
+
+
+class AgeEventDeleteView(DeleteView):
+    model = AgeEvent
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "age_timelines:age-timeline-detail",
+            kwargs={"pk": self.object.age_timeline.id}
+        )

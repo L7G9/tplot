@@ -54,3 +54,6 @@ class AgeEvent(timelines.Event):
             return f"{self.start_end_description()} : {self.title}"
         else:
             return f"{self.start_description()} : {self.title}"
+
+    def get_absolute_url(self):
+        return reverse("age_timelines:age-event-detail", kwargs={"pk": self.pk})

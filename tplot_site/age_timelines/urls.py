@@ -12,5 +12,11 @@ urlpatterns = [
     # ex: 1/update/
     path("<int:pk>/update/", views.AgeTimelineUpdateView.as_view(), name="age-timeline-update"),
     # ex: 1/delete/
-    path("<int:pk>/delete/", views.AgeTimelineDeleteView.as_view(), name="age-timeline-delete")
+    path("<int:pk>/delete/", views.AgeTimelineDeleteView.as_view(), name="age-timeline-delete"),
+    # ex: event/add/
+    path("event/add/", views.AgeEventCreateView.as_view(), name="age-event-add"),
+    # ex: event/1/update/
+    path("event/<int:pk>/update/", views.AgeEventUpdateView.as_view(), name="age-event-update"),
+    # ex: event/delete/
+    path("event/<int:pk>/delete/", views.AgeEventDeleteView.as_view(), name="age-event-delete"),
 ]
