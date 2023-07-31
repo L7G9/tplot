@@ -61,6 +61,7 @@ class Timeline(models.Model):
 class TimelineArea(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
+    # page_position = models.PositiveSmallIntegerField(default=0)
     weight = models.PositiveSmallIntegerField(default=1)
 
     def __str__(self):

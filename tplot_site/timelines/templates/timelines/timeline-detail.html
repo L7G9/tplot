@@ -1,0 +1,30 @@
+{% extends "timelines/base.html" %}
+
+{% block title %}TPlot - Timeline Detail{% endblock %}
+
+{% block content %}
+    <h2>{% block timeline_type %}Timeline{% endblock %}: {{ object.title }}</h2>
+    <p>{{ object.description }}</p>
+
+    <h3>Events</h3>
+    {% block events %}
+    {% endblock %}
+
+    <h3>Tags</h3>
+    {% for tag in object.tag_set.all %}
+        <li><a href="">{{ tag }}</a></li>
+    {% endfor %}
+
+    <h3>Scale</h3>
+    <p>{{ object.get_scale_unit_display }} per {{ object.get_scale_length_display }}</p>
+
+    <h3>Page Setup</h3>
+    <p>Size: {{ object.get_page_size_display }}</p>
+    <p>Orientation: {{ object.get_page_orientation_display }}</p>
+    <p>Scale Position: {{ object.page_scale_position }}</p>
+    <h4>Areas</h4>
+    {% for area in object.timelinearea_set.all %}
+        <li><a href="">{{ area }}</a></li>
+    {% endfor %}
+
+{% endblock %}
