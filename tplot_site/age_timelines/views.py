@@ -1,12 +1,9 @@
-from django.forms.models import BaseModelForm
-from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-from timelines.models import Event, Timeline
 from .models import AgeEvent, AgeTimeline
 
 
@@ -79,16 +76,28 @@ class AgeEventCreateView(CreateView):
 
         return super().form_valid(form)
 
+    def get_success_url(self) -> str:
+        return reverse_lazy(
+            "age_timelines:age-timeline-detail",
+            kwargs={"pk": self.object.age_timeline.id}
+        )
+
 
 class AgeEventUpdateView(UpdateView):
     model = AgeEvent
     fields = AGE_EVENT_FIELD_ORDER
 
+    def get_success_url(self) -> str:
+        return reverse_lazy(
+            "age_timelines:age-timeline-detail",
+            kwargs={"pk": self.object.age_timeline.id}
+        )
+
 
 class AgeEventDeleteView(DeleteView):
     model = AgeEvent
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse_lazy(
             "age_timelines:age-timeline-detail",
             kwargs={"pk": self.object.age_timeline.id}
