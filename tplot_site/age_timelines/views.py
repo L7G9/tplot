@@ -1,5 +1,6 @@
-from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -36,9 +37,13 @@ class AgeTimelineDetailView(DetailView):
         return context
 
 
-class AgeTimelineCreateView(CreateView):
+class AgeTimelineCreateView(LoginRequiredMixin, CreateView):
     model = AgeTimeline
     fields = AGE_TIMELINE_FIELD_ORDER
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class AgeTimelineUpdateView(UpdateView):
