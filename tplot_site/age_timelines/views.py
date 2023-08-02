@@ -1,9 +1,12 @@
+from django.forms.models import BaseModelForm
+from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
+from timelines.models import Event, Timeline
 from .models import AgeEvent, AgeTimeline
 
 
@@ -67,6 +70,14 @@ AGE_EVENT_FIELD_ORDER = [
 class AgeEventCreateView(CreateView):
     model = AgeEvent
     fields = AGE_EVENT_FIELD_ORDER
+
+    def form_valid(self, form):
+        form.instance.age_timeline = AgeTimeline.objects.get(
+            pk=self.kwargs['age_timeline_id']
+        )
+        form.instance.timeline_id = form.instance.age_timeline.timeline_ptr.pk
+
+        return super().form_valid(form)
 
 
 class AgeEventUpdateView(UpdateView):

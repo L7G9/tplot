@@ -13,8 +13,8 @@ urlpatterns = [
     path("<int:pk>/update/", views.AgeTimelineUpdateView.as_view(), name="age-timeline-update"),
     # ex: 1/delete/
     path("<int:pk>/delete/", views.AgeTimelineDeleteView.as_view(), name="age-timeline-delete"),
-    # ex: event/add/
-    path("event/add/", views.AgeEventCreateView.as_view(), name="age-event-add"),
+    # ex: 1/event/add/
+    path("<int:age_timeline_id>/event/add/", views.AgeEventCreateView.as_view(), name="age-event-add"),
     # ex: event/1/update/
     path("event/<int:pk>/update/", views.AgeEventUpdateView.as_view(), name="age-event-update"),
     # ex: event/delete/
