@@ -4,6 +4,15 @@
 
 {% block timeline_type %}Age Timeline{% endblock %}
 
+{% block sidebar %}
+<ul>
+    <li><a href="{% url 'timelines:user-timelines' %}">User Home</a></li>
+    <li><a href="{% url 'age_timelines:age-timeline-update' object.id %}">Update Timeline</a></li>
+    <li><a href="{% url 'age_timelines:age-event-add' age_timeline_id=object.id %}">New Age Event</a></li>
+    <li><a href="{% url 'age_timelines:age-timeline-delete' object.id %}">Delete Timeline</a></li>
+</ul>
+{% endblock %}
+
 {% block events %}
 {% for age_event in object.ageevent_set.all %}
     <li><a href="{% url 'age_timelines:age-event-update' age_event.id %}">{{ age_event }}</a></li>

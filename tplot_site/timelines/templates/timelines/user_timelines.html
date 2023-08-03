@@ -1,6 +1,12 @@
 {% extends "timelines/base.html" %}
 
 {% block title %}TPlot - Your Timelines{% endblock %}
+{% block sidebar %}
+<ul>
+    <li><a href="{% url 'age_timelines:age-timeline-add' %}">New Age Timeline</a></li>
+    <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+</ul>
+{% endblock %}
 
 {% block content %}
     <h1>Your Timelines</h1>
