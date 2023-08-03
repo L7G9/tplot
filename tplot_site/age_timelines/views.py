@@ -1,20 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponseForbidden
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
+from timelines.mixins import OwnerRequiredMixin
+
 from .models import AgeEvent, AgeTimeline
-
-
-def age_timeline_edit(request, age_timeline_id):
-    age_timeline = get_object_or_404(AgeTimeline, pk=age_timeline_id)
-    return render(
-        request,
-        "age_timelines/age_timeline_edit.html",
-        {"timeline": age_timeline, "age_timeline": age_timeline}
-    )
 
 
 AGE_TIMELINE_FIELD_ORDER = [
@@ -28,7 +21,7 @@ AGE_TIMELINE_FIELD_ORDER = [
 ]
 
 
-class AgeTimelineDetailView(DetailView):
+class AgeTimelineDetailView(OwnerRequiredMixin, DetailView):
     model = AgeTimeline
 
     def get_context_data(self, **kwargs):
@@ -46,12 +39,12 @@ class AgeTimelineCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class AgeTimelineUpdateView(UpdateView):
+class AgeTimelineUpdateView(OwnerRequiredMixin, UpdateView):
     model = AgeTimeline
     fields = AGE_TIMELINE_FIELD_ORDER
 
 
-class AgeTimelineDeleteView(DeleteView):
+class AgeTimelineDeleteView(OwnerRequiredMixin, DeleteView):
     model = AgeTimeline
     success_url = reverse_lazy("timelines:user-timelines")
 
@@ -69,7 +62,7 @@ AGE_EVENT_FIELD_ORDER = [
 ]
 
 
-class AgeEventCreateView(CreateView):
+class AgeEventCreateView(LoginRequiredMixin, CreateView):
     model = AgeEvent
     fields = AGE_EVENT_FIELD_ORDER
 
@@ -81,6 +74,14 @@ class AgeEventCreateView(CreateView):
 
         return super().form_valid(form)
 
+    def dispatch(self, request, *args, **kwargs):
+        age_timeline = AgeTimeline.objects.get(
+            pk=kwargs['age_timeline_id']
+        )
+        if age_timeline.get_owner() != self.request.user:
+            return HttpResponseForbidden()
+        return super().dispatch(request, *args, **kwargs)
+
     def get_success_url(self) -> str:
         return reverse_lazy(
             "age_timelines:age-timeline-detail",
@@ -88,7 +89,7 @@ class AgeEventCreateView(CreateView):
         )
 
 
-class AgeEventUpdateView(UpdateView):
+class AgeEventUpdateView(OwnerRequiredMixin, UpdateView):
     model = AgeEvent
     fields = AGE_EVENT_FIELD_ORDER
 
@@ -99,7 +100,7 @@ class AgeEventUpdateView(UpdateView):
         )
 
 
-class AgeEventDeleteView(DeleteView):
+class AgeEventDeleteView(OwnerRequiredMixin, DeleteView):
     model = AgeEvent
 
     def get_success_url(self) -> str:
