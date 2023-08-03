@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -33,9 +34,7 @@ class Timeline(models.Model):
     ]
 
     # basic
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # date_created = models.
-    # date_updated = models.
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000, blank=True)
 
@@ -57,15 +56,21 @@ class Timeline(models.Model):
     def __str__(self):
         return self.title
 
+    def get_owner(self):
+        return self.user
+
 
 class TimelineArea(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    # page_position = models.PositiveSmallIntegerField(default=0)
+    page_position = models.PositiveSmallIntegerField(default=0)
     weight = models.PositiveSmallIntegerField(default=1)
 
     def __str__(self):
         return self.name
+
+    def get_owner(self):
+        return self.timeline.user
 
 
 class Tag(models.Model):
@@ -74,6 +79,9 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_owner(self):
+        return self.timeline.user
 
 
 class Event(models.Model):
@@ -91,3 +99,6 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_owner(self):
+        return self.timeline.user
