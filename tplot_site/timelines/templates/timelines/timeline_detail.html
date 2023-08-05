@@ -11,9 +11,11 @@
     {% endblock %}
 
     <h3>Tags</h3>
+    {% block tag_list %}
     {% for tag in object.tag_set.all %}
         <li><a href="">{{ tag }}</a></li>
     {% endfor %}
+    {% endblock %}
 
     <h3>Scale</h3>
     <p>{{ object.get_scale_unit_display }} per {{ object.get_scale_length_display }}</p>
@@ -23,8 +25,10 @@
     <p>Orientation: {{ object.get_page_orientation_display }}</p>
     <p>Scale Position: {{ object.page_scale_position }}</p>
     <h4>Areas</h4>
+    {% block area_list %}
     {% for area in object.timelinearea_set.all %}
         <li><a href="">{{ area }}</a></li>
     {% endfor %}
+    {% endblock %}
 
 {% endblock %}

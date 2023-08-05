@@ -1,9 +1,9 @@
 {% extends 'timelines/base.html' %}
 
 {% block content %}
-    <h2>Edit Age Event</h2>
+    <h2>{% block heading %}Form Heading{% endblock %}</h2>
     <form method="POST" class="post-form">{% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" value="Update">Update</button>
+        <button type="submit" value="Update">{% block button_name %}Submit{% endblock %}</button>
     </form>
 {% endblock %}

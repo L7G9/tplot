@@ -1,0 +1,8 @@
+{% extends "timelines/area_add_form.html"  %}
+
+{% block sidebar %}
+<ul>
+    <li><a href="{% url 'timelines:user-timelines' %}">User Home</a></li>
+    <li><a href="{% url 'age_timelines:age-timeline-detail' view.kwargs.age_timeline_id %}">Timeline</a></li>
+</ul>
+{% endblock %}

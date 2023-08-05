@@ -7,6 +7,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from timelines.mixins import OwnerRequiredMixin
 
+from timelines.models import Tag, TimelineArea
 from .models import AgeEvent, AgeTimeline
 
 
@@ -23,6 +24,7 @@ AGE_TIMELINE_FIELD_ORDER = [
 
 class AgeTimelineDetailView(OwnerRequiredMixin, DetailView):
     model = AgeTimeline
+    template_name = "age_timelines/age_timeline_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -33,6 +35,7 @@ class AgeTimelineDetailView(OwnerRequiredMixin, DetailView):
 class AgeTimelineCreateView(LoginRequiredMixin, CreateView):
     model = AgeTimeline
     fields = AGE_TIMELINE_FIELD_ORDER
+    template_name = "age_timelines/age_timeline_add_form.html"
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -42,11 +45,45 @@ class AgeTimelineCreateView(LoginRequiredMixin, CreateView):
 class AgeTimelineUpdateView(OwnerRequiredMixin, UpdateView):
     model = AgeTimeline
     fields = AGE_TIMELINE_FIELD_ORDER
+    template_name = "age_timelines/age_timeline_edit_form.html"
 
 
 class AgeTimelineDeleteView(OwnerRequiredMixin, DeleteView):
     model = AgeTimeline
+    template_name = "age_timelines/age_timeline_confirm_delete.html"
     success_url = reverse_lazy("timelines:user-timelines")
+
+
+# check age timeline found with age_timeline_id is owned by logged in user
+class AgeTimelineOwnerMixim(object):
+    def dispatch(self, request, *args, **kwargs):
+        age_timline = AgeTimeline.objects.get(
+            pk=self.kwargs['age_timeline_id']
+        )
+        if age_timline.get_owner() != request.user:
+            return HttpResponseForbidden()
+        return super().dispatch(request, *args, **kwargs)
+
+
+# get age timeline object and id of timeline object
+class AgeTimelineMixim(object):
+    def form_valid(self, form):
+        form.instance.age_timeline = AgeTimeline.objects.get(
+            pk=self.kwargs['age_timeline_id']
+        )
+        form.instance.timeline_id = form.instance.age_timeline.timeline_ptr.pk
+
+        return super().form_valid(form)
+
+
+# return age timeline detail
+class SuccessMixim(object):
+    def get_success_url(self) -> str:
+        return reverse_lazy(
+            "age_timelines:age-timeline-detail",
+            kwargs={"pk": self.kwargs['age_timeline_id']},
+            # kwargs={"pk": self.object.age_timeline.id},
+        )
 
 
 AGE_EVENT_FIELD_ORDER = [
@@ -62,49 +99,52 @@ AGE_EVENT_FIELD_ORDER = [
 ]
 
 
-class AgeEventCreateView(LoginRequiredMixin, CreateView):
+class AgeEventCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, AgeTimelineMixim, SuccessMixim, CreateView):
     model = AgeEvent
     fields = AGE_EVENT_FIELD_ORDER
-
-    def form_valid(self, form):
-        form.instance.age_timeline = AgeTimeline.objects.get(
-            pk=self.kwargs['age_timeline_id']
-        )
-        form.instance.timeline_id = form.instance.age_timeline.timeline_ptr.pk
-
-        return super().form_valid(form)
-
-    def dispatch(self, request, *args, **kwargs):
-        age_timeline = AgeTimeline.objects.get(
-            pk=kwargs['age_timeline_id']
-        )
-        if age_timeline.get_owner() != self.request.user:
-            return HttpResponseForbidden()
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_success_url(self) -> str:
-        return reverse_lazy(
-            "age_timelines:age-timeline-detail",
-            kwargs={"pk": self.object.age_timeline.id}
-        )
+    template_name = "age_timelines/age_event_add_form.html"
 
 
-class AgeEventUpdateView(OwnerRequiredMixin, UpdateView):
+class AgeEventUpdateView(OwnerRequiredMixin, SuccessMixim, UpdateView):
     model = AgeEvent
     fields = AGE_EVENT_FIELD_ORDER
-
-    def get_success_url(self) -> str:
-        return reverse_lazy(
-            "age_timelines:age-timeline-detail",
-            kwargs={"pk": self.object.age_timeline.id}
-        )
+    template_name = "age_timelines/age_event_edit_form.html"
 
 
-class AgeEventDeleteView(OwnerRequiredMixin, DeleteView):
+class AgeEventDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
     model = AgeEvent
+    template_name = "age_timelines/age_event_confirm_delete.html"
 
-    def get_success_url(self) -> str:
-        return reverse_lazy(
-            "age_timelines:age-timeline-detail",
-            kwargs={"pk": self.object.age_timeline.id}
-        )
+
+class TagCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, AgeTimelineMixim, SuccessMixim, CreateView):
+    model = Tag
+    fields = ['name']
+    template_name = "age_timelines/tag_add_form.html"
+
+
+class TagUpdateView(OwnerRequiredMixin, AgeTimelineMixim, SuccessMixim, UpdateView):
+    model = Tag
+    fields = ["name"]
+    template_name = "age_timelines/tag_edit_form.html"
+
+
+class TagDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
+    model = Tag
+    template_name = "timelines/tag_confirm_delete.html"
+
+
+class AreaCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, AgeTimelineMixim, SuccessMixim, CreateView):
+    model = TimelineArea
+    fields = ["name", "page_position", "weight"]
+    template_name = "age_timelines/area_add_form.html"
+
+
+class AreaUpdateView(OwnerRequiredMixin, AgeTimelineMixim, SuccessMixim, UpdateView):
+    model = TimelineArea
+    fields = ["name", "page_position", "weight"]
+    template_name = "age_timelines/area_edit_form.html"
+
+
+class AreaDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
+    model = TimelineArea
+    template_name = "timelines/area_confirm_delete.html"
