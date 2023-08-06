@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.http import HttpResponseForbidden
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -6,8 +7,9 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from timelines.mixins import OwnerRequiredMixin
-
+from timelines.view_errors import area_position_error, field_empty_error
 from timelines.models import Tag, TimelineArea
+
 from .models import AgeEvent, AgeTimeline
 
 
@@ -135,35 +137,32 @@ class TagDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
     template_name = "timelines/tag_confirm_delete.html"
 
 
-def area_form_duplicates(form, area_id=None):
-    timeline = form.instance.age_timeline.timeline_ptr
-    position = form.cleaned_data['page_position']
-
-    duplicate_areas = TimelineArea.objects.filter(timeline=timeline, page_position=position)
-    if area_id is not None:
-        duplicate_areas.exclude(id=area_id)
-
-    return duplicate_areas, position
-
-
 class AreaCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, SuccessMixim, CreateView):
     model = TimelineArea
     fields = ["name", "page_position", "weight"]
     template_name = "age_timelines/area_add_form.html"
 
     def form_valid(self, form):
-        form.instance.age_timeline = AgeTimeline.objects.get(
+        age_timeline = AgeTimeline.objects.get(
             pk=self.kwargs['age_timeline_id']
         )
-        form.instance.timeline_id = form.instance.age_timeline.timeline_ptr.pk
+        form.instance.timeline_id = age_timeline.timeline_ptr.pk
 
-        duplicate_areas, position = area_form_duplicates(form)
+        name_error = field_empty_error(form, "name")
+        if name_error is not None:
+            form.add_error("name", name_error)
 
-        if not duplicate_areas:
-            return super().form_valid(form)
-        else:
-            form.add_error("page_position", f"Area with position { position } already exists")
+        position_error = area_position_error(
+            form,
+            age_timeline.timeline_ptr
+        )
+        if position_error is not None:
+            form.add_error("page_position", position_error)
+
+        if form.errors:
             return self.form_invalid(form)
+        else:
+            return super().form_valid(form)
 
 
 class AreaUpdateView(OwnerRequiredMixin, SuccessMixim, UpdateView):
@@ -172,18 +171,27 @@ class AreaUpdateView(OwnerRequiredMixin, SuccessMixim, UpdateView):
     template_name = "age_timelines/area_edit_form.html"
 
     def form_valid(self, form):
-        form.instance.age_timeline = AgeTimeline.objects.get(
+        age_timeline = AgeTimeline.objects.get(
             pk=self.kwargs['age_timeline_id']
         )
-        form.instance.timeline_id = form.instance.age_timeline.timeline_ptr.pk
+        form.instance.timeline_id = age_timeline.timeline_ptr.pk
 
-        duplicate_areas, position = area_form_duplicates(form, self.get_object().id)
+        name_error = field_empty_error(form, "name")
+        if name_error is not None:
+            form.add_error("name", name_error)
 
-        if not duplicate_areas:
-            return super().form_valid(form)
-        else:
-            form.add_error("page_position", f"Area with position { position } already exists")
+        position_error = area_position_error(
+            form,
+            age_timeline.timeline_ptr,
+            self.get_object().id
+        )
+        if position_error is not None:
+            form.add_error("page_position", position_error)
+
+        if form.errors:
             return self.form_invalid(form)
+        else:
+            return super().form_valid(form)
 
 
 class AreaDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
