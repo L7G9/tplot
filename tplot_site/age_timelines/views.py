@@ -1,5 +1,4 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
 from django.http import HttpResponseForbidden
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -202,11 +201,7 @@ class TagDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
     template_name = "timelines/tag_confirm_delete.html"
 
 
-class AreaCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, SuccessMixim, CreateView):
-    model = TimelineArea
-    fields = ["name", "page_position", "weight"]
-    template_name = "age_timelines/area_add_form.html"
-
+class AreaValidateMixim(object):
     def form_valid(self, form):
         age_timeline = AgeTimeline.objects.get(
             pk=self.kwargs['age_timeline_id']
@@ -217,38 +212,14 @@ class AreaCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, SuccessMixim, Cr
         if name_error is not None:
             form.add_error("name", name_error)
 
-        position_error = area_position_error(
-            form,
-            age_timeline.timeline_ptr
-        )
-        if position_error is not None:
-            form.add_error("page_position", position_error)
-
-        if form.errors:
-            return self.form_invalid(form)
-        else:
-            return super().form_valid(form)
-
-
-class AreaUpdateView(OwnerRequiredMixin, SuccessMixim, UpdateView):
-    model = TimelineArea
-    fields = ["name", "page_position", "weight"]
-    template_name = "age_timelines/area_edit_form.html"
-
-    def form_valid(self, form):
-        age_timeline = AgeTimeline.objects.get(
-            pk=self.kwargs['age_timeline_id']
-        )
-        form.instance.timeline_id = age_timeline.timeline_ptr.pk
-
-        name_error = field_empty_error(form, "name")
-        if name_error is not None:
-            form.add_error("name", name_error)
+        area_id = None
+        if "pk" in self.kwargs:
+            area_id = self.get_object().id
 
         position_error = area_position_error(
             form,
             age_timeline.timeline_ptr,
-            self.get_object().id
+            area_id,
         )
         if position_error is not None:
             form.add_error("page_position", position_error)
@@ -257,6 +228,18 @@ class AreaUpdateView(OwnerRequiredMixin, SuccessMixim, UpdateView):
             return self.form_invalid(form)
         else:
             return super().form_valid(form)
+
+
+class AreaCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, AreaValidateMixim, SuccessMixim, CreateView):
+    model = TimelineArea
+    fields = ["name", "page_position", "weight"]
+    template_name = "age_timelines/area_add_form.html"
+
+
+class AreaUpdateView(OwnerRequiredMixin, AreaValidateMixim, SuccessMixim, UpdateView):
+    model = TimelineArea
+    fields = ["name", "page_position", "weight"]
+    template_name = "age_timelines/area_edit_form.html"
 
 
 class AreaDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
