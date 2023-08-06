@@ -153,6 +153,7 @@ class TagDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
     template_name = "timelines/tag_confirm_delete.html"
 
 
+class AreaCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, SuccessMixim, CreateView):
     model = TimelineArea
     fields = ["name", "page_position", "weight"]
     template_name = "age_timelines/area_add_form.html"
