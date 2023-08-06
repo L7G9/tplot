@@ -35,19 +35,7 @@ class AgeTimelineDetailView(OwnerRequiredMixin, DetailView):
         return context
 
 
-class AgeTimelineValidateMixim(object):
-    def form_valid(self, form):
-        name_error = field_empty_error(form, "title")
-        if name_error is not None:
-            form.add_error("title", name_error)
-
-        if form.errors:
-            return self.form_invalid(form)
-        else:
-            return super().form_valid(form)
-
-
-class AgeTimelineCreateView(LoginRequiredMixin, AgeTimelineValidateMixim, CreateView):
+class AgeTimelineCreateView(LoginRequiredMixin, CreateView):
     model = AgeTimeline
     fields = AGE_TIMELINE_FIELD_ORDER
     template_name = "age_timelines/age_timeline_add_form.html"
@@ -57,7 +45,7 @@ class AgeTimelineCreateView(LoginRequiredMixin, AgeTimelineValidateMixim, Create
         return super().form_valid(form)
 
 
-class AgeTimelineUpdateView(OwnerRequiredMixin, AgeTimelineValidateMixim, UpdateView):
+class AgeTimelineUpdateView(OwnerRequiredMixin, UpdateView):
     model = AgeTimeline
     fields = AGE_TIMELINE_FIELD_ORDER
     template_name = "age_timelines/age_timeline_edit_form.html"
@@ -78,17 +66,6 @@ class AgeTimelineOwnerMixim(object):
         if age_timline.get_owner() != request.user:
             return HttpResponseForbidden()
         return super().dispatch(request, *args, **kwargs)
-
-
-# get age timeline object and id of timeline object
-class AgeTimelineMixim(object):
-    def form_valid(self, form):
-        form.instance.age_timeline = AgeTimeline.objects.get(
-            pk=self.kwargs['age_timeline_id']
-        )
-        form.instance.timeline_id = form.instance.age_timeline.timeline_ptr.pk
-
-        return super().form_valid(form)
 
 
 # return age timeline detail
@@ -119,10 +96,6 @@ class AgeEventValidateMixim(object):
             pk=self.kwargs['age_timeline_id']
         )
         form.instance.timeline_id = form.instance.age_timeline.timeline_ptr.pk
-
-        name_error = field_empty_error(form, "title")
-        if name_error is not None:
-            form.add_error("title", name_error)
 
         if form.cleaned_data['has_end']:
             # TODO: move this logic somewhere useful
@@ -174,14 +147,7 @@ class TagValidateMixim(object):
         )
         form.instance.timeline_id = age_timeline.timeline_ptr.pk
 
-        name_error = field_empty_error(form, "name")
-        if name_error is not None:
-            form.add_error("name", name_error)
-
-        if form.errors:
-            return self.form_invalid(form)
-        else:
-            return super().form_valid(form)
+        return super().form_valid(form)
 
 
 class TagCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, TagValidateMixim, SuccessMixim, CreateView):
@@ -207,10 +173,6 @@ class AreaValidateMixim(object):
             pk=self.kwargs['age_timeline_id']
         )
         form.instance.timeline_id = age_timeline.timeline_ptr.pk
-
-        name_error = field_empty_error(form, "name")
-        if name_error is not None:
-            form.add_error("name", name_error)
 
         area_id = None
         if "pk" in self.kwargs:
