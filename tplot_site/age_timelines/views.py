@@ -36,7 +36,19 @@ class AgeTimelineDetailView(OwnerRequiredMixin, DetailView):
         return context
 
 
-class AgeTimelineCreateView(LoginRequiredMixin, CreateView):
+class AgeTimelineValidateMixim(object):
+    def form_valid(self, form):
+        name_error = field_empty_error(form, "title")
+        if name_error is not None:
+            form.add_error("title", name_error)
+
+        if form.errors:
+            return self.form_invalid(form)
+        else:
+            return super().form_valid(form)
+
+
+class AgeTimelineCreateView(LoginRequiredMixin, AgeTimelineValidateMixim, CreateView):
     model = AgeTimeline
     fields = AGE_TIMELINE_FIELD_ORDER
     template_name = "age_timelines/age_timeline_add_form.html"
@@ -46,7 +58,7 @@ class AgeTimelineCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class AgeTimelineUpdateView(OwnerRequiredMixin, UpdateView):
+class AgeTimelineUpdateView(OwnerRequiredMixin, AgeTimelineValidateMixim, UpdateView):
     model = AgeTimeline
     fields = AGE_TIMELINE_FIELD_ORDER
     template_name = "age_timelines/age_timeline_edit_form.html"
@@ -100,6 +112,7 @@ AGE_EVENT_FIELD_ORDER = [
     'tags',
     'timeline_area',
 ]
+
 
 class AgeEventValidateMixim(object):
     def form_valid(self, form):
