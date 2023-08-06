@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
 
@@ -26,15 +27,24 @@ class AgeTimeline(timelines.Timeline):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("age_timelines:age-timeline-detail", kwargs={"pk": self.pk})
+        return reverse(
+            "age_timelines:age-timeline-detail",
+            kwargs={"pk": self.pk}
+        )
 
 
 class AgeEvent(timelines.Event):
     age_timeline = models.ForeignKey(AgeTimeline, on_delete=models.CASCADE)
     start_year = models.SmallIntegerField(default=0)
-    start_month = models.SmallIntegerField(default=0)
+    start_month = models.SmallIntegerField(
+        default=0,
+        validators=[MaxValueValidator(11), MinValueValidator(-11)]
+    )
     end_year = models.SmallIntegerField(default=0)
-    end_month = models.SmallIntegerField(default=0)
+    end_month = models.SmallIntegerField(
+        default=0,
+        validators=[MaxValueValidator(11), MinValueValidator(-11)]
+    )
 
     class Meta:
         ordering = ["start_year", "start_month"]
@@ -62,4 +72,7 @@ class AgeEvent(timelines.Event):
             return f"{self.start_description()} : {self.title}"
 
     def get_absolute_url(self):
-        return reverse("age_timelines:age-event-detail", kwargs={"pk": self.pk})
+        return reverse(
+            "age_timelines:age-event-detail",
+            kwargs={"pk": self.pk}
+        )
