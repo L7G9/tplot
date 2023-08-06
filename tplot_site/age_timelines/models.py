@@ -19,6 +19,9 @@ class AgeTimeline(timelines.Timeline):
         default=10
     )
 
+    class Meta:
+        ordering = ["title"]
+
     def __str__(self):
         return self.title
 
@@ -32,6 +35,9 @@ class AgeEvent(timelines.Event):
     start_month = models.SmallIntegerField(default=0)
     end_year = models.SmallIntegerField(default=0)
     end_month = models.SmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ["start_year", "start_month"]
 
     def age_description(self, years, months):
         if months == 0:

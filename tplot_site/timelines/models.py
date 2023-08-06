@@ -66,6 +66,10 @@ class TimelineArea(models.Model):
     page_position = models.PositiveSmallIntegerField(default=0)
     weight = models.PositiveSmallIntegerField(default=1)
 
+    class Meta:
+        ordering = ["name"]
+        unique_together = ["timeline", "page_position"]
+
     def __str__(self):
         return self.name
 
@@ -76,6 +80,9 @@ class TimelineArea(models.Model):
 class Tag(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
     name = models.CharField(max_length=20)
+
+    class Meta:
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
