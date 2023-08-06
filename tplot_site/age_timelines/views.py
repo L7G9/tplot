@@ -25,10 +25,12 @@ AGE_TIMELINE_FIELD_ORDER = [
 class AgeTimelineDetailView(OwnerRequiredMixin, DetailView):
     model = AgeTimeline
     template_name = "age_timelines/age_timeline_detail.html"
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["now"] = timezone.now()
+
         return context
 
 
@@ -133,16 +135,55 @@ class TagDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
     template_name = "timelines/tag_confirm_delete.html"
 
 
-class AreaCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, AgeTimelineMixim, SuccessMixim, CreateView):
+def area_form_duplicates(form, area_id=None):
+    timeline = form.instance.age_timeline.timeline_ptr
+    position = form.cleaned_data['page_position']
+
+    duplicate_areas = TimelineArea.objects.filter(timeline=timeline, page_position=position)
+    if area_id is not None:
+        duplicate_areas.exclude(id=area_id)
+
+    return duplicate_areas, position
+
+
+class AreaCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, SuccessMixim, CreateView):
     model = TimelineArea
     fields = ["name", "page_position", "weight"]
     template_name = "age_timelines/area_add_form.html"
 
+    def form_valid(self, form):
+        form.instance.age_timeline = AgeTimeline.objects.get(
+            pk=self.kwargs['age_timeline_id']
+        )
+        form.instance.timeline_id = form.instance.age_timeline.timeline_ptr.pk
 
-class AreaUpdateView(OwnerRequiredMixin, AgeTimelineMixim, SuccessMixim, UpdateView):
+        duplicate_areas, position = area_form_duplicates(form)
+
+        if not duplicate_areas:
+            return super().form_valid(form)
+        else:
+            form.add_error("page_position", f"Area with position { position } already exists")
+            return self.form_invalid(form)
+
+
+class AreaUpdateView(OwnerRequiredMixin, SuccessMixim, UpdateView):
     model = TimelineArea
     fields = ["name", "page_position", "weight"]
     template_name = "age_timelines/area_edit_form.html"
+
+    def form_valid(self, form):
+        form.instance.age_timeline = AgeTimeline.objects.get(
+            pk=self.kwargs['age_timeline_id']
+        )
+        form.instance.timeline_id = form.instance.age_timeline.timeline_ptr.pk
+
+        duplicate_areas, position = area_form_duplicates(form, self.get_object().id)
+
+        if not duplicate_areas:
+            return super().form_valid(form)
+        else:
+            form.add_error("page_position", f"Area with position { position } already exists")
+            return self.form_invalid(form)
 
 
 class AreaDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
