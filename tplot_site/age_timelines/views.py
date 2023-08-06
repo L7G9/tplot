@@ -101,14 +101,50 @@ AGE_EVENT_FIELD_ORDER = [
     'timeline_area',
 ]
 
+class AgeEventValidateMixim(object):
+    def form_valid(self, form):
+        form.instance.age_timeline = AgeTimeline.objects.get(
+            pk=self.kwargs['age_timeline_id']
+        )
+        form.instance.timeline_id = form.instance.age_timeline.timeline_ptr.pk
 
-class AgeEventCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, AgeTimelineMixim, SuccessMixim, CreateView):
+        name_error = field_empty_error(form, "title")
+        if name_error is not None:
+            form.add_error("title", name_error)
+
+        if form.cleaned_data['has_end']:
+            # TODO: move this logic somewhere useful
+            start_year = form.cleaned_data['start_year']
+            start_month = form.cleaned_data['start_month']
+            start_total = (start_year * 12) + start_month
+
+            end_year = form.cleaned_data['end_year']
+            end_month = form.cleaned_data['end_month']
+            end_total = (end_year * 12) + end_month
+
+            if end_total <= start_total:
+                form.add_error(
+                    "end_year",
+                    "End age must be greater than start age"
+                )
+                form.add_error(
+                    "end_month",
+                    "End age must be greater than start age"
+                )
+
+        if form.errors:
+            return self.form_invalid(form)
+        else:
+            return super().form_valid(form)
+
+
+class AgeEventCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, AgeEventValidateMixim, SuccessMixim, CreateView):
     model = AgeEvent
     fields = AGE_EVENT_FIELD_ORDER
     template_name = "age_timelines/age_event_add_form.html"
 
 
-class AgeEventUpdateView(OwnerRequiredMixin, SuccessMixim, UpdateView):
+class AgeEventUpdateView(OwnerRequiredMixin, AgeEventValidateMixim, SuccessMixim, UpdateView):
     model = AgeEvent
     fields = AGE_EVENT_FIELD_ORDER
     template_name = "age_timelines/age_event_edit_form.html"
