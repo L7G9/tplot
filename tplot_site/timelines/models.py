@@ -1,5 +1,12 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+
+def validate_present(value):
+    if value is None:
+        raise ValidationError("Field must have a value")
 
 
 class Timeline(models.Model):
@@ -35,7 +42,7 @@ class Timeline(models.Model):
 
     # basic
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, validators=[validate_present])
     description = models.CharField(max_length=1000, blank=True)
 
     # scale
@@ -62,7 +69,7 @@ class Timeline(models.Model):
 
 class TimelineArea(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=25, validators=[validate_present])
     page_position = models.PositiveSmallIntegerField(default=0)
     weight = models.PositiveSmallIntegerField(default=1)
 
@@ -79,7 +86,7 @@ class TimelineArea(models.Model):
 
 class Tag(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=25, validators=[validate_present])
 
     class Meta:
         ordering = ["name"]
@@ -93,7 +100,7 @@ class Tag(models.Model):
 
 class Event(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, validators=[validate_present])
     description = models.CharField(max_length=1000, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
     timeline_area = models.ForeignKey(
