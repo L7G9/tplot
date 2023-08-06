@@ -1,5 +1,5 @@
 {% block title %}TPlot - Delete{% endblock %}
 <form method="post">{% csrf_token %}
-    <p>Are you sure you want to delete {% block description %}"{{ object }}"{% endblock %}?</p>
+    <p>Are you sure you want to delete {% block description %}{{ object }}{% endblock %}?</p>
     <input type="submit" value="Confirm"/>
 </form>
