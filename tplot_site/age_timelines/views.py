@@ -86,7 +86,6 @@ class SuccessMixim(object):
         return reverse_lazy(
             "age_timelines:age-timeline-detail",
             kwargs={"pk": self.kwargs['age_timeline_id']},
-            # kwargs={"pk": self.object.age_timeline.id},
         )
 
 
@@ -120,13 +119,30 @@ class AgeEventDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
     template_name = "age_timelines/age_event_confirm_delete.html"
 
 
-class TagCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, AgeTimelineMixim, SuccessMixim, CreateView):
+class TagValidateMixim(object):
+    def form_valid(self, form):
+        age_timeline = AgeTimeline.objects.get(
+            pk=self.kwargs['age_timeline_id']
+        )
+        form.instance.timeline_id = age_timeline.timeline_ptr.pk
+
+        name_error = field_empty_error(form, "name")
+        if name_error is not None:
+            form.add_error("name", name_error)
+
+        if form.errors:
+            return self.form_invalid(form)
+        else:
+            return super().form_valid(form)
+
+
+class TagCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, TagValidateMixim, SuccessMixim, CreateView):
     model = Tag
     fields = ['name']
     template_name = "age_timelines/tag_add_form.html"
 
 
-class TagUpdateView(OwnerRequiredMixin, AgeTimelineMixim, SuccessMixim, UpdateView):
+class TagUpdateView(OwnerRequiredMixin, TagValidateMixim, SuccessMixim, UpdateView):
     model = Tag
     fields = ["name"]
     template_name = "age_timelines/tag_edit_form.html"
@@ -137,7 +153,6 @@ class TagDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
     template_name = "timelines/tag_confirm_delete.html"
 
 
-class AreaCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, SuccessMixim, CreateView):
     model = TimelineArea
     fields = ["name", "page_position", "weight"]
     template_name = "age_timelines/area_add_form.html"
