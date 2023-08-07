@@ -7,7 +7,6 @@ Task list
 
 Plan
     Testing
-    bootstrap
     info app
     display timeline on canvas
     display timeline on pdf

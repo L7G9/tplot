@@ -1,10 +1,12 @@
 {% extends 'timelines/base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
 <div class="container">
     <p class="h2">{% block heading %}Form Heading{% endblock %}</p>
     <form method="POST" class="post-form">{% csrf_token %}
-        {{ form.as_p }}
+        {{ form|crispy }}
         <button type="submit" class="btn btn-primary">{% block button_name %}Submit{% endblock %}</button>
     </form>
 </div>
