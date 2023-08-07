@@ -1,0 +1,19 @@
+Task list
+    add credit field to timeline
+    rename TimelineArea to Area or EventArea
+    update view object names
+    event pagination
+    use try on get_object
+
+Plan
+    Testing
+    bootstrap
+    info app
+    display timeline on canvas
+    display timeline on pdf
+    CI
+    CD
+    other timelines
+
+Feature Ideas
+    sharing and collaboration
