@@ -1,18 +1,8 @@
-{% extends 'timelines/base.html' %}
-
+{% extends 'timelines/form_base.html' %}
 {% block title %}TPlot - New Age Event{% endblock %}
-
-{% block sidebar %}
-<ul>
-    <li><a href="{% url 'timelines:user-timelines' %}">User Home</a></li>
-    <li><a href="{% url 'age_timelines:age-timeline-detail' view.kwargs.age_timeline_id %}">Timeline</a></li>
-</ul>
+{% block nav_links %}
+    <li class="nav-item"><a class="nav-link link-light" href="{% url 'timelines:user-timelines' %}">User Timelines</a></li>
+    <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-detail' view.kwargs.age_timeline_id %}">Timeline</a></li>
 {% endblock %}
-
-{% block content %}
-    <h2>Age Age Event</h2>
-    <form method="POST" class="post-form">{% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" value="Add">Add</button>
-    </form>
-{% endblock %}
+{% block heading %}New Age Event{% endblock %}
+{% block button_name %}Add{% endblock %}

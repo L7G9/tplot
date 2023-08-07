@@ -1,9 +1,11 @@
 {% extends 'timelines/base.html' %}
 
 {% block content %}
-    <h2>{% block heading %}Form Heading{% endblock %}</h2>
+<div class="container">
+    <p class="h2">{% block heading %}Form Heading{% endblock %}</p>
     <form method="POST" class="post-form">{% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" value="Update">{% block button_name %}Submit{% endblock %}</button>
+        <button type="submit" class="btn btn-primary">{% block button_name %}Submit{% endblock %}</button>
     </form>
+</div>
 {% endblock %}

@@ -164,7 +164,7 @@ class TagUpdateView(OwnerRequiredMixin, TagValidateMixim, SuccessMixim, UpdateVi
 
 class TagDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
     model = Tag
-    template_name = "timelines/tag_confirm_delete.html"
+    template_name = "age_timelines/tag_confirm_delete.html"
 
 
 class AreaValidateMixim(object):
@@ -174,6 +174,7 @@ class AreaValidateMixim(object):
         )
         form.instance.timeline_id = age_timeline.timeline_ptr.pk
 
+        # TODO: find a more elegant solution
         area_id = None
         if "pk" in self.kwargs:
             area_id = self.get_object().id
@@ -206,4 +207,4 @@ class AreaUpdateView(OwnerRequiredMixin, AreaValidateMixim, SuccessMixim, Update
 
 class AreaDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
     model = TimelineArea
-    template_name = "timelines/area_confirm_delete.html"
+    template_name = "age_timelines/area_confirm_delete.html"

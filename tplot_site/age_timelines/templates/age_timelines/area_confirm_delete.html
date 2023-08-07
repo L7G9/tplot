@@ -1,6 +1,6 @@
-{% extends "timelines/tag_edit_form.html"  %}
+{% extends "timelines/area_confirm_delete.html" %}
 {% block nav_links %}
     <li class="nav-item"><a class="nav-link link-light" href="{% url 'timelines:user-timelines' %}">User Timelines</a></li>
     <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-detail' view.kwargs.age_timeline_id %}">Timeline</a></li>
-    <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:tag-delete' view.kwargs.age_timeline_id view.kwargs.pk %}">Delete</a></li>
+    <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:area-update' view.kwargs.age_timeline_id view.kwargs.pk %}">Area</a></li>
 {% endblock %}

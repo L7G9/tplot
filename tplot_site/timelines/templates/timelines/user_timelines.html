@@ -1,28 +1,28 @@
 {% extends "timelines/base.html" %}
 
 {% block title %}TPlot - Your Timelines{% endblock %}
-{% block sidebar %}
-<ul>
-    <li><a href="{% url 'age_timelines:age-timeline-add' %}">New Age Timeline</a></li>
-    <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
-</ul>
+
+{% block nav_links %}
+<li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-add' %}">New Age Timeline</a></li>
+<li class="nav-item"><a class="nav-link link-light" href="{% url 'accounts:logout' %}">Logout</a></li>
 {% endblock %}
 
 {% block content %}
-    <h1>Your Timelines</h1>
-    <h2>Age Timelines</h2>
-    <ul>
+<div class="container">
+    <p class="h2">Your Timelines</p>
+
+    <p class="h3">Age Timelines</p>
+    <div class="list-group">
     {% for age_timeline in age_timeline_list %}
-        <li><a href="{% url 'age_timelines:age-timeline-detail' age_timeline.id %}">{{ age_timeline.title }}</a></li>
+        <a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-timeline-detail' age_timeline.id %}">{{ age_timeline.title }}</a>
     {% endfor %}
-    </ul>
+    </div>
 
-    <h2>Date and Time Timelines</h2>
+    <p class="h3">Date and Time Timelines</p>
 
+    <p class="h3">Historical Timelines</p>
 
-    <h2>Historical Timelines</h2>
+    <p class="h3">Scientific Timelines</p>
 
-
-    <h2>Scientific Timelines</h2>
-
+</div>
 {% endblock %}

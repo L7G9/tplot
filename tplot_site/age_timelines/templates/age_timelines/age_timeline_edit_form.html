@@ -1,15 +1,9 @@
-{% extends "timelines/form_base.html" %}
-
+{% extends 'timelines/form_base.html' %}
 {% block title %}TPlot - Edit Age Timeline{% endblock %}
-
-{% block sidebar %}
-<ul>
-    <li><a href="{% url 'timelines:user-timelines' %}">User Home</a></li>
-    <li><a href="{% url 'age_timelines:age-timeline-detail' view.kwargs.pk %}">Timeline</a></li>
-    <li><a href="{% url 'age_timelines:age-timeline-delete' view.kwargs.pk %}">Delete</a></li>
-</ul>
+{% block nav_links %}
+    <li class="nav-item"><a class="nav-link link-light" href="{% url 'timelines:user-timelines' %}">User Timelines</a></li>
+    <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-detail' view.kwargs.pk %}">Timeline</a></li>
+    <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-delete' view.kwargs.pk %}">Delete</a></li>
 {% endblock %}
-
 {% block heading %}Edit Age Timeline{% endblock %}
-
 {% block button_name %}Update{% endblock %}

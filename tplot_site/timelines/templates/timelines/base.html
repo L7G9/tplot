@@ -2,18 +2,24 @@
 <html lang="en">
 <head>
     <title>{% block title %}TPlot - Timeline Editor {% endblock %}</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 </head>
 <body>
-    <div id="sidebar">
-        {% block sidebar %}
-        <ul>
-            <li><a href="/">Home</a></li>
-        </ul>
-        {% endblock %}
-    </div>
 
-    <div id="content">
-        {% block content %}{% endblock %}
-    </div>
+<div class="container">
+    <ul class="nav bg-info">
+        {% block nav_home_link %}
+        <li class="nav-item"><a class="nav-link link-light" href="/">HOME</a></li>
+        {% endblock %}
+
+        {% block nav_links %}
+        {% endblock %}
+    </ul>
+    {% block content %}
+    {% endblock %}
+</div>
+
 </body>
 </html>
