@@ -1,8 +1,11 @@
 Essential Task list
+    Weight min value of 1
     use try on get_object
     update python
     update references to Area to Event Area
-    update user timelines to user's timeline
+    update user timelines to your timelines
+    Event area position default of 1?
+    layout of sign-up page
 
 Optional Task List
     add created and edited date and times to timeline
@@ -36,10 +39,9 @@ Plan
         views
         forms
         coverage
-
+    code quality tools
     CI
     CD
-
     info app
     display timeline on canvas
     display timeline on pdf

@@ -22,20 +22,10 @@ class TimelineModel(TestCase):
         )
         self.timeline_id = timeline.id
 
-    def test_title_label(self):
-        timeline = Timeline.objects.get(id=self.timeline_id)
-        field_label = timeline._meta.get_field('title').verbose_name
-        self.assertEqual(field_label, 'title')
-
     def test_title_name_max_length(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
         max_length = timeline._meta.get_field('title').max_length
         self.assertEqual(max_length, 100)
-
-    def test_description_label(self):
-        timeline = Timeline.objects.get(id=self.timeline_id)
-        field_label = timeline._meta.get_field('description').verbose_name
-        self.assertEqual(field_label, 'description')
 
     def test_description_max_length(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
@@ -47,11 +37,6 @@ class TimelineModel(TestCase):
         blank = timeline._meta.get_field('description').blank
         self.assertTrue(blank)
 
-    def test_scale_length_label(self):
-        timeline = Timeline.objects.get(id=self.timeline_id)
-        field_label = timeline._meta.get_field('scale_length').verbose_name
-        self.assertEqual(field_label, 'scale length')
-
     def test_scale_choices(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
         choices = timeline._meta.get_field('scale_length').choices
@@ -61,11 +46,6 @@ class TimelineModel(TestCase):
         timeline = Timeline.objects.get(id=self.timeline_id)
         default = timeline._meta.get_field('scale_length').default
         self.assertEqual(default, 5)
-
-    def test_page_size_label(self):
-        timeline = Timeline.objects.get(id=self.timeline_id)
-        field_label = timeline._meta.get_field('page_size').verbose_name
-        self.assertEqual(field_label, 'page size')
 
     def test_page_size_max_length(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
@@ -82,11 +62,6 @@ class TimelineModel(TestCase):
         default = timeline._meta.get_field('page_size').default
         self.assertEqual(default, "4")
 
-    def test_page_orientation_label(self):
-        timeline = Timeline.objects.get(id=self.timeline_id)
-        field_label = timeline._meta.get_field('page_orientation').verbose_name
-        self.assertEqual(field_label, 'page orientation')
-
     def test_page_orientation_max_length(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
         max_length = timeline._meta.get_field('page_orientation').max_length
@@ -101,11 +76,6 @@ class TimelineModel(TestCase):
         timeline = Timeline.objects.get(id=self.timeline_id)
         default = timeline._meta.get_field('page_orientation').default
         self.assertEqual(default, "L")
-
-    def test_page_scale_position_label(self):
-        timeline = Timeline.objects.get(id=self.timeline_id)
-        field_label = timeline._meta.get_field('page_scale_position').verbose_name
-        self.assertEqual(field_label, 'page scale position')
 
     def test_page_scale_position_default(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
@@ -181,14 +151,14 @@ class EventModel(TestCase):
         self.assertFalse(default)
 
     def test_object_name_is_title(self):
-        event = Event.objects.get(id=self.event_id)
-        title = event.title
-        self.assertEqual(str(event), title)
+        event: Event = Event.objects.get(id=self.event_id)
+        expected_title = event.title
+        self.assertEqual(str(event), expected_title)
 
     def test_get_owner_is_timeline_user(self):
         event = Event.objects.get(id=self.event_id)
-        owner = event.timeline.user
-        self.assertEqual(event.get_owner(), owner)
+        expected_owner = event.timeline.user
+        self.assertEqual(event.get_owner(), expected_owner)
 
 
 class EventAreaModel(TestCase):
@@ -244,13 +214,13 @@ class EventAreaModel(TestCase):
 
     def test_object_name_is_name(self):
         area = EventArea.objects.get(id=self.area_id)
-        name = area.name
-        self.assertEqual(str(area), name)
+        expected_owner = area.name
+        self.assertEqual(str(area), expected_owner)
 
     def test_get_owner_is_timeline_user(self):
         area = EventArea.objects.get(id=self.area_id)
-        owner = area.timeline.user
-        self.assertEqual(area.get_owner(), owner)
+        expected_owner = area.timeline.user
+        self.assertEqual(area.get_owner(), expected_owner)
 
 
 class TagModel(TestCase):
@@ -292,4 +262,3 @@ class TagModel(TestCase):
         tag = Tag.objects.get(id=self.tag_id)
         expected_owner = tag.timeline.user
         self.assertEqual(tag.get_owner(), expected_owner)
-

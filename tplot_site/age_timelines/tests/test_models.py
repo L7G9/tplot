@@ -52,7 +52,8 @@ class AgeTimelineModel(TestCase):
 
     def test_get_absolute_url(self):
         age_timeline = AgeTimeline.objects.get(id=self.age_timeline_id)
-        self.assertEqual(age_timeline.get_absolute_url(), f"/timelines/age/{age_timeline.id}/detail/")
+        url = f"/timelines/age/{age_timeline.id}/detail/"
+        self.assertEqual(age_timeline.get_absolute_url(), url)
 
 
 class AgeEventModel(TestCase):
@@ -182,5 +183,5 @@ class AgeEventModel(TestCase):
 
     def test_get_owner_is_timeline_user(self):
         event = AgeEvent.objects.get(id=self.start_age_event_id)
-        owner = event.age_timeline.user
-        self.assertEqual(event.get_owner(), owner)
+        expected_owner = event.age_timeline.user
+        self.assertEqual(event.get_owner(), expected_owner)
