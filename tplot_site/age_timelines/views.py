@@ -6,8 +6,8 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from timelines.mixins import OwnerRequiredMixin
-from timelines.view_errors import area_position_error, field_empty_error
-from timelines.models import Tag, TimelineArea
+from timelines.view_errors import area_position_error
+from timelines.models import Tag, EventArea
 
 from .models import AgeEvent, AgeTimeline
 
@@ -194,17 +194,17 @@ class AreaValidateMixim(object):
 
 
 class AreaCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, AreaValidateMixim, SuccessMixim, CreateView):
-    model = TimelineArea
+    model = EventArea
     fields = ["name", "page_position", "weight"]
     template_name = "age_timelines/area_add_form.html"
 
 
 class AreaUpdateView(OwnerRequiredMixin, AreaValidateMixim, SuccessMixim, UpdateView):
-    model = TimelineArea
+    model = EventArea
     fields = ["name", "page_position", "weight"]
     template_name = "age_timelines/area_edit_form.html"
 
 
 class AreaDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
-    model = TimelineArea
+    model = EventArea
     template_name = "age_timelines/area_confirm_delete.html"

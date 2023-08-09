@@ -36,7 +36,7 @@
     <p class="h4">Areas</p>
     <div class="list-group">
         {% block area_list %}
-        {% for area in object.timelinearea_set.all %}
+        {% for area in object.eventarea_set.all %}
             <a class="list-group-item list-group-item-action" href="">{{ area }}</a>
         {% endfor %}
         {% endblock %}

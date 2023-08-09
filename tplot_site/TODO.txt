@@ -1,17 +1,49 @@
-Task list
-    add credit field to timeline
-    rename TimelineArea to Area or EventArea
-    update view object names
-    event pagination
+Essential Task list
     use try on get_object
+    update python
+    update references to Area to Event Area
+    update user timelines to user's timeline
+
+Optional Task List
+    add created and edited date and times to timeline
+    add credit field to timeline
+    validate titles and names with regex
+    add hints and titles to models
+    update view object names
+    event table
+        order
+        filter
+    event pagination
+    add default Field
+        created when we create new timeline
+        can only be one
+        cannot be deleted
+        implementation1
+            new events are added to this by default
+            when area is deleted add events with no area to this event
+        implementation2
+            use this area when rendering if event had no area
+    user profile
+        first name
+        second name
+        account details
+        reset password
+        subscription
 
 Plan
     Testing
+        models
+        views
+        forms
+        coverage
+
+    CI
+    CD
+
     info app
     display timeline on canvas
     display timeline on pdf
-    CI
-    CD
+
     other timelines
 
 Feature Ideas

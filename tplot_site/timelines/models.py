@@ -1,27 +1,14 @@
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.translation import gettext_lazy as _
-
-
-def validate_present(value):
-    if value is None:
-        raise ValidationError("Field must have a value")
 
 
 class Timeline(models.Model):
+    # basic
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    description = models.CharField(max_length=1000, blank=True)
 
-    PAGE_SIZES = [
-        ("3", "A3"),
-        ("4", "A4"),
-        ("5", "A5")
-    ]
-
-    PAGE_ORIENTATIONS = [
-        ("L", "Landscape"),
-        ("P", "Portrait"),
-    ]
-
+    # scale
     SCALE_LENGTHS = [
         (1, "1cm"),
         (2, "2cm"),
@@ -39,20 +26,25 @@ class Timeline(models.Model):
         (25, "25cm"),
         (30, "30cm"),
     ]
-
-    # basic
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100, validators=[validate_present])
-    description = models.CharField(max_length=1000, blank=True)
-
-    # scale
     scale_length = models.PositiveSmallIntegerField(
         choices=SCALE_LENGTHS,
         default=5
     )
 
     # display layout
-    page_size = models.CharField(max_length=1, choices=PAGE_SIZES, default="4")
+    PAGE_SIZES = [
+        ("3", "A3"),
+        ("4", "A4"),
+        ("5", "A5")
+    ]
+    page_size = models.CharField(
+        max_length=1,
+        choices=PAGE_SIZES,
+        default="4")
+    PAGE_ORIENTATIONS = [
+        ("L", "Landscape"),
+        ("P", "Portrait"),
+    ]
     page_orientation = models.CharField(
         max_length=1,
         choices=PAGE_ORIENTATIONS,
@@ -67,9 +59,9 @@ class Timeline(models.Model):
         return self.user
 
 
-class TimelineArea(models.Model):
+class EventArea(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
-    name = models.CharField(max_length=25, validators=[validate_present])
+    name = models.CharField(max_length=25)
     page_position = models.PositiveSmallIntegerField(default=0)
     weight = models.PositiveSmallIntegerField(default=1)
 
@@ -86,7 +78,7 @@ class TimelineArea(models.Model):
 
 class Tag(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
-    name = models.CharField(max_length=25, validators=[validate_present])
+    name = models.CharField(max_length=25)
 
     class Meta:
         ordering = ["name"]
@@ -100,11 +92,11 @@ class Tag(models.Model):
 
 class Event(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100, validators=[validate_present])
+    title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
     timeline_area = models.ForeignKey(
-        TimelineArea,
+        EventArea,
         blank=True,
         null=True,
         on_delete=models.SET_NULL

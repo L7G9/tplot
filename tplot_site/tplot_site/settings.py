@@ -33,8 +33,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'accounts',
-    'timelines.apps.TimelinesConfig',
-    'age_timelines.apps.AgeTimelinesConfig',
+    'timelines',
+    'age_timelines',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
