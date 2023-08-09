@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from timelines.models import EventArea, Tag, Timeline
+from timelines.models import Event, EventArea, Tag, Timeline
 
 
 class TimelineModel(TestCase):
@@ -121,6 +121,74 @@ class TimelineModel(TestCase):
         timeline = Timeline.objects.get(id=self.timeline_id)
         expected_owner = timeline.user
         self.assertEqual(timeline.get_owner(), expected_owner)
+
+
+class EventModel(TestCase):
+    @classmethod
+    def setUpTestData(self):
+        user = User.objects.create_user(
+            username="TestUser",
+            password="TestUser01#"
+        )
+        timeline = Timeline.objects.create(
+            user=user,
+            title="Test Timeline Title",
+            description="Test Timeline Description",
+            scale_length=1,
+            page_size="4",
+            page_orientation="L",
+            page_scale_position=0,
+        )
+        event = Event.objects.create(
+            timeline=timeline,
+            title="Test Event",
+        )
+        self.event_id = event.id
+
+    def test_title_max_length(self):
+        event = Event.objects.get(id=self.event_id)
+        max_length = event._meta.get_field("title").max_length
+        self.assertEqual(max_length, 100)
+
+    def test_description_max_length(self):
+        event = Event.objects.get(id=self.event_id)
+        max_length = event._meta.get_field("description").max_length
+        self.assertEqual(max_length, 1000)
+
+    def test_description_blank(self):
+        event = Event.objects.get(id=self.event_id)
+        blank = event._meta.get_field("description").blank
+        self.assertTrue(blank)
+
+    def test_tags_blank(self):
+        event = Event.objects.get(id=self.event_id)
+        blank = event._meta.get_field("tags").blank
+        self.assertTrue(blank)
+
+    def test_timeline_area_blank(self):
+        event = Event.objects.get(id=self.event_id)
+        blank = event._meta.get_field("timeline_area").blank
+        self.assertTrue(blank)
+
+    def test_timeline_area_null(self):
+        event = Event.objects.get(id=self.event_id)
+        null = event._meta.get_field("timeline_area").null
+        self.assertTrue(null)
+
+    def test_has_end_default(self):
+        event = Event.objects.get(id=self.event_id)
+        default = event._meta.get_field("has_end").default
+        self.assertFalse(default)
+
+    def test_object_name_is_title(self):
+        event = Event.objects.get(id=self.event_id)
+        title = event.title
+        self.assertEqual(str(event), title)
+
+    def test_get_owner_is_timeline_user(self):
+        event = Event.objects.get(id=self.event_id)
+        owner = event.timeline.user
+        self.assertEqual(event.get_owner(), owner)
 
 
 class EventAreaModel(TestCase):
