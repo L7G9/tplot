@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from timelines.models import Tag, Timeline
+from timelines.models import EventArea, Tag, Timeline
 
 
 class TimelineModel(TestCase):
@@ -45,7 +45,7 @@ class TimelineModel(TestCase):
     def test_description_blank(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
         blank = timeline._meta.get_field('description').blank
-        self.assertEqual(blank, True)
+        self.assertTrue(blank)
 
     def test_scale_length_label(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
@@ -123,6 +123,68 @@ class TimelineModel(TestCase):
         self.assertEqual(timeline.get_owner(), expected_owner)
 
 
+class EventAreaModel(TestCase):
+    @classmethod
+    def setUpTestData(self):
+        user = User.objects.create_user(
+            username="TestUser",
+            password="TestUser01#"
+        )
+        timeline = Timeline.objects.create(
+            user=user,
+            title="Test Timeline Title",
+            description="Test Timeline Description",
+            scale_length=1,
+            page_size="4",
+            page_orientation="L",
+            page_scale_position=0,
+        )
+        area = EventArea.objects.create(
+            timeline=timeline,
+            name="Test Event Area",
+            page_position=1,
+            weight=1,
+        )
+        self.area_id = area.id
+
+    def test_name_max_length(self):
+        area = EventArea.objects.get(id=self.area_id)
+        max_length = area._meta.get_field('name').max_length
+        self.assertEqual(max_length, 25)
+
+    def test_page_position_default(self):
+        area = EventArea.objects.get(id=self.area_id)
+        default = area._meta.get_field('page_position').default
+        self.assertEqual(default, 0)
+
+    def test_weight_default(self):
+        area = EventArea.objects.get(id=self.area_id)
+        default = area._meta.get_field('weight').default
+        self.assertEqual(default, 1)
+
+    def test_meta_ordering_by_name(self):
+        area = EventArea.objects.get(id=self.area_id)
+        ordering = area._meta.ordering
+        self.assertEqual(len(ordering), 1)
+        self.assertEqual(ordering[0], "name")
+
+    def test_meta_unique_together_timeline_page_position(self):
+        area = EventArea.objects.get(id=self.area_id)
+        unique_together = area._meta.unique_together
+        self.assertEqual(len(unique_together), 1)
+        self.assertEqual(unique_together[0], ("timeline", "page_position"))
+
+    def test_object_name_is_name(self):
+        area = EventArea.objects.get(id=self.area_id)
+        name = area.name
+        self.assertEqual(str(area), name)
+
+    def test_get_owner_is_timeline_user(self):
+        area = EventArea.objects.get(id=self.area_id)
+        owner = area.timeline.user
+        self.assertEqual(area.get_owner(), owner)
+
+
 class TagModel(TestCase):
     @classmethod
     def setUpTestData(self):
@@ -144,8 +206,14 @@ class TagModel(TestCase):
 
     def test_name_max_length(self):
         tag = Tag.objects.get(id=self.tag_id)
-        max_length = tag._meta.get_field('name').max_length
+        max_length = tag._meta.get_field("name").max_length
         self.assertEqual(max_length, 25)
+
+    def test_meta_ordering_by_name(self):
+        tag = Tag.objects.get(id=self.tag_id)
+        ordering = tag._meta.ordering
+        self.assertEqual(len(ordering), 1)
+        self.assertEqual(ordering[0], "name")
 
     def test_object_name_is_title(self):
         tag = Tag.objects.get(id=self.tag_id)
@@ -156,3 +224,4 @@ class TagModel(TestCase):
         tag = Tag.objects.get(id=self.tag_id)
         expected_owner = tag.timeline.user
         self.assertEqual(tag.get_owner(), expected_owner)
+
