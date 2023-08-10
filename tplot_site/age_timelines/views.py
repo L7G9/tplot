@@ -23,7 +23,7 @@ AGE_TIMELINE_FIELD_ORDER = [
 ]
 
 
-class AgeTimelineDetailView(OwnerRequiredMixin, DetailView):
+class AgeTimelineDetailView(LoginRequiredMixin, OwnerRequiredMixin, DetailView):
     model = AgeTimeline
     template_name = "age_timelines/age_timeline_detail.html"
     paginate_by = 10
