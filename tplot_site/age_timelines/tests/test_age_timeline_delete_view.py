@@ -57,13 +57,13 @@ class AgeTimelineDetailViewTest(TestCase):
         self.assertTrue('object' in response.context)
         self.assertEqual(response.context['object'].get_owner(), response.context['user'])
 
-    def todo_test_age_timeline_deleted(self):
+    def test_age_timeline_deleted(self):
         self.client.login(username=self.user_0.username, password=self.user_0_pw)
-        response = self.client.post(reverse('age_timelines:age-timeline-delete', args=(self.age_timeline_0.id,)), follow=True)
+        response = self.client.post(reverse('age_timelines:age-timeline-delete', kwargs={'pk': self.age_timeline_0.id}), follow=True)
         age_timelines = AgeTimeline.objects.filter(user=self.user_0)
         self.assertEqual(len(age_timelines), self.TIMELINES_PER_USER-1)
 
-    def todo_test_redirect_to_user_timelines_on_delete(self):
+    def test_redirect_to_user_timelines_on_delete(self):
         self.client.login(username=self.user_0.username, password=self.user_0_pw)
-        response = self.client.post(reverse('age_timelines:age-timeline-delete', args=(self.age_timeline_0.id,)), follow=True)
-        self.assertRedirects(post_response, reverse('timelines:user-timelines'), status_code=302)
+        response = self.client.post(reverse('age_timelines:age-timeline-delete', kwargs={'pk': self.age_timeline_0.id}), follow=True)
+        self.assertRedirects(response, reverse('timelines:user-timelines'), status_code=302)
