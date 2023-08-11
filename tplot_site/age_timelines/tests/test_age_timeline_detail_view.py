@@ -5,19 +5,19 @@ from .populate_db import populate_db
 
 class AgeTimelineDetailViewTest(TestCase):
     USER_COUNT = 2
-    TIMELINE_COUNT = 1
-    EVENT_COUNT = 6
-    TAG_COUNT = 3
-    AREA_COUNT = 2
+    TIMELINES_PER_USER = 1
+    EVENTS_PER_TIMELINE = 6
+    TAGS_PER_TIMELINE = 3
+    AREAS_PER_TIMELINE = 2
 
     @classmethod
-    def setUpTestData(self):
+    def setUpTestData(cls):
         populate_db(
-            self.USER_COUNT,
-            self.TIMELINE_COUNT,
-            self.EVENT_COUNT,
-            self.TAG_COUNT,
-            self.AREA_COUNT
+            cls.USER_COUNT,
+            cls.TIMELINES_PER_USER,
+            cls.EVENTS_PER_TIMELINE,
+            cls.TAGS_PER_TIMELINE,
+            cls.AREAS_PER_TIMELINE
         )
 
     def test_redirect_if_not_logged_in(self):
@@ -60,7 +60,7 @@ class AgeTimelineDetailViewTest(TestCase):
         response = self.client.get(reverse("age_timelines:age-timeline-detail", kwargs={'pk': 1}))
 
         age_events = response.context['object'].ageevent_set.all()
-        self.assertEqual(len(age_events), self.EVENT_COUNT)
+        self.assertEqual(len(age_events), self.EVENTS_PER_TIMELINE)
         for age_Event in age_events:
             self.assertEqual(age_Event.get_owner(), response.context['user'])
 
@@ -69,7 +69,7 @@ class AgeTimelineDetailViewTest(TestCase):
         response = self.client.get(reverse("age_timelines:age-timeline-detail", kwargs={'pk': 1}))
 
         tags = response.context['object'].tag_set.all()
-        self.assertEqual(len(tags), self.TAG_COUNT)
+        self.assertEqual(len(tags), self.TAGS_PER_TIMELINE)
         for tag in tags:
             self.assertEqual(tag.get_owner(), response.context['user'])
 
@@ -78,6 +78,6 @@ class AgeTimelineDetailViewTest(TestCase):
         response = self.client.get(reverse("age_timelines:age-timeline-detail", kwargs={'pk': 1}))
 
         areas = response.context['object'].eventarea_set.all()
-        self.assertEqual(len(areas), self.AREA_COUNT)
+        self.assertEqual(len(areas), self.AREAS_PER_TIMELINE)
         for area in areas:
             self.assertEqual(area.get_owner(), response.context['user'])
