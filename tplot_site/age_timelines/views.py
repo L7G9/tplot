@@ -45,13 +45,13 @@ class AgeTimelineCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class AgeTimelineUpdateView(OwnerRequiredMixin, UpdateView):
+class AgeTimelineUpdateView(LoginRequiredMixin, OwnerRequiredMixin, UpdateView):
     model = AgeTimeline
     fields = AGE_TIMELINE_FIELD_ORDER
     template_name = "age_timelines/age_timeline_edit_form.html"
 
 
-class AgeTimelineDeleteView(OwnerRequiredMixin, DeleteView):
+class AgeTimelineDeleteView(LoginRequiredMixin, OwnerRequiredMixin, DeleteView):
     model = AgeTimeline
     template_name = "age_timelines/age_timeline_confirm_delete.html"
     success_url = reverse_lazy("timelines:user-timelines")
