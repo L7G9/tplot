@@ -39,7 +39,7 @@ class AgeTimelineDetailViewTest(TestCase):
         data = {
             'user': self.test_user_0,
             'title': 'New Age Timeline',
-            'sescription': 'Description',
+            'description': 'Description',
             'scale_unit': 5,
             'scale_length': 5,
             'page_size': '4',
@@ -56,7 +56,7 @@ class AgeTimelineDetailViewTest(TestCase):
         data = {
             'user': self.test_user_0,
             'title': 'New Age Timeline',
-            'sescription': 'Description',
+            'description': 'Description',
             'scale_unit': 5,
             'scale_length': 5,
             'page_size': '4',
@@ -66,4 +66,3 @@ class AgeTimelineDetailViewTest(TestCase):
         response = self.client.post(reverse("age_timelines:age-timeline-add"), data=data, follow=True)
         age_timeline = AgeTimeline.objects.get(user=self.test_user_0)
         self.assertRedirects(response, reverse("age_timelines:age-timeline-detail", kwargs={'pk': age_timeline.id}), status_code=302)
-
