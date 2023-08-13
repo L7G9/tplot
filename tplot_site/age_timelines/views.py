@@ -129,7 +129,7 @@ class AgeEventCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, AgeEventVali
     template_name = "age_timelines/age_event_add_form.html"
 
 
-class AgeEventUpdateView(OwnerRequiredMixin, AgeEventValidateMixim, SuccessMixim, UpdateView):
+class AgeEventUpdateView(LoginRequiredMixin, OwnerRequiredMixin, AgeEventValidateMixim, SuccessMixim, UpdateView):
     model = AgeEvent
     fields = AGE_EVENT_FIELD_ORDER
     template_name = "age_timelines/age_event_edit_form.html"
