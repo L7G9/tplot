@@ -135,7 +135,7 @@ class AgeEventUpdateView(LoginRequiredMixin, OwnerRequiredMixin, AgeEventValidat
     template_name = "age_timelines/age_event_edit_form.html"
 
 
-class AgeEventDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
+class AgeEventDeleteView(LoginRequiredMixin, OwnerRequiredMixin, SuccessMixim, DeleteView):
     model = AgeEvent
     template_name = "age_timelines/age_event_confirm_delete.html"
 
