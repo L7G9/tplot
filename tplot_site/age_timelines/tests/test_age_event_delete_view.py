@@ -79,7 +79,7 @@ class AgeEventDeleteViewTest(TestCase):
             password=self.user0_password
         )
         response = self.client.get(
-            f"/timelines/age/{self.user0_age_timeline_id}/event/{self.user0_age_timeline_id}/delete/"
+            f"/timelines/age/{self.user0_age_timeline_id}/event/{self.user0_age_event_id}/delete/"
         )
         self.assertEqual(str(response.context['user']), self.user0.username)
         self.assertEqual(response.status_code, 200)
@@ -120,7 +120,7 @@ class AgeEventDeleteViewTest(TestCase):
             "age_timelines/age_event_confirm_delete.html"
         )
 
-    def test_age_event_deleted_and_redirect(self):
+    def test_age_event_deleted(self):
         self.client.login(
             username=self.user0.username,
             password=self.user0_password
@@ -132,10 +132,30 @@ class AgeEventDeleteViewTest(TestCase):
                     'age_timeline_id': self.user0_age_timeline_id,
                     'pk': self.user0_age_event_id
                 }
-            )
+            ),
+            follow=True
         )
+        self.assertEqual(response.status_code, 200)
         age_events = AgeEvent.objects.filter(id=self.user0_age_event_id)
-        self.assertEqual(len(age_events), 0)
+        expected_age_events = (self.AGE_TIMELINES_PER_USER * self.EVENTS_PER_TIMELINE) - 1
+        self.assertEqual(len(age_events), expected_age_events)
+
+    def test_redirect_after_age_event_deleted(self):
+        self.client.login(
+            username=self.user0.username,
+            password=self.user0_password
+        )
+        response = self.client.post(
+            reverse(
+                "age_timelines:age-event-delete",
+                kwargs={
+                    'age_timeline_id': self.user0_age_timeline_id,
+                    'pk': self.user0_age_event_id
+                }
+            ),
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
         self.assertRedirects(
             response,
             reverse(
