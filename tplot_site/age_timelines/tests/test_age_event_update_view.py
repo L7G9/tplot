@@ -25,6 +25,16 @@ class AgeEventUpdateViewTest(TestCase):
         cls.user0_age_event_id = users[0]['age_timeline_ids'][0]['age_event_ids'][0]
         cls.user1_age_timeline_id = users[1]['age_timeline_ids'][0]['id']
         cls.user1_age_event_id = users[1]['age_timeline_ids'][0]['age_event_ids'][0]
+        cls.updated_age_event_data = {
+            'age_timeline': cls.user0_age_timeline_id,
+            'title': 'Updated Title',
+            'description': 'Description',
+            'start_year': 1,
+            'start_month': 0,
+            'has_end': False,
+            'end_year': 2,
+            'end_month': 0
+        }
 
     def test_redirect_if_not_logged_in(self):
         response = self.client.get(
@@ -79,7 +89,7 @@ class AgeEventUpdateViewTest(TestCase):
             password=self.user0_password
         )
         response = self.client.get(
-            f"/timelines/age/{self.user0_age_timeline_id}/event/{self.user0_age_timeline_id}/update/"
+            f"/timelines/age/{self.user0_age_timeline_id}/event/{self.user0_age_event_id}/update/"
         )
         self.assertEqual(str(response.context['user']), self.user0.username)
         self.assertEqual(response.status_code, 200)
@@ -120,22 +130,11 @@ class AgeEventUpdateViewTest(TestCase):
             "age_timelines/age_event_edit_form.html"
         )
 
-    def test_age_event_updated_and_redirect(self):
+    def test_age_event_updated(self):
         self.client.login(
             username=self.user0.username,
             password=self.user0_password
         )
-        updated_title = 'Updated Age Event'
-        data = {
-            'age_timeline': self.user0_age_timeline_id,
-            'title': updated_title,
-            'description': 'Description',
-            'start_year': 1,
-            'start_month': 0,
-            'has_end': False,
-            'end_year': 2,
-            'end_month': 0
-        }
         response = self.client.post(
             reverse(
                 "age_timelines:age-event-update",
@@ -144,12 +143,30 @@ class AgeEventUpdateViewTest(TestCase):
                     'pk': self.user0_age_event_id
                 }
             ),
-            data=data,
+            data=self.updated_age_event_data,
             follow=True
         )
         self.assertEquals(response.status_code, 200)
         age_event = AgeEvent.objects.get(id=self.user0_age_event_id)
-        self.assertEqual(age_event.title, updated_title)
+        self.assertEqual(age_event.title, self.updated_age_event_data['title'])
+
+    def test_redirect_after_age_event_updated(self):
+        self.client.login(
+            username=self.user0.username,
+            password=self.user0_password
+        )
+        response = self.client.post(
+            reverse(
+                "age_timelines:age-event-update",
+                kwargs={
+                    'age_timeline_id': self.user0_age_timeline_id,
+                    'pk': self.user0_age_event_id
+                }
+            ),
+            data=self.updated_age_event_data,
+            follow=True
+        )
+        self.assertEquals(response.status_code, 200)
         self.assertRedirects(
             response,
             reverse(
