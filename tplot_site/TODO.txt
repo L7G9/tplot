@@ -1,13 +1,18 @@
 Essential Task list
     Weight min value of 1
     use try on get_object
-    update python
     update references to Area to Event Area
     update user timelines to your timelines
     Event area position default of 1?
     layout of sign-up page
+        account form should be using bootstrap etc
+    remove pageination from age timeline detail view until implemeted
+    Test if OwnerRequiredMixin works when not logged in
+    check test class named from copy and past errors
+    rename age_timeline_ids to age timelines in result from populate_db
 
 Optional Task List
+    update python
     add created and edited date and times to timeline
     add credit field to timeline
     validate titles and names with regex
@@ -32,14 +37,25 @@ Optional Task List
         account details
         reset password
         subscription
-
+    Consistency
+        area or event area
+        Create Read Update & Delete OR Add Detail Edit & Delete
+    DRY
+        look for ways to not to repeat similar views and forms across timeline types
 Plan
     Testing
         models
         views
         forms
         coverage
-    code quality tools
+    Check list
+        naming look for c&p typos
+        remove magic numbers & values where possible
+        try to test one thing per method
+    Code quality tools
+
+
+    documentation
     CI
     CD
     info app
