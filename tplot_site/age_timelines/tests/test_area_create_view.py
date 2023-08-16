@@ -2,7 +2,6 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from .populate_db import populate_db
-from age_timelines.models import AgeTimeline
 from timelines.models import EventArea, Timeline
 
 
@@ -90,7 +89,7 @@ class AreaCreateViewTest(TestCase):
             "age_timelines/area_add_form.html"
         )
 
-    def test_age_event_added(self):
+    def test_event_area_added(self):
         self.client.login(
             username=self.user0.username,
             password=self.user0_password
@@ -115,7 +114,7 @@ class AreaCreateViewTest(TestCase):
         )
         self.assertEquals(len(age_events), 1)
 
-    def test_redirect_after_age_event_added(self):
+    def test_redirect_after_event_area_added(self):
         self.client.login(
             username=self.user0.username,
             password=self.user0_password

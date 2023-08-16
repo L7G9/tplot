@@ -8,7 +8,7 @@ from age_timelines.models import AgeEvent
 class AgeEventCreateViewTest(TestCase):
     USER_COUNT = 2
     AGE_TIMELINES_PER_USER = 1
-    EVENTS_PER_TIMELINE = 1
+    EVENTS_PER_TIMELINE = 0
 
     @classmethod
     def setUpTestData(cls):
@@ -118,7 +118,7 @@ class AgeEventCreateViewTest(TestCase):
         age_events = AgeEvent.objects.filter(
             age_timeline=self.user0_age_timeline_id
         )
-        expected_age_events = (self.AGE_TIMELINES_PER_USER * self.EVENTS_PER_TIMELINE) + 1
+        expected_age_events = self.EVENTS_PER_TIMELINE + 1
         self.assertEquals(len(age_events), expected_age_events)
 
     def test_redirect_after_age_event_added(self):

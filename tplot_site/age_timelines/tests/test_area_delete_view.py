@@ -150,7 +150,7 @@ class AreaDeleteViewTest(TestCase):
                 "age_timelines:area-delete",
                 kwargs={
                     'age_timeline_id': self.user0_age_timeline_id,
-                    'pk': self.user0_age_timeline_id,
+                    'pk': self.user0_event_area_id,
                 },
             ),
             follow=True

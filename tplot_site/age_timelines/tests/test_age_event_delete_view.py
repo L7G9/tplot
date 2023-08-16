@@ -136,8 +136,8 @@ class AgeEventDeleteViewTest(TestCase):
             follow=True
         )
         self.assertEqual(response.status_code, 200)
-        age_events = AgeEvent.objects.filter(id=self.user0_age_event_id)
-        expected_age_events = (self.AGE_TIMELINES_PER_USER * self.EVENTS_PER_TIMELINE) - 1
+        age_events = AgeEvent.objects.filter(age_timeline=self.user0_age_timeline_id)
+        expected_age_events = self.EVENTS_PER_TIMELINE - 1
         self.assertEqual(len(age_events), expected_age_events)
 
     def test_redirect_after_age_event_deleted(self):
