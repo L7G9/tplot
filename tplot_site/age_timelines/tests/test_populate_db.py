@@ -55,19 +55,19 @@ class PopulateDBTest(TestCase):
         self.assertEqual(users[0]['username'], "User0")
         self.assertEqual(users[0]['password'], "Password0#")
         self.assertEqual(
-            len(users[0]['age_timeline_ids']),
+            len(users[0]['age_timelines']),
             self.AGE_TIMELINES_PER_USER
         )
         self.assertEqual(
-            len(users[0]['age_timeline_ids'][0]['age_event_ids']),
+            len(users[0]['age_timelines'][0]['age_event_ids']),
             self.EVENTS_PER_TIMELINE
         )
         self.assertEqual(
-            len(users[0]['age_timeline_ids'][0]['tag_ids']),
+            len(users[0]['age_timelines'][0]['tag_ids']),
             self.TAGS_PER_TIMELINE
         )
         self.assertEqual(
-            len(users[0]['age_timeline_ids'][0]['event_area_ids']),
+            len(users[0]['age_timelines'][0]['event_area_ids']),
             self.EVENT_AREAS_PER_TIMELINE
         )
 
