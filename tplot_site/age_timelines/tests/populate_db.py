@@ -19,7 +19,7 @@ def populate_db(
         user_ids = {
             'username': f"User{user_index}",
             'password': f"Password{user_index}#",
-            'age_timeline_ids': []
+            'age_timelines': []
         }
         users.append(user_ids)
         for age_timeline_index in range(age_timelines_per_user):
@@ -33,7 +33,7 @@ def populate_db(
                 'tag_ids': [],
                 'event_area_ids': [],
             }
-            user_ids['age_timeline_ids'].append(age_timeline_ids)
+            user_ids['age_timelines'].append(age_timeline_ids)
 
             for age_event_index in range(events_per_timeline):
                 age_event = AgeEvent.objects.create(
