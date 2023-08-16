@@ -135,7 +135,7 @@ class AgeEventUpdateView(LoginRequiredMixin, AgeTimelineOwnerMixim, OwnerRequire
     template_name = "age_timelines/age_event_edit_form.html"
 
 
-class AgeEventDeleteView(LoginRequiredMixin, OwnerRequiredMixin, SuccessMixim, DeleteView):
+class AgeEventDeleteView(LoginRequiredMixin, AgeTimelineOwnerMixim, OwnerRequiredMixin, SuccessMixim, DeleteView):
     model = AgeEvent
     template_name = "age_timelines/age_event_confirm_delete.html"
 
@@ -156,13 +156,13 @@ class TagCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, TagValidateMixim,
     template_name = "age_timelines/tag_add_form.html"
 
 
-class TagUpdateView(OwnerRequiredMixin, TagValidateMixim, SuccessMixim, UpdateView):
+class TagUpdateView(LoginRequiredMixin, AgeTimelineOwnerMixim, OwnerRequiredMixin, TagValidateMixim, SuccessMixim, UpdateView):
     model = Tag
     fields = ["name"]
     template_name = "age_timelines/tag_edit_form.html"
 
 
-class TagDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
+class TagDeleteView(LoginRequiredMixin, AgeTimelineOwnerMixim, OwnerRequiredMixin, SuccessMixim, DeleteView):
     model = Tag
     template_name = "age_timelines/tag_confirm_delete.html"
 
@@ -199,12 +199,12 @@ class AreaCreateView(LoginRequiredMixin, AgeTimelineOwnerMixim, AreaValidateMixi
     template_name = "age_timelines/area_add_form.html"
 
 
-class AreaUpdateView(OwnerRequiredMixin, AreaValidateMixim, SuccessMixim, UpdateView):
+class AreaUpdateView(LoginRequiredMixin, AgeTimelineOwnerMixim, OwnerRequiredMixin, AreaValidateMixim, SuccessMixim, UpdateView):
     model = EventArea
     fields = ["name", "page_position", "weight"]
     template_name = "age_timelines/area_edit_form.html"
 
 
-class AreaDeleteView(OwnerRequiredMixin, SuccessMixim, DeleteView):
+class AreaDeleteView(LoginRequiredMixin, AgeTimelineOwnerMixim, OwnerRequiredMixin, SuccessMixim, DeleteView):
     model = EventArea
     template_name = "age_timelines/area_confirm_delete.html"
