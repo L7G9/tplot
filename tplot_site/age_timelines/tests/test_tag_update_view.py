@@ -2,7 +2,8 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from .populate_db import populate_db
-from timelines.models import Tag, Timeline
+from age_timelines.models import AgeTimeline
+from timelines.models import Tag
 
 
 class TagUpdateViewTest(TestCase):
@@ -21,67 +22,26 @@ class TagUpdateViewTest(TestCase):
         )
         cls.user0 = User.objects.get(username=users[0]['username'])
         cls.user0_password = users[0]['password']
-        cls.user0_age_timeline_id = users[0]['age_timeline_ids'][0]['id']
-        age_timeline0 = Timeline.objects.get(user=cls.user0)
-        cls.user0_timeline_id = age_timeline0.pk
-        cls.user0_tag_id = users[0]['age_timeline_ids'][0]['tag_ids'][0]
-        cls.user1_age_timeline_id = users[1]['age_timeline_ids'][0]['id']
-        cls.user1_tag_id = users[1]['age_timeline_ids'][0]['tag_ids'][0]
-
-    def test_redirect_if_not_logged_in(self):
-        response = self.client.get(
-            reverse(
-                "age_timelines:tag-update",
-                kwargs={
-                    'age_timeline_id': self.user0_age_timeline_id,
-                    'pk': self.user0_tag_id
-                }
-            )
-        )
-        self.assertRedirects(
-            response,
-            f"/accounts/login/?next=/timelines/age/{self.user0_age_timeline_id}/tag/{self.user0_tag_id}/update/"
-        )
-
-    def test_forbidden_if_age_timeline_not_owned_by_logged_in_user(self):
-        self.client.login(
-            username=self.user0.username,
-            password=self.user0_password
-        )
-        response = self.client.get(
-            reverse(
-                "age_timelines:tag-update",
-                kwargs={
-                    'age_timeline_id': self.user1_age_timeline_id,
-                    'pk': self.user0_tag_id
-                }
-            )
-        )
-        self.assertEqual(response.status_code, 403)
-
-    def test_forbidden_if_tag_not_owned_by_logged_in_user(self):
-        self.client.login(
-            username=self.user0.username,
-            password=self.user0_password
-        )
-        response = self.client.get(
-            reverse(
-                "age_timelines:tag-update",
-                kwargs={
-                    'age_timeline_id': self.user0_age_timeline_id,
-                    'pk': self.user1_tag_id
-                }
-            )
-        )
-        self.assertEqual(response.status_code, 403)
+        cls.user0_age_timeline_id = users[0]['age_timelines'][0]['id']
+        age_timeline = AgeTimeline.objects.get(id=cls.user0_age_timeline_id)
+        cls.user0_timeline_id = age_timeline.timeline_ptr.pk
+        cls.user0_tag_id = users[0]['age_timelines'][0]['tag_ids'][0]
+        cls.user1_age_timeline_id = users[1]['age_timelines'][0]['id']
+        cls.user1_tag_id = users[1]['age_timelines'][0]['tag_ids'][0]
+        cls.updated_tag_data = {
+            'timeline': cls.user0_timeline_id,
+            'name': 'Updated Test Tag',
+        }
 
     def test_view_url_exists_at_desired_location(self):
         self.client.login(
             username=self.user0.username,
             password=self.user0_password
         )
+        timeline_id = self.user0_age_timeline_id
+        tag_id = self.user0_tag_id
         response = self.client.get(
-            f"/timelines/age/{self.user0_age_timeline_id}/tag/{self.user0_tag_id}/update/"
+            f"/timelines/age/{timeline_id}/tag/{tag_id}/update/"
         )
         self.assertEqual(str(response.context['user']), self.user0.username)
         self.assertEqual(response.status_code, 200)
@@ -117,21 +77,64 @@ class TagUpdateViewTest(TestCase):
                 }
             )
         )
+        self.assertEqual(str(response.context['user']), self.user0.username)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(
             response,
             "age_timelines/tag_edit_form.html"
         )
+
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(
+            reverse(
+                "age_timelines:tag-update",
+                kwargs={
+                    'age_timeline_id': self.user0_age_timeline_id,
+                    'pk': self.user0_tag_id
+                }
+            )
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    def test_forbidden_if_age_timeline_not_owned_by_logged_in_user(self):
+        self.client.login(
+            username=self.user0.username,
+            password=self.user0_password
+        )
+        response = self.client.get(
+            reverse(
+                "age_timelines:tag-update",
+                kwargs={
+                    'age_timeline_id': self.user1_age_timeline_id,
+                    'pk': self.user0_tag_id
+                }
+            )
+        )
+        self.assertEqual(response.status_code, 403)
+
+    def test_forbidden_if_tag_not_owned_by_logged_in_user(self):
+        self.client.login(
+            username=self.user0.username,
+            password=self.user0_password
+        )
+        response = self.client.get(
+            reverse(
+                "age_timelines:tag-update",
+                kwargs={
+                    'age_timeline_id': self.user0_age_timeline_id,
+                    'pk': self.user1_tag_id
+                }
+            )
+        )
+        self.assertEqual(response.status_code, 403)
 
     def test_tag_updated(self):
         self.client.login(
             username=self.user0.username,
             password=self.user0_password
         )
-        updated_name = 'Updated Tag'
-        data = {
-            'timeline': self.user0_timeline_id,
-            'name': updated_name,
-        }
+
         response = self.client.post(
             reverse(
                 "age_timelines:tag-update",
@@ -140,22 +143,20 @@ class TagUpdateViewTest(TestCase):
                     'pk': self.user0_tag_id
                 }
             ),
-            data=data,
+            data=self.updated_tag_data,
             follow=True
         )
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(str(response.context['user']), self.user0.username)
+        self.assertEqual(response.status_code, 200)
+
         tag = Tag.objects.get(id=self.user0_tag_id)
-        self.assertEqual(tag.name, updated_name)
+        self.assertEqual(tag.name, self.updated_tag_data['name'])
 
     def test_redirect_after_tag_updated(self):
         self.client.login(
             username=self.user0.username,
             password=self.user0_password
         )
-        data = {
-            'timeline': self.user0_timeline_id,
-            'name': 'Updated Tag',
-        }
         response = self.client.post(
             reverse(
                 "age_timelines:tag-update",
@@ -164,10 +165,11 @@ class TagUpdateViewTest(TestCase):
                     'pk': self.user0_tag_id
                 }
             ),
-            data=data,
+            data=self.updated_tag_data,
             follow=True
         )
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(str(response.context['user']), self.user0.username)
+        self.assertEqual(response.status_code, 200)
         self.assertRedirects(
             response,
             reverse(

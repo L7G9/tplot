@@ -23,37 +23,17 @@ class AgeTimelineDetailViewTest(TestCase):
         cls.user0 = User.objects.get(username=users[0]['username'])
         cls.user0_password = users[0]['password']
         cls.user1 = User.objects.get(username=users[1]['username'])
-        cls.user0_age_timeline_id = users[0]['age_timeline_ids'][0]['id']
-        cls.user1_age_timeline_id = users[1]['age_timeline_ids'][0]['id']
-
-    def test_redirect_if_not_logged_in(self):
-        response = self.client.get(
-            reverse(
-                "age_timelines:age-timeline-detail",
-                kwargs={'pk': self.user0_age_timeline_id}
-            )
-        )
-        self.assertRedirects(response, "/accounts/login/?next=/timelines/age/1/detail/")
-
-    def test_forbidden_if_age_timeline_not_owned_by_logged_in_user(self):
-        self.client.login(
-            username=self.user0.username,
-            password=self.user0_password
-        )
-        response = self.client.get(
-            reverse(
-                "age_timelines:age-timeline-detail",
-                kwargs={'pk': self.user1_age_timeline_id}
-            )
-        )
-        self.assertEqual(response.status_code, 403)
+        cls.user0_age_timeline_id = users[0]['age_timelines'][0]['id']
+        cls.user1_age_timeline_id = users[1]['age_timelines'][0]['id']
 
     def test_view_url_exists_at_desired_location(self):
         self.client.login(
             username=self.user0.username,
             password=self.user0_password
         )
-        response = self.client.get(f"/timelines/age/{self.user0_age_timeline_id}/detail/")
+        response = self.client.get(
+            f"/timelines/age/{self.user0_age_timeline_id}/detail/"
+        )
         self.assertEqual(str(response.context['user']), self.user0.username)
         self.assertEqual(response.status_code, 200)
 
@@ -84,7 +64,10 @@ class AgeTimelineDetailViewTest(TestCase):
         )
         self.assertEqual(str(response.context['user']), self.user0.username)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "age_timelines/age_timeline_detail.html")
+        self.assertTemplateUsed(
+            response,
+            "age_timelines/age_timeline_detail.html"
+        )
 
     def test_context_age_timeline_object_owned_by_logged_in_user(self):
         self.client.login(
@@ -97,9 +80,11 @@ class AgeTimelineDetailViewTest(TestCase):
                 kwargs={'pk': self.user0_age_timeline_id}
             )
         )
-
         self.assertTrue('object' in response.context)
-        self.assertEqual(response.context['object'].get_owner(), response.context['user'])
+        self.assertEqual(
+            response.context['object'].get_owner(),
+            response.context['user']
+        )
 
     def test_age_events_owned_by_logged_in_user(self):
         self.client.login(
@@ -112,7 +97,6 @@ class AgeTimelineDetailViewTest(TestCase):
                 kwargs={'pk': self.user0_age_timeline_id}
             )
         )
-
         age_events = response.context['object'].ageevent_set.all()
         self.assertEqual(len(age_events), self.EVENTS_PER_TIMELINE)
         for age_Event in age_events:
@@ -129,7 +113,6 @@ class AgeTimelineDetailViewTest(TestCase):
                 kwargs={'pk': self.user0_age_timeline_id}
             )
         )
-
         tags = response.context['object'].tag_set.all()
         self.assertEqual(len(tags), self.TAGS_PER_TIMELINE)
         for tag in tags:
@@ -146,8 +129,30 @@ class AgeTimelineDetailViewTest(TestCase):
                 kwargs={'pk': self.user0_age_timeline_id}
             )
         )
-
         areas = response.context['object'].eventarea_set.all()
         self.assertEqual(len(areas), self.AREAS_PER_TIMELINE)
         for area in areas:
             self.assertEqual(area.get_owner(), response.context['user'])
+
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(
+            reverse(
+                "age_timelines:age-timeline-detail",
+                kwargs={'pk': self.user0_age_timeline_id}
+            )
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    def test_forbidden_if_age_timeline_not_owned_by_logged_in_user(self):
+        self.client.login(
+            username=self.user0.username,
+            password=self.user0_password
+        )
+        response = self.client.get(
+            reverse(
+                "age_timelines:age-timeline-detail",
+                kwargs={'pk': self.user1_age_timeline_id}
+            )
+        )
+        self.assertEqual(response.status_code, 403)

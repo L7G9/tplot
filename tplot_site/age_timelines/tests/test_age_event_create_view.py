@@ -21,12 +21,12 @@ class AgeEventCreateViewTest(TestCase):
         )
         cls.user0 = User.objects.get(username=users[0]['username'])
         cls.user0_password = users[0]['password']
-        cls.user0_age_timeline_id = users[0]['age_timeline_ids'][0]['id']
-        cls.user1_age_timeline_id = users[1]['age_timeline_ids'][0]['id']
+        cls.user0_age_timeline_id = users[0]['age_timelines'][0]['id']
+        cls.user1_age_timeline_id = users[1]['age_timelines'][0]['id']
 
         cls.new_age_event_data = {
             'age_timeline': cls.user0_age_timeline_id,
-            'title': 'New Age Event',
+            'title': 'New Test Age Event',
             'description': 'Description',
             'start_year': 1,
             'start_month': 0,
@@ -34,31 +34,6 @@ class AgeEventCreateViewTest(TestCase):
             'end_year': 2,
             'end_month': 0
         }
-
-    def test_redirect_if_not_logged_in(self):
-        response = self.client.get(
-            reverse(
-                "age_timelines:age-event-add",
-                kwargs={'age_timeline_id': self.user0_age_timeline_id}
-            )
-        )
-        self.assertRedirects(
-            response,
-            f"/accounts/login/?next=/timelines/age/{self.user0_age_timeline_id}/event/add/"
-        )
-
-    def test_forbidden_if_age_timeline_not_owned_by_logged_in_user(self):
-        self.client.login(
-            username=self.user0.username,
-            password=self.user0_password
-        )
-        response = self.client.get(
-            reverse(
-                "age_timelines:age-event-add",
-                kwargs={'age_timeline_id': self.user1_age_timeline_id}
-            )
-        )
-        self.assertEqual(response.status_code, 403)
 
     def test_view_url_exists_at_desired_location(self):
         self.client.login(
@@ -96,10 +71,35 @@ class AgeEventCreateViewTest(TestCase):
                 kwargs={'age_timeline_id': self.user0_age_timeline_id}
             )
         )
+        self.assertEqual(str(response.context['user']), self.user0.username)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(
             response,
             "age_timelines/age_event_add_form.html"
         )
+
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(
+            reverse(
+                "age_timelines:age-event-add",
+                kwargs={'age_timeline_id': self.user0_age_timeline_id}
+            )
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+    def test_forbidden_if_age_timeline_not_owned_by_logged_in_user(self):
+        self.client.login(
+            username=self.user0.username,
+            password=self.user0_password
+        )
+        response = self.client.get(
+            reverse(
+                "age_timelines:age-event-add",
+                kwargs={'age_timeline_id': self.user1_age_timeline_id}
+            )
+        )
+        self.assertEqual(response.status_code, 403)
 
     def test_age_event_added(self):
         self.client.login(
@@ -114,12 +114,14 @@ class AgeEventCreateViewTest(TestCase):
             data=self.new_age_event_data,
             follow=True
         )
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(str(response.context['user']), self.user0.username)
+        self.assertEqual(response.status_code, 200)
+
         age_events = AgeEvent.objects.filter(
             age_timeline=self.user0_age_timeline_id
         )
-        expected_age_events = self.EVENTS_PER_TIMELINE + 1
-        self.assertEquals(len(age_events), expected_age_events)
+        expected_age_event_count = self.EVENTS_PER_TIMELINE + 1
+        self.assertEquals(len(age_events), expected_age_event_count)
 
     def test_redirect_after_age_event_added(self):
         self.client.login(
@@ -134,7 +136,8 @@ class AgeEventCreateViewTest(TestCase):
             data=self.new_age_event_data,
             follow=True
         )
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(str(response.context['user']), self.user0.username)
+        self.assertEqual(response.status_code, 200)
         self.assertRedirects(
             response,
             reverse(
