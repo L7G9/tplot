@@ -1,5 +1,9 @@
 name: Python CICD pipeline
 
+env:
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  PASSWORD: ${{ secrets.PASSWORD }}
+
 on:
   push:
     branches:
