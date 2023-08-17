@@ -1,0 +1,35 @@
+name: Python CICD pipeline
+
+on:
+  push:
+    branches:
+      - cicd
+  pull_request:
+    branches:
+      - cicd
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.11.3
+
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Unit Tests
+      run: |
+        tplot_site/coverage run manage.py test
+
+    - name: Coverage Check
+      run: |
+        tplot_site/coverage report --fail-under=80
