@@ -5,7 +5,6 @@ env:
   SECRET_KEY: ${{ secrets.SECRET_KEY }}
   PASSWORD: ${{ secrets.PASSWORD }}
 
-
 on:
   push:
     branches:
@@ -49,4 +48,4 @@ jobs:
 
     - name: Coverage Check
       working-directory: ./tplot_site
-      run: tplot_site/coverage report --fail-under=80
+      run: coverage report --fail-under=80
