@@ -1,0 +1,3 @@
+[run]
+omit =
+    tplot_site/settings.py
