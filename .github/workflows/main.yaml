@@ -56,4 +56,4 @@ jobs:
 
     - name: Bandit
       working-directory: ./tplot_site
-      run: bandit -r accounts/ age_timelines/ timelines/ tplot_site/
+      run: bandit -c pyproject.toml -r accounts/ age_timelines/ timelines/ tplot_site/
