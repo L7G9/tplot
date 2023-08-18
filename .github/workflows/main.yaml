@@ -49,3 +49,7 @@ jobs:
     - name: Coverage Check
       working-directory: ./tplot_site
       run: coverage report --fail-under=80
+
+    - name: Flake8
+      working-directory: ./tplot_site
+      run: flake8 .
