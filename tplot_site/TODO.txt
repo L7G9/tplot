@@ -10,6 +10,7 @@ Essential Task list
     Test if OwnerRequiredMixin works when not logged in
     check test class named from copy and past errors
     rename age_timeline_ids to age timelines in result from populate_db
+    check usage of setUpTestData(cls): in tests should I create, delete or update twice?
 
 Optional Task List
     update python
@@ -66,3 +67,5 @@ Plan
 
 Feature Ideas
     sharing and collaboration
+https://coverage.readthedocs.io/en/6.4/index.html
+https://stackoverflow.com/questions/72363700/creating-tests-to-maintain-minimum-coverage
