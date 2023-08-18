@@ -66,4 +66,10 @@ jobs:
 
     - name: Bandit
       working-directory: ./tplot_site
-      run: bandit -c pyproject.toml -r accounts/ age_timelines/ timelines/ tplot_site/
+      run: bandit -c pyproject.toml -r accounts/ age_timelines/ timelines/ tplot_site/ -f html -o bandit.html
+
+    - name: Create bandit report artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: bandit-report
+        path: ./bandit.html
