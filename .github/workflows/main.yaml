@@ -50,6 +50,16 @@ jobs:
       working-directory: ./tplot_site
       run: coverage report --fail-under=80
 
+    - name: Coverage Report
+      working-directory: ./tplot_site
+      run: coverage html
+
+    - name: Create coverage report artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: ./tplot_site/htmlcov/
+
     - name: Flake8
       working-directory: ./tplot_site
       run: flake8 .
