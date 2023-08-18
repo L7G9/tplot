@@ -1,2 +1,2 @@
 [flake8]
-exclude = accounts/migrations, age_timelines/migrations, timelines/migrations
+exclude = manage.py, accounts/migrations, age_timelines/migrations, timelines/migrations, tplot_site/settings.py
