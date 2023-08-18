@@ -26,3 +26,6 @@ exclude = '''
                      # the root of the project
 )
 '''
+
+[tool.bandit]
+exclude_dirs = ["accounts/tests", "age_timelines/tests", "timelines/tests"]
