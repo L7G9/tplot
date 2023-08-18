@@ -53,3 +53,7 @@ jobs:
     - name: Flake8
       working-directory: ./tplot_site
       run: flake8 .
+
+    - name: Bandit
+      working-directory: ./tplot_site
+      run: bandit -r accounts/ age_timelines/ timelines/ tplot_site/
