@@ -8,8 +8,7 @@ class TimelineModel(TestCase):
     @classmethod
     def setUpTestData(self):
         user = User.objects.create_user(
-            username="TestUser",
-            password="TestUser01#"
+            username="TestUser", password="TestUser01#"
         )
         timeline = Timeline.objects.create(
             user=user,
@@ -24,62 +23,62 @@ class TimelineModel(TestCase):
 
     def test_title_name_max_length(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        max_length = timeline._meta.get_field('title').max_length
+        max_length = timeline._meta.get_field("title").max_length
         self.assertEqual(max_length, 100)
 
     def test_description_max_length(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        max_length = timeline._meta.get_field('description').max_length
+        max_length = timeline._meta.get_field("description").max_length
         self.assertEqual(max_length, 1000)
 
     def test_description_blank(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        blank = timeline._meta.get_field('description').blank
+        blank = timeline._meta.get_field("description").blank
         self.assertTrue(blank)
 
     def test_scale_choices(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        choices = timeline._meta.get_field('scale_length').choices
+        choices = timeline._meta.get_field("scale_length").choices
         self.assertEqual(choices, Timeline.SCALE_LENGTHS)
 
     def test_scale_default(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        default = timeline._meta.get_field('scale_length').default
+        default = timeline._meta.get_field("scale_length").default
         self.assertEqual(default, 5)
 
     def test_page_size_max_length(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        max_length = timeline._meta.get_field('page_size').max_length
+        max_length = timeline._meta.get_field("page_size").max_length
         self.assertEqual(max_length, 1)
 
     def test_page_size_choices(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        choices = timeline._meta.get_field('page_size').choices
+        choices = timeline._meta.get_field("page_size").choices
         self.assertEqual(choices, Timeline.PAGE_SIZES)
 
     def test_page_size_default(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        default = timeline._meta.get_field('page_size').default
+        default = timeline._meta.get_field("page_size").default
         self.assertEqual(default, "4")
 
     def test_page_orientation_max_length(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        max_length = timeline._meta.get_field('page_orientation').max_length
+        max_length = timeline._meta.get_field("page_orientation").max_length
         self.assertEqual(max_length, 1)
 
     def test_page_orientation_choices(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        choices = timeline._meta.get_field('page_orientation').choices
+        choices = timeline._meta.get_field("page_orientation").choices
         self.assertEqual(choices, Timeline.PAGE_ORIENTATIONS)
 
     def test_page_orientation_default(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        default = timeline._meta.get_field('page_orientation').default
+        default = timeline._meta.get_field("page_orientation").default
         self.assertEqual(default, "L")
 
     def test_page_scale_position_default(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        default = timeline._meta.get_field('page_scale_position').default
+        default = timeline._meta.get_field("page_scale_position").default
         self.assertEqual(default, 0)
 
     def test_object_name_is_title(self):
@@ -97,8 +96,7 @@ class EventModel(TestCase):
     @classmethod
     def setUpTestData(self):
         user = User.objects.create_user(
-            username="TestUser",
-            password="TestUser01#"
+            username="TestUser", password="TestUser01#"
         )
         timeline = Timeline.objects.create(
             user=user,
@@ -165,8 +163,7 @@ class EventAreaModel(TestCase):
     @classmethod
     def setUpTestData(self):
         user = User.objects.create_user(
-            username="TestUser",
-            password="TestUser01#"
+            username="TestUser", password="TestUser01#"
         )
         timeline = Timeline.objects.create(
             user=user,
@@ -187,17 +184,17 @@ class EventAreaModel(TestCase):
 
     def test_name_max_length(self):
         area = EventArea.objects.get(id=self.area_id)
-        max_length = area._meta.get_field('name').max_length
+        max_length = area._meta.get_field("name").max_length
         self.assertEqual(max_length, 25)
 
     def test_page_position_default(self):
         area = EventArea.objects.get(id=self.area_id)
-        default = area._meta.get_field('page_position').default
+        default = area._meta.get_field("page_position").default
         self.assertEqual(default, 0)
 
     def test_weight_default(self):
         area = EventArea.objects.get(id=self.area_id)
-        default = area._meta.get_field('weight').default
+        default = area._meta.get_field("weight").default
         self.assertEqual(default, 1)
 
     def test_meta_ordering_by_name(self):
@@ -227,8 +224,7 @@ class TagModel(TestCase):
     @classmethod
     def setUpTestData(self):
         user = User.objects.create_user(
-            username="TestUser",
-            password="TestUser01#"
+            username="TestUser", password="TestUser01#"
         )
         timeline = Timeline.objects.create(
             user=user,

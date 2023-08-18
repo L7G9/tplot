@@ -14,14 +14,13 @@ def register_request(request):
             messages.success(request, "Registration successful.")
             return redirect("timelines:user-timelines")
         messages.error(
-            request,
-            "Unsuccessful registration.  Invalid information."
+            request, "Unsuccessful registration.  Invalid information."
         )
     form = NewUserForm()
     return render(
         request=request,
         template_name="accounts/register.html",
-        context={"register_form": form}
+        context={"register_form": form},
     )
 
 
@@ -29,8 +28,8 @@ def login_request(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
@@ -42,7 +41,7 @@ def login_request(request):
     return render(
         request=request,
         template_name="accounts/login.html",
-        context={"login_form": form}
+        context={"login_form": form},
     )
 
 

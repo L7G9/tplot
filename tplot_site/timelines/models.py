@@ -27,28 +27,18 @@ class Timeline(models.Model):
         (30, "30cm"),
     ]
     scale_length = models.PositiveSmallIntegerField(
-        choices=SCALE_LENGTHS,
-        default=5
+        choices=SCALE_LENGTHS, default=5
     )
 
     # display layout
-    PAGE_SIZES = [
-        ("3", "A3"),
-        ("4", "A4"),
-        ("5", "A5")
-    ]
-    page_size = models.CharField(
-        max_length=1,
-        choices=PAGE_SIZES,
-        default="4")
+    PAGE_SIZES = [("3", "A3"), ("4", "A4"), ("5", "A5")]
+    page_size = models.CharField(max_length=1, choices=PAGE_SIZES, default="4")
     PAGE_ORIENTATIONS = [
         ("L", "Landscape"),
         ("P", "Portrait"),
     ]
     page_orientation = models.CharField(
-        max_length=1,
-        choices=PAGE_ORIENTATIONS,
-        default="L"
+        max_length=1, choices=PAGE_ORIENTATIONS, default="L"
     )
     page_scale_position = models.PositiveSmallIntegerField(default=0)
 
@@ -96,10 +86,7 @@ class Event(models.Model):
     description = models.CharField(max_length=1000, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
     timeline_area = models.ForeignKey(
-        EventArea,
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL
+        EventArea, blank=True, null=True, on_delete=models.SET_NULL
     )
     has_end = models.BooleanField(default=False)
 

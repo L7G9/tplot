@@ -18,28 +18,21 @@ class PopulateDBTest(TestCase):
             self.AGE_TIMELINES_PER_USER,
             self.EVENTS_PER_TIMELINE,
             self.TAGS_PER_TIMELINE,
-            self.EVENT_AREAS_PER_TIMELINE
+            self.EVENT_AREAS_PER_TIMELINE,
         )
-        self.assertEqual(
-            len(User.objects.all()),
-            self.USERS
-        )
+        self.assertEqual(len(User.objects.all()), self.USERS)
         total_timelines = self.USERS * self.AGE_TIMELINES_PER_USER
-        self.assertEqual(
-            len(AgeTimeline.objects.all()),
-            total_timelines
-        )
+        self.assertEqual(len(AgeTimeline.objects.all()), total_timelines)
         self.assertEqual(
             len(AgeEvent.objects.all()),
-            total_timelines * self.EVENTS_PER_TIMELINE
+            total_timelines * self.EVENTS_PER_TIMELINE,
         )
         self.assertEqual(
             len(EventArea.objects.all()),
-            total_timelines * self.EVENT_AREAS_PER_TIMELINE
+            total_timelines * self.EVENT_AREAS_PER_TIMELINE,
         )
         self.assertEqual(
-            len(Tag.objects.all()),
-            total_timelines * self.TAGS_PER_TIMELINE
+            len(Tag.objects.all()), total_timelines * self.TAGS_PER_TIMELINE
         )
 
     def test_populate_db_output(self):
@@ -48,27 +41,26 @@ class PopulateDBTest(TestCase):
             self.AGE_TIMELINES_PER_USER,
             self.EVENTS_PER_TIMELINE,
             self.TAGS_PER_TIMELINE,
-            self.EVENT_AREAS_PER_TIMELINE
+            self.EVENT_AREAS_PER_TIMELINE,
         )
 
         self.assertEqual(len(users), self.USERS)
-        self.assertEqual(users[0]['username'], "User0")
-        self.assertEqual(users[0]['password'], "Password0#")
+        self.assertEqual(users[0]["username"], "User0")
+        self.assertEqual(users[0]["password"], "Password0#")
         self.assertEqual(
-            len(users[0]['age_timelines']),
-            self.AGE_TIMELINES_PER_USER
+            len(users[0]["age_timelines"]), self.AGE_TIMELINES_PER_USER
         )
         self.assertEqual(
-            len(users[0]['age_timelines'][0]['age_event_ids']),
-            self.EVENTS_PER_TIMELINE
+            len(users[0]["age_timelines"][0]["age_event_ids"]),
+            self.EVENTS_PER_TIMELINE,
         )
         self.assertEqual(
-            len(users[0]['age_timelines'][0]['tag_ids']),
-            self.TAGS_PER_TIMELINE
+            len(users[0]["age_timelines"][0]["tag_ids"]),
+            self.TAGS_PER_TIMELINE,
         )
         self.assertEqual(
-            len(users[0]['age_timelines'][0]['event_area_ids']),
-            self.EVENT_AREAS_PER_TIMELINE
+            len(users[0]["age_timelines"][0]["event_area_ids"]),
+            self.EVENT_AREAS_PER_TIMELINE,
         )
 
     def test_populate_db_none(self):

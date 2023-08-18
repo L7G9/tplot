@@ -9,8 +9,7 @@ class AgeTimelineModel(TestCase):
     @classmethod
     def setUpTestData(self):
         user = User.objects.create_user(
-            username="TestUser",
-            password="TestUser01#"
+            username="TestUser", password="TestUser01#"
         )
         age_timeline = AgeTimeline.objects.create(
             user=user,
@@ -26,12 +25,12 @@ class AgeTimelineModel(TestCase):
 
     def test_scale_unit_choices(self):
         age_timeline = AgeTimeline.objects.get(id=self.age_timeline_id)
-        choices = age_timeline._meta.get_field('scale_unit').choices
+        choices = age_timeline._meta.get_field("scale_unit").choices
         self.assertEqual(choices, AgeTimeline.SCALE_UNITS)
 
     def test_scale_unit_default(self):
         age_timeline = AgeTimeline.objects.get(id=self.age_timeline_id)
-        default = age_timeline._meta.get_field('scale_unit').default
+        default = age_timeline._meta.get_field("scale_unit").default
         self.assertEqual(default, 10)
 
     def test_ordering_by_title(self):
@@ -60,8 +59,7 @@ class AgeEventModel(TestCase):
     @classmethod
     def setUpTestData(self):
         user = User.objects.create_user(
-            username="TestUser",
-            password="TestUser01#"
+            username="TestUser", password="TestUser01#"
         )
         age_timeline = AgeTimeline.objects.create(
             user=user,
@@ -81,7 +79,7 @@ class AgeEventModel(TestCase):
             start_month=6,
             has_end=True,
             end_year=2,
-            end_month=0
+            end_month=0,
         )
         self.end_age_event_id = end_age_event.id
         start_age_event = AgeEvent.objects.create(

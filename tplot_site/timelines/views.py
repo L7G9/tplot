@@ -9,5 +9,5 @@ def user_timelines(request):
     return render(
         request,
         "timelines/user_timelines.html",
-        {"age_timeline_list": age_timeline_list}
+        {"age_timeline_list": age_timeline_list},
     )
