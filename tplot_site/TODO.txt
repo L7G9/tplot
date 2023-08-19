@@ -6,13 +6,14 @@ Essential Task list
     Event area position default of 1?
     layout of sign-up page
         account form should be using bootstrap etc
-    remove pageination from age timeline detail view until implemeted
-    Test if OwnerRequiredMixin works when not logged in
-    check test class named from copy and past errors
-    rename age_timeline_ids to age timelines in result from populate_db
+    remove pageination from age timeline detail view until implemented
     check usage of setUpTestData(cls): in tests should I create, delete or update twice?
+    requirements for different situations (dev, testing, deployment, running)
+
 
 Optional Task List
+    update all tests to use
+    versioning
     update python
     add created and edited date and times to timeline
     add credit field to timeline
@@ -69,3 +70,23 @@ Feature Ideas
     sharing and collaboration
 https://coverage.readthedocs.io/en/6.4/index.html
 https://stackoverflow.com/questions/72363700/creating-tests-to-maintain-minimum-coverage
+
+
+elastic beanstalk
+
+run init without interaction
+https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb3-cmd-commands.html
+https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create-deploy-python-django.html
+https://testdriven.io/blog/django-elastic-beanstalk/
+eb init ${EB_APPLICATION} -- region ${AWS_REGION} -- platform ${EB_PLATFORM}
+eb deploy --verbose -l
+
+
+install ebci into venv
+https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install-virtualenv.html
+
+
+en init
+https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb3-init.html
+https://docs.aws.amazon.com/elasticbeanstalk/latest/platforms/platforms-supported.html#platforms-supported.python
+eb init tplot --region "eu-west-2" --platform "64bit Amazon Linux 2023 v4.0.3 running Python 3.11"
