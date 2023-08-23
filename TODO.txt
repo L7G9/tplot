@@ -84,9 +84,20 @@ eb deploy --verbose -l
 
 install ebci into venv
 https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install-virtualenv.html
-
+pip install awsebcli --upgrade
 
 en init
 https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb3-init.html
 https://docs.aws.amazon.com/elasticbeanstalk/latest/platforms/platforms-supported.html#platforms-supported.python
 eb init tplot --region "eu-west-2" --platform "64bit Amazon Linux 2023 v4.0.3 running Python 3.11"
+
+eb create tplot-dev \
+--database.engine "postgres" \
+--database.instance "db.t4g.micro" \
+--database.username "DRSUser" \
+--database.password "RD5_Acc355_01#" \
+--database.size 5 \
+--elb-type "application" \
+--instance_type "t2.micro" \
+--min-instances 1 \
+--max-instances 2
