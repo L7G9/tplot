@@ -52,7 +52,7 @@ jobs:
       run: coverage report --fail-under=80
 
     - name: Coverage Report
-      run: coverage html
+      run: coverage html --directory=reports/htmlcov/
 
     - name: Create coverage report artifact
       uses: actions/upload-artifact@v3
@@ -64,7 +64,7 @@ jobs:
       run: flake8 .
 
     - name: Bandit
-      run: bandit -c pyproject.toml -r accounts/ age_timelines/ timelines/ tplot_site/ -f html -o bandit.html
+      run: bandit -c pyproject.toml -r accounts/ age_timelines/ timelines/ tplot_site/ -f html -o reports/bandit.html
 
     - name: Create bandit report artifact
       uses: actions/upload-artifact@v3
