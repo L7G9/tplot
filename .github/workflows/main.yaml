@@ -72,8 +72,27 @@ jobs:
         name: bandit-report
         path: ./reports/bandit.html
 
+
+  get_version_label:
+    runs-on: ubuntu-latest
+    outputs:
+      version_label: ${{ steps.get_version_label.outputs.version_label }}
+    steps:
+
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Get version label
+      id: get_version_label
+      run: |
+        version_label="github_action_$(grep -o '[0-9]*\.[0-9]*\.[0-9]*' pyproject.toml | tr . _)"
+        echo "version_label=$version_label" >> $GITHUB_OUTPUT
+
+    - name: Display release label
+      run: echo "${{ steps.get_version_label.outputs.version_label }}"
+
   deploy:
-    needs: test
+    needs: [test, get_version_label]
     runs-on: ubuntu-latest
     steps:
 
@@ -85,13 +104,13 @@ jobs:
 
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v21
+      continue-on-error: true
       with:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         application_name: tplot
         environment_name: tplot-dev
-        version_label: 12346
+        version_label: ${{ needs.get_version_label.outputs.version_label }}
         use_existing_version_if_available: true
         region: eu-west-2
         deployment_package: deploy.zip
-      continue-on-error: true

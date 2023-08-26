@@ -9,7 +9,13 @@ Essential Task list
     remove pageination from age timeline detail view until implemented
     check usage of setUpTestData(cls): in tests should I create, delete or update twice?
     requirements for different situations (dev, testing, deployment, running)
+    only create reports on fail
+    ALLOWED_HOSTS = ['*'] improve
+    retain data from database if env is terminated, restore if created again
+    pass a flag to workflow to create
+    how to check if job failed and create env#
 
+    automatically update version label
 
 Optional Task List
     update all tests to use
@@ -101,3 +107,13 @@ eb create tplot-dev \
 --instance_type "t2.micro" \
 --min-instances 1 \
 --max-instances 2
+
+eb setenv DJANGO_SECRET_KEY='oq_mg-4)1bp3kw2ex1!xieaysgxi-8ddb!to5!c7n!)b$no*n3' \
+DJANGO_DEBUG='1'
+
+# get version number from pypproject.toml
+# assumes there is only one match
+grep -o '[0-9]*\.[0-9]*\.[0-9]*' pyproject.toml
+
+# replace fullstops with underscores
+grep -o '[0-9]*\.[0-9]*\.[0-9]*' pyproject.toml | tr . _
