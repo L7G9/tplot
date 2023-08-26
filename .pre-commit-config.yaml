@@ -1,0 +1,7 @@
+---
+2repos:
+3  - repo: https://github.com/commitizen-tools/commitizen
+4    rev: master
+5    hooks:
+6      - id: commitizen
+7        stages: [commit-msg]
