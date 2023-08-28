@@ -1,0 +1,47 @@
+name: Elastic Beanstalk environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      workflow_action:
+        type: choice
+        description: Create or terminate Elastic Beanstalk Evironment
+        required: true
+        options:
+        - create
+        - terminate
+
+jobs:
+
+  create_eb_environment:
+    runs-on: ubuntu-latest
+    env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+
+    if: ${{ github.event.inputs.workflow_action == 'create' }}
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9
+
+    - name: Install AWS Elastic Beanstalk CLI
+      run: |
+        python --version
+        pip --version
+        pip install awsebcli --upgrade --user
+
+    - name: Deploy to Elastic Beanstalk
+      run: |
+        eb status
+
+  terminate_eb_environment:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.workflow_action == 'terminate' }}
+    steps:
+    - name: Termninate chosen
+      run: echo Termninating Beanstalk Evironment
