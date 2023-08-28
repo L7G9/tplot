@@ -10,12 +10,22 @@ Essential Task list
     check usage of setUpTestData(cls): in tests should I create, delete or update twice?
     requirements for different situations (dev, testing, deployment, running)
     only create reports on fail
+
     ALLOWED_HOSTS = ['*'] improve
     retain data from database if env is terminated, restore if created again
     pass a flag to workflow to create
     how to check if job failed and create env#
 
-    automatically update version label
+    remove unused env vars from main.yaml
+    add settings for eb application, environment and region
+
+    workflow to setup elastic beanstalk environment
+        create environment using eb cli
+        get details needed for terraform
+        use terraform to setup https & route53
+
+        create / terminate options
+        password protect
 
 Optional Task List
     update all tests to use
