@@ -10,17 +10,38 @@ on:
         options:
         - create
         - terminate
+  env:
+    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+    EB_ENV_NAME: tplot-dev
 
 jobs:
+  check_environment:
+    steps:
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9
+
+    - name: Install AWS Elastic Beanstalk CLI
+      run: |
+        python --version
+        pip --version
+        pip install awsebcli --upgrade --user
+
+    - name: Check for existing environment
+      id: env_status
+      run: |
+        eb status $EB_ENV_NAME
+      continue-on-error: true
+    outputs:
+      exists: ${{ steps.env_status.outcome == 'success' }}
 
   create_eb_environment:
     runs-on: ubuntu-latest
-    env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-
-    if: ${{ github.event.inputs.workflow_action == 'create' }}
+    needs: [check_environment]
+    if: ${{ github.event.inputs.workflow_action == 'create' && needs.check_environment.outputs.exists == 'false'}}
     steps:
     - uses: actions/checkout@v2
 
@@ -35,13 +56,32 @@ jobs:
         pip --version
         pip install awsebcli --upgrade --user
 
-    - name: Deploy to Elastic Beanstalk
+    - name: Check for existing environment
+      id: env_check
       run: |
-        eb status
+        eb status tplot-dev
+      continue-on-error: true
+
+    - name: Create environment
+      if: steps.env_check.outcome == 'failure'
+      run: |
+        echo creating tplot-dev environment
 
   terminate_eb_environment:
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.workflow_action == 'terminate' }}
+    needs: [check_environment]
+    if: ${{ github.event.inputs.workflow_action == 'terminate' && needs.check_environment.outputs.exists == 'true'}}
     steps:
-    - name: Termninate chosen
-      run: echo Termninating Beanstalk Evironment
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9
+
+    - name: Install AWS Elastic Beanstalk CLI
+      run: |
+        python --version
+        pip --version
+        pip install awsebcli --upgrade --user
+
+    - name: Terminate environment
+      run: eb terminate $EB_ENV_NAME
