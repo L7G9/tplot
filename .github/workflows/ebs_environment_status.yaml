@@ -1,0 +1,68 @@
+name: Elastic Beanstalk environment status
+
+on:
+  workflow_call:
+    inputs:
+      environment_name:
+        required: true
+        type: string
+    secrets:
+      aws_access_key_id:
+        required: true
+      aws_secret_access_key:
+        required: true
+    outputs:
+      status:
+        description: "Status of Elastic Beanstalk environment (created, not_created, error)"
+        value: ${{ jobs.get_status.outputs.status }}
+
+env:
+    AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
+    AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+
+jobs:
+  get_status:
+    name: Get environment status
+    runs-on: ubuntu-latest
+    outputs:
+      status: ${{ steps.env_status.outputs.status }}
+    env:
+      EB_STATUS_CREATED: 'created'
+      EB_STATUS_ERROR: 'error'
+      EB_STATUS_NOT_CREATED: 'not_created'
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.9
+
+      - name: Install AWS Elastic Beanstalk CLI
+        run: |
+          python --version
+          pip --version
+          pip install awsebcli --upgrade --user
+
+      - name: Check environment status
+        id: env_status
+        continue-on-error: true
+        run: |
+          STATUS_TEXT=$(eb status "${{ inputs.environment_name }}") || true
+          echo $STATUS_TEXT
+          if echo $STATUS_TEXT | grep -o 'NotFoundError'; then
+              echo "status=${{ env.EB_STATUS_NOT_CREATED }}" >> $GITHUB_OUTPUT
+          elif echo $STATUS_TEXT | grep -o 'Environment details'; then
+              echo "status=${{ env.EB_STATUS_CREATED }}" >> $GITHUB_OUTPUT
+          else
+              echo "status=${{ env.EB_STATUS_ERROR }}" >> $GITHUB_OUTPUT
+          fi
+          echo $STATUS_TEXT > eb_status_output.txt
+
+      - name: Archive EB satus output
+        uses: actions/upload-artifact@v3
+        with:
+          name: EBS evironment status output
+          path: eb_status_output.txt
