@@ -1,22 +1,23 @@
-name: Python CICD pipeline
-
-env:
-  GITHUB_WORKFLOW: ${{ true }}
-  SECRET_KEY: ${{ secrets.SECRET_KEY }}
-  PASSWORD: ${{ secrets.PASSWORD }}
+name: Django CICD pipeline
 
 on:
-  push:
-    branches:
-      - cicd
-  pull_request:
-    branches:
-      - cicd
+    push:
+      branches:
+        - main
+    pull_request:
+      branches:
+        - main
+
+env:
+  GITHUB_WORKFLOW: true
+  DJANGO_SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  DJANGO_DEBUG: false
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     services:
       postgres:
         image: postgres:latest
@@ -73,12 +74,20 @@ jobs:
         path: ./reports/bandit.html
 
 
+  check_environment_status:
+    uses: ./.github/workflows/ebs_environment_status.yaml
+    with:
+      environment_name: ${{ vars.EB_ENV_NAME  }}
+    secrets:
+      aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+
   get_version_label:
     runs-on: ubuntu-latest
     outputs:
       version_label: ${{ steps.get_version_label.outputs.version_label }}
     steps:
-
     - name: Check out code
       uses: actions/checkout@v3
 
@@ -91,11 +100,12 @@ jobs:
     - name: Display release label
       run: echo "${{ steps.get_version_label.outputs.version_label }}"
 
+
   deploy:
-    needs: [test, get_version_label]
+    needs: [test, check_environment_status, get_version_label]
+    if: ${{ needs.check_environment_status.outputs.status == 'created' }}
     runs-on: ubuntu-latest
     steps:
-
     - name: Checkout source code
       uses: actions/checkout@v2
 
@@ -109,7 +119,7 @@ jobs:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         application_name: tplot
-        environment_name: tplot-dev
+        environment_name: "${{ vars.EB_ENV_NAME }}"
         version_label: ${{ needs.get_version_label.outputs.version_label }}
         use_existing_version_if_available: true
         region: eu-west-2
