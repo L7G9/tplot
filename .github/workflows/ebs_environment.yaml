@@ -10,19 +10,30 @@ on:
         options:
         - create
         - terminate
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  EB_DB_USER: ${{ secrets.EB_DB_USER }}
+  EB_DB_PASSWORD: ${{ secrets.EB_DB_PASSWORD }}
 
 jobs:
+  environment_status:
+    uses: ./.github/workflows/ebs_environment_status.yaml
+    with:
+      environment_name: ${{ vars.EB_ENV_NAME  }}
+    secrets:
+      aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-  create_eb_environment:
+
+  create_environment:
     runs-on: ubuntu-latest
-    env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+    needs: environment_status
+    if: ${{ github.event.inputs.workflow_action == 'create' && needs.environment_status.outputs.status == 'not_created' }}
 
-    if: ${{ github.event.inputs.workflow_action == 'create' }}
     steps:
-    - uses: actions/checkout@v2
+    - name: Check out code
+      uses: actions/checkout@v3
 
     - name: Set up Python
       uses: actions/setup-python@v3
@@ -35,13 +46,48 @@ jobs:
         pip --version
         pip install awsebcli --upgrade --user
 
-    - name: Deploy to Elastic Beanstalk
+    - name: Create environment
       run: |
-        eb status
+        eb create "${{ vars.EB_ENV_NAME }}" \
+        --database.engine "postgres" \
+        --database.instance "db.t4g.micro" \
+        --database.username $EB_DB_USER \
+        --database.password $EB_DB_PASSWORD \
+        --database.size 5 \
+        --elb-type "application" \
+        --instance_type "t2.micro" \
+        --min-instances 1 \
+        --max-instances 2
 
-  terminate_eb_environment:
+
+  terminate_environment:
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.workflow_action == 'terminate' }}
+    needs: environment_status
+    if: ${{ github.event.inputs.workflow_action == 'terminate' && needs.environment_status.outputs.status == 'created' }}
+
     steps:
-    - name: Termninate chosen
-      run: echo Termninating Beanstalk Evironment
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9
+
+    - name: Install AWS Elastic Beanstalk CLI
+      run: |
+        python --version
+        pip --version
+        pip install awsebcli --upgrade --user
+
+    - name: Terimnate environment
+      run: eb terminate "${{ vars.EB_ENV_NAME }}" --force
+
+
+  error_getting_environment_status:
+    runs-on: ubuntu-latest
+    needs: environment_status
+    if: ${{ needs.environment_status.outputs.status == 'error' }}
+
+    steps:
+    - run: exit 1
