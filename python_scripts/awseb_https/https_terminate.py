@@ -2,9 +2,9 @@
 # https_terminate.py
 
 
-import boto3
-import botocore
-import logging
+# import boto3
+# import botocore
+# import logging
 
 
 def delete_certificate_for_domain(acm_client):

@@ -3,7 +3,7 @@
 
 import argparse
 
-from . import https_setup
+# from . import https_setup
 
 from . import __version__
 
@@ -13,21 +13,32 @@ def main():
     args = parse_cmd_line_arguments()
 
     if args.terminate:
-        print(f"terminate {args.environment_name[0]} {args.domain[0]} {args.subdomain[0]}")
+        print(
+            f"terminate \
+                {args.environment_name[0]} \
+                {args.domain[0]} \
+                {args.subdomain[0]}"
+        )
     else:
-        print(f"setup {args.environment_name[0]} {args.domain[0]} {args.subdomain[0]}")
-        #https_setup.http_setup(
+        print(
+            f"setup \
+                {args.environment_name[0]} \
+                {args.domain[0]} \
+                {args.subdomain[0]}"
+        )
+        # https_setup.http_setup(
         #    args.environment_name,
         #    args.domain,
         #    args.subdomain
-        #)
+        # )
 
 
 def parse_cmd_line_arguments():
     """"""
     parser = argparse.ArgumentParser(
         prog="awseb_https",
-        description="Setup HTTPS access for an AWS Elastic Beanstalk Application Load Balancer",
+        description="Setup HTTPS access for an AWS Elastic Beanstalk \
+            Application Load Balancer",
         epilog="Thanks for using Setup HTTPS.",
     )
     parser.version = f"VPC Tree V{__version__}"
