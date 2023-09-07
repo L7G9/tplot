@@ -60,6 +60,28 @@ jobs:
         --max-instances 2
 
 
+  setup_https:
+    runs-on: ubuntu-latest
+    needs: create_environment
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9
+
+    - name: Install AWS Boto3 SDK
+      run: |
+        pip install boto3
+
+    - name: Run HTTPS setup script
+      run: |
+        python3 python_scripts/awseb_setup.py -e tplot-prod -d lukegregorydev.co.uk -s tplot.lukegregorydev.co.uk
+
+
   terminate_environment:
     runs-on: ubuntu-latest
     needs: environment_status
@@ -82,6 +104,28 @@ jobs:
 
     - name: Terimnate environment
       run: eb terminate "${{ vars.EB_ENV_NAME }}" --force
+
+
+  terimate_https:
+    runs-on: ubuntu-latest
+    needs: terminate_environment
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9
+
+    - name: Install AWS Boto3 SDK
+      run: |
+        pip install boto3
+
+    - name: Run HTTPS setup script
+      run: |
+        python3 python_scripts/awseb_setup.py -e tplot-prod -d lukegregorydev.co.uk -s tplot.lukegregorydev.co.uk
 
 
   error_getting_environment_status:
