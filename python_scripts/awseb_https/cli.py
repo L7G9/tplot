@@ -3,8 +3,8 @@
 
 import argparse
 
-# from . import https_setup
-
+from . import https_setup
+from . import https_terminate
 from . import __version__
 
 
@@ -13,24 +13,17 @@ def main():
     args = parse_cmd_line_arguments()
 
     if args.terminate:
-        print(
-            f"terminate \
-                {args.environment_name[0]} \
-                {args.domain[0]} \
-                {args.subdomain[0]}"
+        https_terminate.http_terminate(
+            args.environment_name[0],
+            args.domain[0],
+            args.subdomain[0]
         )
     else:
-        print(
-            f"setup \
-                {args.environment_name[0]} \
-                {args.domain[0]} \
-                {args.subdomain[0]}"
+        https_setup.http_setup(
+            args.environment_name[0],
+            args.domain[0],
+            args.subdomain[0]
         )
-        # https_setup.http_setup(
-        #    args.environment_name,
-        #    args.domain,
-        #    args.subdomain
-        # )
 
 
 def parse_cmd_line_arguments():
