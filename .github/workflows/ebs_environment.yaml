@@ -79,7 +79,7 @@ jobs:
 
     - name: Run HTTPS setup script
       run: |
-        python3 python_scripts/awseb_setup.py -e tplot-prod -d lukegregorydev.co.uk -s tplot.lukegregorydev.co.uk
+        python3 python_scripts/awseb_https.py -e tplot-prod -d lukegregorydev.co.uk -s tplot.lukegregorydev.co.uk
 
 
   terminate_environment:
@@ -108,8 +108,7 @@ jobs:
 
   terminate_https:
     runs-on: ubuntu-latest
-    needs: environment_status
-    if: ${{ github.event.inputs.workflow_action == 'terminate' && needs.environment_status.outputs.status == 'created' }}
+    needs: terminate_environment
 
     steps:
     - name: Check out code
@@ -126,7 +125,7 @@ jobs:
 
     - name: Run HTTPS setup script
       run: |
-        python3 python_scripts/awseb_setup.py -e tplot-prod -d lukegregorydev.co.uk -s tplot.lukegregorydev.co.uk
+        python3 python_scripts/awseb_https.py -t -e tplot-prod -d lukegregorydev.co.uk -s tplot.lukegregorydev.co.uk
 
 
   error_getting_environment_status:
