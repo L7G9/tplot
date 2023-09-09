@@ -170,14 +170,16 @@ def http_terminate(environment_name, domain, subdomain):
         lb_dns_name
     )
 
-
     acm_client = boto3.client('acm')
 
     logging.info("Getting certificates")
     response = list_certificates(acm_client)
 
     logging.info("Getting certificate arn")
-    certificate_arn = get_certificate_arn(response['CertificateSummaryList'], f"*.{domain}")
+    certificate_arn = get_certificate_arn(
+        response['CertificateSummaryList'],
+        f"*.{domain}"
+    )
 
     if certificate_arn is not None:
         logging.info("Getting certificates arn")
