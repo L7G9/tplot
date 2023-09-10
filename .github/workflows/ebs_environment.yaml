@@ -80,13 +80,35 @@ jobs:
 
     - name: Run HTTPS setup script
       run: |
-        python3 python_scripts/awseb_https.py -e tplot-prod -d lukegregorydev.co.uk -s tplot.lukegregorydev.co.uk
+        python3 python_scripts/awseb_https.py -e "${{ vars.EB_ENV_NAME }}" -d "${{ vars.DOMAIN_NAME }}" -s "${{ vars.SUBDOMAIN_NAME }}"
+
+
+  delete_alias:
+    runs-on: ubuntu-latest
+    needs: environment_status
+    if: ${{ github.event.inputs.workflow_action == 'terminate' && needs.environment_status.outputs.status == 'created' }}
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9
+
+    - name: Install AWS Boto3 SDK
+      run: |
+        pip install boto3
+
+    - name: Run HTTPS setup script
+      run: |
+        python3 python_scripts/delete_alias.py -e "${{ vars.EB_ENV_NAME }}" -d "${{ vars.DOMAIN_NAME }}" -s "${{ vars.SUBDOMAIN_NAME }}"
 
 
   terminate_environment:
     runs-on: ubuntu-latest
-    needs: environment_status
-    if: ${{ github.event.inputs.workflow_action == 'terminate' && needs.environment_status.outputs.status == 'created' }}
+    needs: delete_alias
 
     steps:
     - name: Check out code
@@ -107,7 +129,7 @@ jobs:
       run: eb terminate "${{ vars.EB_ENV_NAME }}" --force
 
 
-  terminate_https:
+  delete_certificate:
     runs-on: ubuntu-latest
     needs: terminate_environment
 
@@ -126,7 +148,7 @@ jobs:
 
     - name: Run HTTPS setup script
       run: |
-        python3 python_scripts/awseb_https.py -t -e tplot-prod -d lukegregorydev.co.uk -s tplot.lukegregorydev.co.uk
+        python3 python_scripts/delete_certificate.py -d "${{ vars.DOMAIN_NAME }}"
 
 
   error_getting_environment_status:
