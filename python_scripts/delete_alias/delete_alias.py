@@ -1,26 +1,10 @@
 #!/usr/bin/env python3
-# https_terminate.py
+# delete_alias.py
 
 
 import boto3
 import botocore
 import logging
-
-
-def request_certificate_for_domain(acm_client, domain_name, tags):
-    kwargs = {
-        "DomainName": domain_name,
-        "ValidationMethod": "DNS",
-        "Tags": tags,
-    }
-    try:
-        response = acm_client.request_certificate(**kwargs)
-        logging.info(f"Requested certificate for domain {domain_name}")
-    except botocore.exceptions.ClientError:
-        logging.exception("Requested certificate for domain failed")
-        raise
-    else:
-        return response
 
 
 def get_lbs(lb_client, kwargs):
@@ -99,41 +83,6 @@ def delete_alias_record_for_load_balancer(
         return response
 
 
-def list_certificates(acm_client):
-    try:
-        response = acm_client.list_certificates()
-        logging.info("Requested list certificates")
-    except botocore.exceptions.ClientError:
-        logging.exception("Requested list certificates failed")
-        raise
-    else:
-        return response
-
-
-def get_certificate_arn(certificates, domain_name):
-    for certificate in certificates:
-        if certificate['DomainName'] == domain_name:
-            return certificate['CertificateArn']
-    return None
-
-
-def delete_certificate(acm_client, certificate_arn):
-    try:
-        response = acm_client.delete_certificate(
-            CertificateArn=certificate_arn
-        )
-        logging.info(
-            f"Requested delete of certificate {certificate_arn}"
-        )
-    except botocore.exceptions.ClientError:
-        logging.exception(
-            "Requested delete of certificate failed"
-        )
-        raise
-    else:
-        return response
-
-
 def get_hosted_zone(r53_client, dns_name):
     try:
         response = r53_client.list_hosted_zones_by_name(DNSName=dns_name)
@@ -145,7 +94,7 @@ def get_hosted_zone(r53_client, dns_name):
         return response
 
 
-def http_terminate(environment_name, domain, subdomain):
+def delete_alias_record(environment_name, domain, subdomain):
 
     logging.basicConfig(level=logging.INFO)
 
@@ -169,18 +118,3 @@ def http_terminate(environment_name, domain, subdomain):
         lb_hosted_zone_id,
         lb_dns_name
     )
-
-    acm_client = boto3.client('acm')
-
-    logging.info("Getting certificates")
-    response = list_certificates(acm_client)
-
-    logging.info("Getting certificate arn")
-    certificate_arn = get_certificate_arn(
-        response['CertificateSummaryList'],
-        f"*.{domain}"
-    )
-
-    if certificate_arn is not None:
-        logging.info("Getting certificates arn")
-        delete_certificate(acm_client, certificate_arn)
