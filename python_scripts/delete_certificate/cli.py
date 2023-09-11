@@ -11,7 +11,7 @@ def main():
     """"""
     args = parse_cmd_line_arguments()
 
-    delete_certificate.delete_certificate(args.domain[0])
+    delete_certificate.delete_domain_certificate(args.domain[0])
 
 
 def parse_cmd_line_arguments():

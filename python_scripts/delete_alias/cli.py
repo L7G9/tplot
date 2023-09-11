@@ -11,7 +11,7 @@ def main():
     """"""
     args = parse_cmd_line_arguments()
 
-    delete_alias.delete_alias_record(
+    delete_alias.delete_load_balancer_alias_record(
         args.environment_name[0],
         args.domain[0],
         args.subdomain[0]
