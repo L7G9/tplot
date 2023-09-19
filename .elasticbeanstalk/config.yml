@@ -1,6 +1,8 @@
 branch-defaults:
   cicd:
     environment: null
+  main:
+    environment: null
 environment-defaults:
   tplot-dev:
     branch: null
