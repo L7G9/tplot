@@ -109,7 +109,7 @@ jobs:
   terminate_environment:
     runs-on: ubuntu-latest
     needs: delete_alias
-    if: always() && (needs.delete_alias.result == 'success' || needs.terminate_enviroment.result = 'failure')
+    if: always() && (needs.delete_alias.result == 'success' || needs.terminate_enviroment.result == 'failure')
 
     steps:
     - name: Check out code
