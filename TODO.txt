@@ -97,7 +97,7 @@ https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb3-init.html
 https://docs.aws.amazon.com/elasticbeanstalk/latest/platforms/platforms-supported.html#platforms-supported.python
 eb init tplot --region "eu-west-2" --platform "64bit Amazon Linux 2023 v4.0.3 running Python 3.11"
 
-eb create tplot-dev \
+eb create tplot-prod \
 --database.engine "postgres" \
 --database.instance "db.t4g.micro" \
 --database.username "DRSUser" \
