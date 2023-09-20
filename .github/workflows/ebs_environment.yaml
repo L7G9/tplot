@@ -109,6 +109,7 @@ jobs:
   terminate_environment:
     runs-on: ubuntu-latest
     needs: delete_alias
+    if: ${{ always() && (needs.delete_alias.result == 'success' || needs.delete_alias.result == 'failure' )}}
 
     steps:
     - name: Check out code
@@ -126,12 +127,13 @@ jobs:
         pip install awsebcli --upgrade --user
 
     - name: Terimnate environment
-      run: eb terminate "${{ vars.EB_ENV_NAME }}" --force
+      run: eb terminate "${{ vars.EB_ENV_NAME }}" --force --timeout 5
 
 
   delete_certificate:
     runs-on: ubuntu-latest
     needs: terminate_environment
+    if: ${{ always() && (needs.terminate_environment.result == 'success' || needs.terminate_environment.result == 'failure' )}}
 
     steps:
     - name: Check out code
