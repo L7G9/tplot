@@ -17,13 +17,13 @@
 - **models.py**: add get_owner methods
 - add sidebar links
 - **AgeTimelineCreateView**: require login and add user to new timeline
-- **accounts**: add basic register, login and logout functionallity
+- **accounts**: add basic register, login and logout functionality
 - **views.py**: update AgeEvent view classes so get_success_url returns age-timeline-detail view
 - **age_timelines**: add, update and delete AgeEvents
 - add timeline and age_timeline urls
 - **age_timelines**: add age_timeline_edit view
-- **timelines**: add urls file cointaining user_timelines url
-- **age_timelines**: add urls file cointaining age_timeline_edit url
+- **timelines**: add urls file containing user_timelines url
+- **age_timelines**: add urls file containing age_timeline_edit url
 - **age_timelines**: add age_timeline_edit template
 - **timelines**: add user_timelines template
 - **timelines**: add timeline_edit template
