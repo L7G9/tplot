@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', '1').lower() in ['true', 't', '1']
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1', 'tplot-prod.eba-t3ijixep.eu-west-2.elasticbeanstalk.com']
 
 
 # Application definition
@@ -61,6 +61,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+CSRF_COOKIE_SECURE = True
 
 ROOT_URLCONF = "tplot_site.urls"
 
