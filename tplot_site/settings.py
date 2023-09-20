@@ -28,7 +28,10 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', '1').lower() in ['true', 't', '1']
 
-ALLOWED_HOSTS = ['127.0.0.1', 'tplot-prod.eba-t3ijixep.eu-west-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'tplot-prod.eba-t3ijixep.eu-west-2.elasticbeanstalk.com',
+    'tplot.lukegregorydev.co.uk']
 
 
 # Application definition
