@@ -119,9 +119,9 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": "tplot_local",
-            "USER": "postgres_user",
-            "PASSWORD": "postgres",
+            "NAME": "tplot",
+            "USER": "tplotuser",
+            "PASSWORD": "T1m3L1n3#",
             "HOST": "localhost",
             "PORT": "",
         }
