@@ -4,6 +4,7 @@ crispy-bootstrap5==0.7
 Django==4.2.4
 django-bootstrap-v5==1.0.11
 django-crispy-forms==2.0
+reportlab==4.0.5
 psycopg2-binary==2.9.7
 soupsieve==2.4.1
 sqlparse==0.4.4
