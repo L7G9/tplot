@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from . import pdf_view
 
 
 app_name = "age_timelines"
@@ -81,4 +82,10 @@ urlpatterns = [
         views.AreaDeleteView.as_view(),
         name="area-delete",
     ),
+    # ex: 1/pdf/
+    path(
+        "<int:age_timeline_id>/pdf/",
+        pdf_view.pdf_view,
+        name="age-timeline-pdf",
+    )
 ]
