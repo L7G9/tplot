@@ -9,7 +9,9 @@ from timelines.mixins import OwnerRequiredMixin
 from timelines.view_errors import area_position_error
 from timelines.models import Tag, EventArea
 
+from .layout import AgeTimelineLayout
 from .models import AgeEvent, AgeTimeline
+
 
 
 AGE_TIMELINE_FIELD_ORDER = [
@@ -66,10 +68,10 @@ class AgeTimelineDeleteView(
 # check age timeline found with age_timeline_id is owned by logged in user
 class AgeTimelineOwnerMixim(object):
     def dispatch(self, request, *args, **kwargs):
-        age_timline = AgeTimeline.objects.get(
+        age_timeline = AgeTimeline.objects.get(
             pk=self.kwargs["age_timeline_id"]
         )
-        if age_timline.get_owner() != request.user:
+        if age_timeline.get_owner() != request.user:
             return HttpResponseForbidden()
         return super().dispatch(request, *args, **kwargs)
 
