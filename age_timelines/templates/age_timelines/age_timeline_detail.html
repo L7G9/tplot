@@ -10,6 +10,7 @@
 <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-event-add' view.kwargs.pk %}">New Age Event</a></li>
 <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:tag-add' view.kwargs.pk %}">New Tag</a></li>
 <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:area-add' view.kwargs.pk %}">New Area</a></li>
+<li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-pdf' view.kwargs.pk %}">View PDF</a></li>
 {% endblock %}
 
 {% block events %}
