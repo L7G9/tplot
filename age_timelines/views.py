@@ -1,17 +1,17 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseForbidden
+from django.http import FileResponse, HttpResponseForbidden
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
+
 from timelines.mixins import OwnerRequiredMixin
 from timelines.view_errors import area_position_error
 from timelines.models import Tag, EventArea
 
-from .layout import AgeTimelineLayout
 from .models import AgeEvent, AgeTimeline
-
+from .pdf.timeline import PDFTimeline
 
 
 AGE_TIMELINE_FIELD_ORDER = [
@@ -271,3 +271,15 @@ class AreaDeleteView(
 ):
     model = EventArea
     template_name = "age_timelines/area_confirm_delete.html"
+
+
+def pdf_view(request, age_timeline_id):
+    age_timeline: AgeTimeline = AgeTimeline.objects.get(id=age_timeline_id)
+
+    pdf_timeline = PDFTimeline(age_timeline)
+
+    return FileResponse(
+        pdf_timeline.buffer,
+        as_attachment=True,
+        filename="timeline.pdf"
+    )

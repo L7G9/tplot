@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 
 from age_timelines.models import AgeEvent, AgeTimeline
-from age_timelines.layout import AgeTimelineLayout
+from age_timelines.pdf.layout import AgeTimelineLayout
 
 
 class AgeTimelineLayoutTest(TestCase):
