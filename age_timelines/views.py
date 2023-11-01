@@ -11,7 +11,7 @@ from timelines.view_errors import area_position_error
 from timelines.models import Tag, EventArea
 
 from .models import AgeEvent, AgeTimeline
-from .pdf.timeline import PDFTimeline
+from .pdf.age_timeline_pdf import AgeTimelinePDF
 
 
 AGE_TIMELINE_FIELD_ORDER = [
@@ -276,10 +276,10 @@ class AreaDeleteView(
 def pdf_view(request, age_timeline_id):
     age_timeline: AgeTimeline = AgeTimeline.objects.get(id=age_timeline_id)
 
-    pdf_timeline = PDFTimeline(age_timeline)
+    timeline_pdf = AgeTimelinePDF(age_timeline)
 
     return FileResponse(
-        pdf_timeline.buffer,
+        timeline_pdf.buffer,
         as_attachment=True,
         filename="timeline.pdf"
     )

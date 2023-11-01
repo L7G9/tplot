@@ -34,3 +34,6 @@ class Area:
             or overlap_right
             or overlap_top
         )
+
+    def __str__(self):
+        return f"Area(x={self.x} y={self.y} r={self.right()} t={sef.top()})"
