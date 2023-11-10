@@ -19,6 +19,7 @@ class PDFEvent(Area):
         time: str,
         title: str,
         description: str,
+        orientation: str,
         canvas: Canvas,
         time_style: ParagraphStyle,
         title_style: ParagraphStyle,
@@ -26,6 +27,9 @@ class PDFEvent(Area):
         max_width: float = 0,
         max_height: float = 0,
     ):
+        if (orientation != "L") or (orientation != "P"):
+            raise ValueError("orientation must be L for landscape or P for portrait")
+
         self.time_paragraph: Paragraph = Paragraph(time, time_style)
         self.title_paragraph: Paragraph = Paragraph(title, title_style)
         self.description_paragraph: Paragraph = Paragraph(description, description_style)
@@ -50,21 +54,22 @@ class PDFEvent(Area):
         self.x = 0
         self.y = 0
 
-        self.width, self.height = self.__landscape_init(
-            time_width,
-            title_width,
-            description_width,
-            2,
-            max_height
-        )
-
-        self.width, self.height = self.__portrait_init(
-            time_width,
-            title_width,
-            description_width,
-            2,
-            max_width
-        )
+        if orientation == "L":
+	        self.width, self.height = self.__landscape_init(
+	            time_width,
+	            title_width,
+	            description_width,
+	            2,
+	            max_height
+	        )
+        elif orientation == "P":
+	        self.width, self.height = self.__portrait_init(
+	            time_width,
+	            title_width,
+	            description_width,
+	            2,
+	            max_width
+	        )
 
         self.time_paragraph.wrapOn(
             self.canvas,

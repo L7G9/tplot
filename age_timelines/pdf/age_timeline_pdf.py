@@ -84,6 +84,7 @@ class AgeTimelinePDF:
                     str(age),
                     event.title,
                     event.description,
+                    age_timeline.page_orientation,
                     self.canvas,
                     self.basic_text_style,
                     self.basic_text_style,
