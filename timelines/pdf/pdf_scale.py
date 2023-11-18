@@ -2,6 +2,7 @@ from reportlab.lib.units import mm
 from .area import Area
 from .pdf_scale_line import PDFScaleLine
 from .pdf_scale_units import PDFScaleUnits
+from .pdf_event import PDFEvent
 
 
 DEFAULT_UNIT_LINE_LENGTH = 5 * mm
@@ -9,8 +10,14 @@ DEFAULT_UNIT_LINE_LENGTH = 5 * mm
 
 class PDFScale(Area):
     """Class to measure dimensions of and draw a timeline's scale."""
-    def __init__(self, scale_description, canvas, unit_label_style, unit_line_length=DEFAULT_UNIT_LINE_LENGTH):
 
+    def __init__(
+        self,
+        scale_description,
+        canvas,
+        unit_label_style,
+        unit_line_length=DEFAULT_UNIT_LINE_LENGTH,
+    ):
         self.scale_description = scale_description
         self.units = PDFScaleUnits(scale_description, unit_label_style, canvas)
         self.line = PDFScaleLine(scale_description, canvas, unit_line_length)
@@ -25,7 +32,7 @@ class PDFScale(Area):
         self.move(0, 0)
 
     def move(self, x, y):
-        """Update """
+        """Update"""
         self.x = x
         self.y = y
 
@@ -42,3 +49,15 @@ class PDFScale(Area):
     def draw(self):
         self.units.draw()
         self.line.draw()
+
+    def plot(self, time_unit, pdf_event: PDFEvent) -> float:
+        event_position = self.scale_description.plot(time_unit) * mm
+        if self.scale_description.timeline.page_orientation == "L":
+            return event_position + self.units.start_offset
+        else:
+            return (
+                self.height
+                - pdf_event.height
+                - event_position
+                - self.units.start_offset
+            )
