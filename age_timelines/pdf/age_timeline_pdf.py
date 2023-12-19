@@ -10,8 +10,10 @@ from .age import Age
 from .age_timeline_scale_description import AgeTimelineScaleDescription
 from ..models import AgeTimeline, AgeEvent
 
+from timelines.pdf.inside import Inside
 from timelines.pdf.timeline_layout import TimelineLayout
 from timelines.pdf.pdf_event import PDFEvent
+from timelines.pdf.pdf_start_end_event import PDFStartEndEvent
 from timelines.pdf.pdf_scale import PDFScale
 
 
@@ -73,30 +75,91 @@ class AgeTimelinePDF:
         self.scale.move(self.layout.scale_area.x, self.layout.scale_area.y)
 
         for pdf_event_area in self.layout.event_areas:
-            event_area = pdf_event_area.object
+            event_area = pdf_event_area.event_area
             events = AgeEvent.objects.filter(timeline_area=event_area.id)
             print(f"event area {event_area.name} contains...")
             for event in events:
                 print(f"{event.title}")
                 # create event at start of event area
                 age = Age(event.start_year, event.start_month)
-                pdf_event = PDFEvent(
-                    str(age),
-                    event.title,
-                    event.description,
-                    age_timeline.page_orientation,
-                    self.canvas,
-                    self.basic_text_style,
-                    self.basic_text_style,
-                    self.basic_text_style,
-                    pdf_event_area.width,
-                    pdf_event_area.height
-                )
-                pdf_event_area.children.append(pdf_event)
 
+                pdf_event = None
+                if event.has_end:
+                    end_age = Age(event.end_year, event.end_month)
+                    size = ((self.scale.scale_description.plot(end_age) - self.scale.scale_description.plot(age)) * mm)
+                    pdf_event = PDFStartEndEvent(
+                        age.start_finish(end_age),
+                        event.title,
+                        event.description,
+                        age_timeline.page_orientation,
+                        self.canvas,
+                        self.basic_text_style,
+                        self.basic_text_style,
+                        self.basic_text_style,
+                        size,
+                        pdf_event_area.width,
+                        pdf_event_area.height
+                    )
+                else:
+                    pdf_event = PDFEvent(
+                        str(age),
+                        event.title,
+                        event.description,
+                        age_timeline.page_orientation,
+                        self.canvas,
+                        self.basic_text_style,
+                        self.basic_text_style,
+                        self.basic_text_style,
+                        pdf_event_area.width,
+                        pdf_event_area.height
+                    )
                 # display in correct position in event area
-                # display checking for overlaps with other events in event area
+                event_position = self.scale.plot(age, pdf_event)
+                if age_timeline.page_orientation == "L":
+                    pdf_event.x = event_position
+                else:
+                    pdf_event.y = event_position
 
+                # display checking for overlaps with other events in event area
+                updated_position = None
+                if age_timeline.page_orientation == "L":
+                    updated_position = pdf_event_area.get_landscape_position(
+                        pdf_event,
+                        True,
+                        True
+                    )
+                else:
+                    updated_position = pdf_event_area.get_portrait_position(
+                        pdf_event,
+                        True,
+                        True
+                    )
+                pdf_event.x, pdf_event.y = updated_position
+
+                pdf_event_area.events.append(pdf_event)
+
+                # add joining lines
+
+                # update canvas size if event goes off end ***
+                inside_event_area = Inside(pdf_event, pdf_event_area)
+                if age_timeline.page_orientation == "L":
+                    if inside_event_area.test(right_inside=False):
+                        # need to expand width of event area right to fit event
+                        pdf_event_area.width = pdf_event.right()
+
+                        # update drawable area to fit event area
+                        if self.layout.drawable_area.width < pdf_event_area.width:
+                            self.layout.drawable_area.width = pdf_event_area.width
+
+                        # update canvas to fit drawable area
+                        required_width = self.layout.drawable_area.width + (2 * self.layout.border_size)
+                        if self.layout.page_area.width < required_width:
+                            self.layout.page_area.width = required_width
+                else:
+                    if inside_event_area.test(bottom_inside=False):
+                        # need to expand height of event area downwards to fit event
+                        # pdf_event_area.height = pdf_event
+                        pass
 
         self.canvas.setPageSize(
             (self.layout.page_area.width, self.layout.page_area.height)
@@ -189,13 +252,12 @@ class AgeTimelinePDF:
 
         self.scale.draw()
 
-
         for pdf_event_area in self.layout.event_areas:
 
             self.canvas.saveState()
             self.canvas.translate(pdf_event_area.x, pdf_event_area.y)
 
-            for pdf_event in pdf_event_area.children:
+            for pdf_event in pdf_event_area.events:
                 pdf_event.draw()
 
             self.canvas.restoreState()

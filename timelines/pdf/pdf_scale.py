@@ -51,10 +51,16 @@ class PDFScale(Area):
         self.line.draw()
 
     def plot(self, time_unit, pdf_event: PDFEvent) -> float:
+        print(f"plot {time_unit} {pdf_event}")
         event_position = self.scale_description.plot(time_unit) * mm
+        print(f"event_position = {event_position/mm}")
         if self.scale_description.timeline.page_orientation == "L":
             return event_position + self.units.start_offset
         else:
+            print(f"self.height = {self.height}")
+            print(f"pdf_event.height = {pdf_event.height}")
+            print(f"event_position = {event_position}")
+            print(f"self.units.start_offset = {self.units.start_offset}")
             return (
                 self.height
                 - pdf_event.height

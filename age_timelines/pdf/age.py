@@ -32,6 +32,9 @@ class Age:
 
         self.years = multiples * year_unit_size
 
+    def start_finish(self, finish_age: "Age") -> str:
+        return f"{str(self)} to {str(finish_age)}"
+
     def __str__(self) -> str:
         if self.months == 0:
             return f"{self.years} Years"

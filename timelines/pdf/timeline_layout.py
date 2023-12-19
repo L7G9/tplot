@@ -1,6 +1,8 @@
+from typing import List
 from reportlab.lib.units import mm
 from timelines.models import Timeline
 from .area import Area
+from .pdf_event_area import PDFEventArea
 
 
 A3_LONG = 420 * mm
@@ -35,7 +37,7 @@ class TimelineLayout:
         self.description_area: Area = None
         self.event_and_scale_area: Area = None
         self.scale_area: Area = None
-        self.event_areas: [Area] = []
+        self.event_areas: List[PDFEventArea] = []
 
     def create_layout(
         self, title_height, description_height, scale_width, scale_height
@@ -264,7 +266,7 @@ class TimelineLayout:
 
     def __landscape_event_area(self, y, height, event_area) -> Area:
         """Calculate area for an event area in a landscape timeline."""
-        return Area(
+        return PDFEventArea(
             self.event_and_scale_area.x,
             y,
             self.event_and_scale_area.width,
@@ -274,7 +276,7 @@ class TimelineLayout:
 
     def __portrait_event_area(self, x, width, event_area) -> Area:
         """Calculate area for an event area in a portrait timeline."""
-        return Area(
+        return PDFEventArea(
             x,
             self.event_and_scale_area.y,
             width,
