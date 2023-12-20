@@ -74,6 +74,8 @@ class AgeTimelinePDF:
 
         self.scale.move(self.layout.scale_area.x, self.layout.scale_area.y)
 
+        max_overlap_size = 0
+
         for pdf_event_area in self.layout.event_areas:
             event_area = pdf_event_area.event_area
             events = AgeEvent.objects.filter(timeline_area=event_area.id)
@@ -144,22 +146,30 @@ class AgeTimelinePDF:
                 inside_event_area = Inside(pdf_event, pdf_event_area)
                 if age_timeline.page_orientation == "L":
                     if inside_event_area.test(right_inside=False):
-                        # need to expand width of event area right to fit event
-                        pdf_event_area.width = pdf_event.right()
-
-                        # update drawable area to fit event area
-                        if self.layout.drawable_area.width < pdf_event_area.width:
-                            self.layout.drawable_area.width = pdf_event_area.width
-
-                        # update canvas to fit drawable area
-                        required_width = self.layout.drawable_area.width + (2 * self.layout.border_size)
-                        if self.layout.page_area.width < required_width:
-                            self.layout.page_area.width = required_width
+                        overlap_size = abs(pdf_event.right() - pdf_event_area.width)
+                        if overlap_size > max_overlap_size:
+                            max_overlap_size = overlap_size
                 else:
                     if inside_event_area.test(bottom_inside=False):
-                        # need to expand height of event area downwards to fit event
-                        # pdf_event_area.height = pdf_event
-                        pass
+                        overlap_size = abs(pdf_event.y)
+                        if overlap_size > max_overlap_size:
+                            max_overlap_size = overlap_size
+
+        if max_overlap_size > 0:
+            if age_timeline.page_orientation == "L":
+                self.layout.page_area.width += max_overlap_size
+                self.layout.drawable_area.width += max_overlap_size
+            else:
+                self.layout.page_area.height += max_overlap_size
+                self.layout.drawable_area.height += max_overlap_size
+
+                self.layout.title_area.y += max_overlap_size
+                self.layout.description_area.y += max_overlap_size
+                self.layout.event_and_scale_area.y += max_overlap_size
+                self.layout.scale_area.y += max_overlap_size
+                self.scale.move(self.layout.scale_area.x, self.layout.scale_area.y)
+                for event_area in self.layout.event_areas:
+                    event_area.y += max_overlap_size
 
         self.canvas.setPageSize(
             (self.layout.page_area.width, self.layout.page_area.height)
