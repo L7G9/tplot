@@ -1,9 +1,11 @@
+from timelines.pdf.time_unit import TimeUnit
 from timelines.pdf.round import Round
+
 
 MONTHS_PER_YEAR = 12
 
 
-class Age:
+class Age(TimeUnit):
     """Class representing an age time unit in years and months."""
     def __init__(self, years: int, months: int):
         self.years = years
@@ -32,8 +34,11 @@ class Age:
 
         self.years = multiples * year_unit_size
 
-    def start_finish(self, finish_age: "Age") -> str:
-        return f"{str(self)} to {str(finish_age)}"
+    def total_months(self) -> int:
+        return (self.years * MONTHS_PER_YEAR) + self.months
+
+    def start_end_string(self, end: "Age") -> str:
+        return f"{str(self)} to {str(end)}"
 
     def __str__(self) -> str:
         if self.months == 0:
@@ -54,9 +59,6 @@ class Age:
 
     def __isub__(self, other):
         return Age(self.years - other.years, self.months - other.months)
-
-    def total_months(self) -> int:
-        return (self.years * MONTHS_PER_YEAR) + self.months
 
     def __lt__(self, other) -> bool:
         return self.total_months() < other.total_months()
