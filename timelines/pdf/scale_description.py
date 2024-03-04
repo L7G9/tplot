@@ -1,11 +1,25 @@
 from abc import ABC, abstractmethod
+from timelines.models import Timeline
 
 
 MM_PER_CM = 10
 
 
 class ScaleDescription(ABC):
-    """Class to represent the description of a timeline's scale."""
+    """Class to represent the description of a timeline's scale.
+
+    Attributes:
+        timeline: A Timeline instance scale description was created from.
+    """
+
+    def __init__(self, timeline: Timeline):
+        """Initialise Instance.
+
+        Args:
+            timeline: A Timeline instance to create this scale description
+            from.
+        """
+        self.timeline: Timeline = timeline
 
     @abstractmethod
     def get_scale_units(self) -> int:

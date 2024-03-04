@@ -11,7 +11,7 @@ class AgeTimelineScaleDescription(ScaleDescription):
     """Class to represent the description of a timeline's scale."""
 
     def __init__(self, age_timeline: AgeTimeline):
-        self.timeline: AgeTimeline = age_timeline
+        ScaleDescription.__init__(self, age_timeline)
 
         if self.timeline.ageevent_set.count() > 0:
             self.start_age = self.__youngest_age()
