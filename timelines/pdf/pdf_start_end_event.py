@@ -125,13 +125,17 @@ class PDFStartEndEvent(PDFEvent):
     def __portrait_init(self, height, desired_width, max_width):
         """Calculates width for a portrait PDFStartEndEvent given that it
         needs to be a set height."""
-        current_width, current_height = self.__get_dimensions(desired_width)
+        current_width, current_height = PDFEvent._get_dimensions(
+            self,
+            desired_width
+        )
 
         width_increment = (max_width - desired_width) / 5
 
         while current_height > height:
             expanded_width = current_width + width_increment
-            current_width, current_height = self.__get_dimensions(
+            current_width, current_height = PDFEvent._get_dimensions(
+                self,
                 expanded_width
             )
 
