@@ -105,6 +105,12 @@ class PDFEvent(Area):
             description, description_style.fontName, description_style.fontSize
         )
 
+        self.min_width = 0.0
+        self.sized_to_ratio = False
+        self.sized_to_min_width = False
+        self.sized_to_max_width = False
+        self.sized_to_max_height = False
+
         if orientation == "L":
             self.width, self.height = self.__landscape_init(
                 time_width,
@@ -169,6 +175,11 @@ class PDFEvent(Area):
             new_width = width - width_reduction_increment
             width, height = self._get_dimensions(new_width)
 
+        self.min_width = min_width + (2 * self.border_size)
+        self.sized_to_ratio = ((width / height) < target_ratio)
+        self.sized_to_min_width = (width < min_width)
+        self.sized_to_max_height = (height > max_height)
+
         return best_width + (2 * self.border_size), best_height
 
     def __portrait_init(
@@ -183,18 +194,27 @@ class PDFEvent(Area):
         the constraints of a target ratio for width/height and the maximum
         width available to draw it in."""
         largest_width = max(max(time_width, title_width), description_width)
-        init_width = min(largest_width, max_width)
-        min_width = min(time_width, max_width)
+        internal_max_width = max_width - (2 * self.border_size)
+        init_width = min(largest_width, internal_max_width)
+        min_width = min(time_width, internal_max_width)
 
         width, height = self._get_dimensions(init_width)
         best_width, best_height = width, height
         width_reduction_increment = width * INCREMENT_SIZE
 
         # reduce width until within parameters
-        while ((width / height) >= target_ratio) and (width >= min_width):
+        while (
+            ((width / height) >= target_ratio)
+            and (width >= min_width)
+        ):
             best_width, best_height = width, height
             new_width = width - width_reduction_increment
             width, height = self._get_dimensions(new_width)
+
+        self.min_width = min_width + (2 * self.border_size)
+        self.sized_to_ratio = ((width / height) < target_ratio)
+        self.sized_to_min_width = (width < min_width)
+        self.sized_to_max_width = (width == internal_max_width)
 
         return best_width + (2 * self.border_size), best_height
 
