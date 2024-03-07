@@ -4,11 +4,12 @@ Classes:
     PDFStartEndEvent
 """
 from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib.units import mm
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
 
-from .pdf_event import PDFEvent
+from .pdf_event import PDFEvent, INCREMENT_SIZE
 
 
 class PDFStartEndEvent(PDFEvent):
@@ -130,7 +131,10 @@ class PDFStartEndEvent(PDFEvent):
             desired_width
         )
 
-        width_increment = (max_width - desired_width) / 5
+        if (max_width > desired_width):
+            width_increment = (max_width - desired_width) * INCREMENT_SIZE
+        else:
+            width_increment = 5 * mm
 
         while current_height > height:
             expanded_width = current_width + width_increment
