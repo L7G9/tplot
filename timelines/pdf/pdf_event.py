@@ -250,3 +250,23 @@ class PDFEvent(Area):
             self.width,
             self.height,
         )
+
+
+class PDFEventEmpty(PDFEvent):
+    """An empty PDFEvent for testing only."""
+    def __init__(self, x: float, y: float, width: float, height: float):
+        """Initialise Instance.
+
+        Creates an object as a subclass of PDFEvent that can be used when
+        testing PDFEventArea to add an area of a specified size.
+
+        Args:
+            x: A Float holding the horizontal coordinate.
+            y: A Float holding the vertical coordinate.
+            width: A Float holding the horizontal size.
+            height: A Float holding the vertical size.
+        """
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
