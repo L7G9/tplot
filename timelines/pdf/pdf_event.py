@@ -224,16 +224,25 @@ class PDFEvent(Area):
             self.canvas,
             self.x + self.border_size,
             self.y
-            + self.title_paragraph.height
-            + self.description_paragraph.height,
+            + self.height
+            - self.time_paragraph.height,
         )
         self.title_paragraph.drawOn(
             self.canvas,
             self.x + self.border_size,
-            self.y + self.description_paragraph.height,
+            self.y
+            + self.height
+            - self.time_paragraph.height
+            - self.title_paragraph.height,
         )
         self.description_paragraph.drawOn(
-            self.canvas, self.x + self.border_size, self.y
+            self.canvas,
+            self.x + self.border_size,
+            self.y
+            + self.height
+            - self.time_paragraph.height
+            - self.title_paragraph.height
+            - self.description_paragraph.height,
         )
         self.canvas.rect(
             self.x,
