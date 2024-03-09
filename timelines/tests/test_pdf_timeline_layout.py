@@ -6,7 +6,11 @@ from django.test import TestCase
 from age_timelines.models import AgeTimeline
 from timelines.models import EventArea
 from timelines.pdf.pdf_timeline_layout import (
-    PDFTimelineLayout, DEFAULT_PAGE_BORDER, DEFAULT_COMPONENT_BORDER, A4_SHORT
+    PDFTimelineLayout,
+    DEFAULT_PAGE_BORDER,
+    DEFAULT_COMPONENT_BORDER,
+    A4_SHORT,
+    A3_SHORT
 )
 
 
@@ -51,7 +55,7 @@ class PDFTimelineLayoutLandscapeTest(TestCase):
         user = User.objects.create_user(
             username="TestUser", password="TestUser01#"
         )
-        landscape_age_timeline = AgeTimeline.objects.create(
+        age_timeline = AgeTimeline.objects.create(
             user=user,
             title="Test Age Timeline Title",
             description="Test Age Timeline Description",
@@ -61,61 +65,60 @@ class PDFTimelineLayoutLandscapeTest(TestCase):
             page_orientation="L",
             page_scale_position=1,
         )
-
         EventArea.objects.create(
-            timeline=landscape_age_timeline.timeline_ptr,
+            timeline=age_timeline.timeline_ptr,
             name="Event Area 0",
             page_position=0,
             weight=LANDSCAPE_EVENT_AREA_0_WEIGHT,
         )
         EventArea.objects.create(
-            timeline=landscape_age_timeline.timeline_ptr,
+            timeline=age_timeline.timeline_ptr,
             name="Event Area 1",
             page_position=2,
             weight=LANDSCAPE_EVENT_AREA_1_WEIGHT,
         )
-        self.landscape_layout = PDFTimelineLayout(landscape_age_timeline)
-        self.landscape_layout.set_dimensions(
+        self.layout = PDFTimelineLayout(age_timeline)
+        self.layout.set_dimensions(
             TITLE_HEIGHT,
             DESCRIPTION_HEIGHT,
             LANDSCAPE_SCALE_WIDTH,
             LANDSCAPE_SCALE_HEIGHT
         )
 
-    def test_landscape_page_area(self):
+    def test_page_area(self):
         expected_x = 0.0
         expected_y = 0.0
         expected_width = LANDSCAPE_SCALE_WIDTH + (2 * DEFAULT_PAGE_BORDER)
         expected_height = A4_SHORT
-        test_area = self.landscape_layout.page_area
+        test_area = self.layout.page_area
         self.assertEqual(test_area.x, expected_x)
         self.assertEqual(test_area.y, expected_y)
         self.assertEqual(test_area.width, expected_width)
         self.assertEqual(test_area.height, expected_height)
 
-    def test_landscape_drawable_area(self):
+    def test_drawable_area(self):
         expected_x = DEFAULT_PAGE_BORDER
         expected_y = DEFAULT_PAGE_BORDER
         expected_width = LANDSCAPE_SCALE_WIDTH
         expected_height = A4_SHORT - (2 * DEFAULT_PAGE_BORDER)
-        test_area = self.landscape_layout.drawable_area
+        test_area = self.layout.drawable_area
         self.assertEqual(test_area.x, expected_x)
         self.assertEqual(test_area.y, expected_y)
         self.assertEqual(test_area.width, expected_width)
         self.assertEqual(test_area.height, expected_height)
 
-    def test_landscape_title_area(self):
+    def test_title_area(self):
         expected_x = DEFAULT_PAGE_BORDER
         expected_y = A4_SHORT - DEFAULT_PAGE_BORDER - TITLE_HEIGHT
         expected_width = LANDSCAPE_SCALE_WIDTH
         expected_height = TITLE_HEIGHT
-        test_area = self.landscape_layout.title_area
+        test_area = self.layout.title_area
         self.assertEqual(test_area.x, expected_x)
         self.assertAlmostEqual(test_area.y, expected_y)
         self.assertEqual(test_area.width, expected_width)
         self.assertEqual(test_area.height, expected_height)
 
-    def test_landscape_description_area(self):
+    def test_description_area(self):
         expected_x = DEFAULT_PAGE_BORDER
         expected_y = (
             A4_SHORT
@@ -126,35 +129,35 @@ class PDFTimelineLayoutLandscapeTest(TestCase):
         )
         expected_width = LANDSCAPE_SCALE_WIDTH
         expected_height = DESCRIPTION_HEIGHT
-        test_area = self.landscape_layout.description_area
+        test_area = self.layout.description_area
         self.assertEqual(test_area.x, expected_x)
         self.assertAlmostEqual(test_area.y, expected_y)
         self.assertEqual(test_area.width, expected_width)
         self.assertEqual(test_area.height, expected_height)
 
-    def test_landscape_event_and_scale_area(self):
+    def test_event_and_scale_area(self):
         expected_x = DEFAULT_PAGE_BORDER
         expected_y = DEFAULT_PAGE_BORDER
         expected_width = LANDSCAPE_SCALE_WIDTH
         expected_height = LANDSCAPE_EVENT_AND_SCALE_AREA_HEIGHT
-        test_area = self.landscape_layout.event_and_scale_area
+        test_area = self.layout.event_and_scale_area
         self.assertEqual(test_area.x, expected_x)
         self.assertEqual(test_area.y, expected_y)
         self.assertEqual(test_area.width, expected_width)
         self.assertEqual(test_area.height, expected_height)
 
-    def test_landscape_event_area_0(self):
+    def test_event_area_0(self):
         expected_x = DEFAULT_PAGE_BORDER
         expected_y = DEFAULT_PAGE_BORDER
         expected_width = LANDSCAPE_SCALE_WIDTH
         expected_height = LANDSCAPE_EVENT_AREA_0_HEIGHT
-        test_area = self.landscape_layout.event_areas[0]
+        test_area = self.layout.event_areas[0]
         self.assertEqual(test_area.x, expected_x)
         self.assertEqual(test_area.y, expected_y)
         self.assertEqual(test_area.width, expected_width)
         self.assertEqual(test_area.height, expected_height)
 
-    def test_landscape_scale_area(self):
+    def test_scale_area(self):
         expected_x = DEFAULT_PAGE_BORDER
         expected_y = (
             DEFAULT_PAGE_BORDER
@@ -163,13 +166,13 @@ class PDFTimelineLayoutLandscapeTest(TestCase):
         )
         expected_width = LANDSCAPE_SCALE_WIDTH
         expected_height = LANDSCAPE_SCALE_HEIGHT
-        test_area = self.landscape_layout.scale_area
+        test_area = self.layout.scale_area
         self.assertEqual(test_area.x, expected_x)
         self.assertEqual(test_area.y, expected_y)
         self.assertEqual(test_area.width, expected_width)
         self.assertEqual(test_area.height, expected_height)
 
-    def test_landscape_event_area_1(self):
+    def test_event_area_1(self):
         expected_x = DEFAULT_PAGE_BORDER
         expected_y = (
             DEFAULT_PAGE_BORDER
@@ -179,14 +182,14 @@ class PDFTimelineLayoutLandscapeTest(TestCase):
         )
         expected_width = LANDSCAPE_SCALE_WIDTH
         expected_height = LANDSCAPE_EVENT_AREA_1_HEIGHT
-        test_area = self.landscape_layout.event_areas[1]
+        test_area = self.layout.event_areas[1]
         self.assertEqual(test_area.x, expected_x)
         self.assertAlmostEqual(test_area.y, expected_y)
         self.assertEqual(test_area.width, expected_width)
         self.assertEqual(test_area.height, expected_height)
 
-    def test_landscape_expand(self):
-        self.landscape_layout.expand_event_overlap(LANDSCAPE_WIDTH_INCREASE)
+    def test_expand(self):
+        self.layout.expand_event_overlap(LANDSCAPE_WIDTH_INCREASE)
         expected_page_width = (
             LANDSCAPE_SCALE_WIDTH
             + (2 * DEFAULT_PAGE_BORDER)
@@ -196,148 +199,202 @@ class PDFTimelineLayoutLandscapeTest(TestCase):
             LANDSCAPE_SCALE_WIDTH + LANDSCAPE_WIDTH_INCREASE
         )
         self.assertEqual(
-            self.landscape_layout.page_area.width,
+            self.layout.page_area.width,
             expected_page_width
         )
         self.assertEqual(
-            self.landscape_layout.drawable_area.width,
+            self.layout.drawable_area.width,
             expected_drawable_width
         )
 
-"""
-PORTRAIT_SCALE_WIDTH = 300 * mm
-PORTRAIT_SCAlE_HEIGHT = 20 * mm
-PORTRAIT_EVENT_AREA_0_WEIGHT = 1
+
+PORTRAIT_SCALE_WIDTH = 40 * mm
+PORTRAIT_SCALE_HEIGHT = 800 * mm
+PORTRAIT_EVENT_AREA_0_WEIGHT = 5
 PORTRAIT_EVENT_AREA_1_WEIGHT = 2
-PORTRAIT_TOTAL_EVENT_AREA_WEIGHT = PORTRAIT_EVENT_AREA_0_WEIGHT + PORTRAIT_EVENT_AREA_1_WEIGHT
-PORTRAIT_EVENT_AND_SCALE_AREA_WIDTH = A4_SHORT - (2 * DEFAULT_PAGE_BORDER)
-PORTRAIT_EVENT_AREA_0_WIDTH = (PORTRAIT_EVENT_AND_SCALE_AREA_WIDTH - PORTRAIT_SCAlE_HEIGHT) * (PORTRAIT_EVENT_AREA_0_WEIGHT / PORTRAIT_TOTAL_EVENT_AREA_WEIGTH)
-PORTRAIT_EVENT_AREA_1_WIDTH = (PORTRAIT_EVENT_AND_SCALE_AREA_WIDTH - PORTRAIT_SCAlE_HEIGHT) * (PORTRAIT_EVENT_AREA_1_WEIGHT / PORTRAIT_TOTAL_EVENT_AREA_WEIGTH)
+PORTRAIT_TOTAL_EVENT_AREA_WEIGHT = (
+    PORTRAIT_EVENT_AREA_0_WEIGHT + PORTRAIT_EVENT_AREA_1_WEIGHT
+)
+PORTRAIT_EVENT_AND_SCALE_AREA_WIDTH = (
+    A3_SHORT - (2 * DEFAULT_PAGE_BORDER)
+)
+PORTRAIT_COMBINED_EVENT_AREA_WIDTH = (
+    PORTRAIT_EVENT_AND_SCALE_AREA_WIDTH
+    - PORTRAIT_SCALE_WIDTH
+    - (2 * DEFAULT_COMPONENT_BORDER)
+)
+PORTRAIT_EVENT_AREA_0_WIDTH = (
+    PORTRAIT_COMBINED_EVENT_AREA_WIDTH
+    * (PORTRAIT_EVENT_AREA_0_WEIGHT / PORTRAIT_TOTAL_EVENT_AREA_WEIGHT)
+)
+PORTRAIT_EVENT_AREA_1_WIDTH = (
+    PORTRAIT_COMBINED_EVENT_AREA_WIDTH
+    * (PORTRAIT_EVENT_AREA_1_WEIGHT / PORTRAIT_TOTAL_EVENT_AREA_WEIGHT)
+)
+PORTRAIT_PAGE_HEIGHT = (
+    TITLE_HEIGHT
+    + DESCRIPTION_HEIGHT
+    + PORTRAIT_SCALE_HEIGHT
+    + (2 * DEFAULT_COMPONENT_BORDER)
+    + (2 * DEFAULT_PAGE_BORDER)
+)
+PORTRAIT_HEIGHT_INCREASE = 55 * mm
+
 
 class PDFTimelineLayoutPortraitTest(TestCase):
     @classmethod
     def setUpTestData(self):
-        portrait_age_timeline = AgeTimeline.objects.create(
+        user = User.objects.create_user(
+            username="TestUser", password="TestUser01#"
+        )
+        age_timeline = AgeTimeline.objects.create(
             user=user,
             title="Test Age Timeline Title",
             description="Test Age Timeline Description",
             scale_unit=5,
             scale_length=5,
-            page_size="4",
+            page_size="3",
             page_orientation="P",
             page_scale_position=1,
         )
-
         EventArea.objects.create(
-            timeline=portrait_age_timeline.timeline_ptr,
+            timeline=age_timeline.timeline_ptr,
             name="Event Area 0",
             page_position=0,
-            weight=EVENT_AREA_0_WEIGHT,
+            weight=PORTRAIT_EVENT_AREA_0_WEIGHT,
         )
-
         EventArea.objects.create(
-            timeline=portrait_age_timeline.timeline_ptr,
+            timeline=age_timeline.timeline_ptr,
             name="Event Area 1",
             page_position=2,
-            weight=EVENT_AREA_1_WEIGHT,
+            weight=PORTRAIT_EVENT_AREA_1_WEIGHT,
         )
-
-        self.portrait_layout = PDFTimelineLayout(portrait_age_timeline)
-        self.portrait_layout.set_dimensions(
+        self.layout = PDFTimelineLayout(age_timeline)
+        self.layout.set_dimensions(
             TITLE_HEIGHT,
             DESCRIPTION_HEIGHT,
-            LANDSCAPE_SCALE_WIDTH,
-            LANDSCAPE_SCAlE_HEIGHT
+            PORTRAIT_SCALE_WIDTH,
+            PORTRAIT_SCALE_HEIGHT
         )
 
-    def test_portrait_page_area(self):
+    def test_page_area(self):
         expected_x = 0.0
         expected_y = 0.0
-        expected_width = A4_SHORT
-        expected_height = TITLE_HEIGHT + DESCRIPTION_HEIGHT + SCAlE_HEIGHT + (2 * DEFAULT_PAGE_BORDER)
-        test_area = self.landscape_layout.page_area
+        expected_width = A3_SHORT
+        expected_height = PORTRAIT_PAGE_HEIGHT
+        test_area = self.layout.page_area
         self.assertEqual(test_area.x, expected_x)
         self.assertEqual(test_area.y, expected_y)
         self.assertEqual(test_area.width, expected_width)
         self.assertEqual(test_area.height, expected_height)
 
-    def test_portrait_drawable_area(self):
+    def test_drawable_area(self):
         expected_x = DEFAULT_PAGE_BORDER
         expected_y = DEFAULT_PAGE_BORDER
-        expected_width = A4_SHORT - (2 * DEFAULT_PAGE_BORDER)
-        expected_height = TITLE_HEIGHT + DESCRIPTION_HEIGHT + SCAlE_HEIGHT
-        test_area = self.landscape_layout.drawable_area
+        expected_width = A3_SHORT - (2 * DEFAULT_PAGE_BORDER)
+        expected_height = PORTRAIT_PAGE_HEIGHT - (2 * DEFAULT_PAGE_BORDER)
+        test_area = self.layout.drawable_area
         self.assertEqual(test_area.x, expected_x)
         self.assertEqual(test_area.y, expected_y)
         self.assertEqual(test_area.width, expected_width)
         self.assertEqual(test_area.height, expected_height)
 
-    def test_portrait_title_area(self):
+    def test_title_area(self):
         expected_x = DEFAULT_PAGE_BORDER
-        expected_y = DEFAULT_PAGE_BORDER + SCAlE_HEIGHT + DESCRIPTION_HEIGHT
-        expected_width = A4_SHORT - (2 * DEFAULT_PAGE_BORDER)
+        expected_y = PORTRAIT_PAGE_HEIGHT - DEFAULT_PAGE_BORDER - TITLE_HEIGHT
+        expected_width = A3_SHORT - (2 * DEFAULT_PAGE_BORDER)
         expected_height = TITLE_HEIGHT
-        test_area = self.landscape_layout.title_area
+        test_area = self.layout.title_area
         self.assertEqual(test_area.x, expected_x)
         self.assertEqual(test_area.y, expected_y)
         self.assertEqual(test_area.width, expected_width)
         self.assertEqual(test_area.height, expected_height)
 
-    def test_portrait_description_area(self):
+    def test_description_area(self):
         expected_x = DEFAULT_PAGE_BORDER
-        expected_y = DEFAULT_PAGE_BORDER + SCAlE_HEIGHT
-        expected_width = A4_SHORT - (2 * DEFAULT_PAGE_BORDER)
+        expected_y = (
+            PORTRAIT_PAGE_HEIGHT
+            - DEFAULT_PAGE_BORDER
+            - TITLE_HEIGHT
+            - DEFAULT_COMPONENT_BORDER
+            - DESCRIPTION_HEIGHT
+        )
+        expected_width = A3_SHORT - (2 * DEFAULT_PAGE_BORDER)
         expected_height = DESCRIPTION_HEIGHT
-        test_area = self.landscape_layout.description_area
+        test_area = self.layout.description_area
         self.assertEqual(test_area.x, expected_x)
         self.assertEqual(test_area.y, expected_y)
         self.assertEqual(test_area.width, expected_width)
         self.assertEqual(test_area.height, expected_height)
 
-    def test_portrait_event_and_scale_area(self):
+    def test_event_and_scale_area(self):
         expected_x = DEFAULT_PAGE_BORDER
         expected_y = DEFAULT_PAGE_BORDER
-        expected_width = SCALE_WIDTH
-        expected_height = EVENT_AND_SCALE_AREA_HEIGHT
-        test_area = self.landscape_layout.???_area
+        expected_width = PORTRAIT_EVENT_AND_SCALE_AREA_WIDTH
+        expected_height = PORTRAIT_SCALE_HEIGHT
+        test_area = self.layout.event_and_scale_area
         self.assertEqual(test_area.x, expected_x)
         self.assertEqual(test_area.y, expected_y)
         self.assertEqual(test_area.width, expected_width)
         self.assertEqual(test_area.height, expected_height)
 
-    def test_portrait_event_area_0(self):
+    def test_event_area_0(self):
         expected_x = DEFAULT_PAGE_BORDER
         expected_y = DEFAULT_PAGE_BORDER
-        expected_width = SCALE_WIDTH
-        expected_height = EVENT_AREA_0_HEIGHT
-        test_area = self.landscape_layout.???_area
+        expected_width = PORTRAIT_EVENT_AREA_0_WIDTH
+        expected_height = PORTRAIT_SCALE_HEIGHT
+        test_area = self.layout.event_areas[0]
         self.assertEqual(test_area.x, expected_x)
         self.assertEqual(test_area.y, expected_y)
         self.assertEqual(test_area.width, expected_width)
         self.assertEqual(test_area.height, expected_height)
 
-    def test_portrait_scale_area(self):
-        expected_x = DEFAULT_PAGE_BORDER
-        expected_y = DEFAULT_PAGE_BORDER + EVENT_AREA_0_HEIGHT
-        expected_width = SCALE_WIDTH
-        expected_height = SCAlE_HEIGHT
-        test_area = self.landscape_layout.???_area
+    def test_scale_area(self):
+        expected_x = (
+            DEFAULT_PAGE_BORDER
+            + PORTRAIT_EVENT_AREA_0_WIDTH
+            + DEFAULT_COMPONENT_BORDER
+        )
+        expected_y = DEFAULT_PAGE_BORDER
+        expected_width = PORTRAIT_SCALE_WIDTH
+        expected_height = PORTRAIT_SCALE_HEIGHT
+        test_area = self.layout.scale_area
         self.assertEqual(test_area.x, expected_x)
         self.assertEqual(test_area.y, expected_y)
         self.assertEqual(test_area.width, expected_width)
         self.assertEqual(test_area.height, expected_height)
 
-    def test_portrait_event_area_1(self):
-        expected_x = DEFAULT_PAGE_BORDER
-        expected_y = DEFAULT_PAGE_BORDER + EVENT_AREA_0_HEIGHT + SCAlE_HEIGHT
-        expected_width = SCALE_WIDTH
-        expected_height = EVENT_AREA_1_HEIGHT
-        test_area = self.landscape_layout.???_area
+    def test_event_area_1(self):
+        expected_x = (
+            DEFAULT_PAGE_BORDER
+            + PORTRAIT_EVENT_AREA_0_WIDTH
+            + PORTRAIT_SCALE_WIDTH
+            + (2 * DEFAULT_COMPONENT_BORDER)
+        )
+        expected_y = DEFAULT_PAGE_BORDER
+        expected_width = PORTRAIT_EVENT_AREA_1_WIDTH
+        expected_height = PORTRAIT_SCALE_HEIGHT
+        test_area = self.layout.event_areas[1]
         self.assertEqual(test_area.x, expected_x)
         self.assertEqual(test_area.y, expected_y)
-        self.assertEqual(test_area.width, expected_width)
+        self.assertAlmostEqual(test_area.width, expected_width)
         self.assertEqual(test_area.height, expected_height)
 
-    def test_portrait_expand(self):
-        pass
-"""
+    def test_expand(self):
+        self.layout.expand_event_overlap(PORTRAIT_HEIGHT_INCREASE)
+        expected_page_height = (
+            PORTRAIT_PAGE_HEIGHT + PORTRAIT_HEIGHT_INCREASE
+        )
+        expected_drawable_height = (
+            PORTRAIT_PAGE_HEIGHT
+            - (2 * DEFAULT_PAGE_BORDER)
+            + PORTRAIT_HEIGHT_INCREASE
+        )
+        self.assertEqual(
+            self.layout.page_area.height,
+            expected_page_height
+        )
+        self.assertEqual(
+            self.layout.drawable_area.height,
+            expected_drawable_height
+        )
