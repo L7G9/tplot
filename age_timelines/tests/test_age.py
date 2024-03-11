@@ -3,6 +3,7 @@ from django.test import TestCase
 from timelines.pdf.round import Round
 from age_timelines.pdf.age import Age
 
+
 class AgeTest(TestCase):
     def test_round_months_up(self):
         age = Age(1, 1)
@@ -22,7 +23,7 @@ class AgeTest(TestCase):
         self.assertEqual(age.years, 1)
         self.assertEqual(age.months, 0)
 
-    def test_round_regative_months_down(self):
+    def test_round_negative_months_down(self):
         age = Age(1, -1)
         age.round_months(Round.DOWN)
         self.assertEqual(age.years, 0)
