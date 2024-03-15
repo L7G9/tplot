@@ -9,6 +9,22 @@ from reportlab.pdfgen.canvas import Canvas
 from timelines.pdf.pdf_event import PDFEvent
 
 DEFAULT_EVENT_BORDER = 0.5 * mm
+LARGE_STRING = (
+    "large amount of text - large amount of text -"
+    "large amount of text - large amount of text -"
+    "large amount of text - large amount of text -"
+    "large amount of text - large amount of text"
+)
+VERY_LARGE_STRING = (
+    "large amount of text - large amount of text -"
+    "large amount of text - large amount of text -"
+    "large amount of text - large amount of text -"
+    "large amount of text - large amount of text -"
+    "large amount of text - large amount of text -"
+    "large amount of text - large amount of text -"
+    "large amount of text - large amount of text -"
+    "large amount of text - large amount of text"
+)
 
 
 class PDFEventTest(TestCase):
@@ -60,8 +76,8 @@ class PDFEventTest(TestCase):
 
         test_event = PDFEvent(
             "12 Years 5 Months",
-            "large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text",
-            "large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text",
+            LARGE_STRING,
+            LARGE_STRING,
             "L",
             canvas,
             paragraph_style,
@@ -82,8 +98,8 @@ class PDFEventTest(TestCase):
 
         test_event = PDFEvent(
             "12 Years 5 Months",
-            "large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text",
-            "large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text",
+            LARGE_STRING,
+            LARGE_STRING,
             "L",
             canvas,
             paragraph_style,
@@ -126,8 +142,8 @@ class PDFEventTest(TestCase):
 
         test_event = PDFEvent(
             "12 Years 5 Months",
-            "large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text",
-            "large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text",
+            LARGE_STRING,
+            LARGE_STRING,
             "P",
             canvas,
             paragraph_style,
@@ -148,8 +164,8 @@ class PDFEventTest(TestCase):
 
         test_event = PDFEvent(
             "12 Years 5 Months",
-            "large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text",
-            "large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text - large amount of text",
+            LARGE_STRING,
+            VERY_LARGE_STRING,
             "P",
             canvas,
             paragraph_style,

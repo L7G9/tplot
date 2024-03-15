@@ -59,7 +59,13 @@ class PDFStartEndEventTest(TestCase):
         test_event = PDFStartEndEvent(
             "12 Years 5 Months",
             "event title",
-            "long event description long event description long event description long event description long event description long event description long event description long event description long event description long event description",
+            (
+                "long event description long event description"
+                "long event description long event description"
+                "long event description long event description"
+                "long event description long event description"
+                "long event description long event description"
+            ),
             "L",
             canvas,
             paragraph_style,
@@ -102,7 +108,13 @@ class PDFStartEndEventTest(TestCase):
         test_event = PDFStartEndEvent(
             "12 Years 5 Months",
             "event title",
-            "long event description long event description long event description long event description long event description long event description long event description long event description long event description long event description",
+            (
+                "long event description long event description"
+                "long event description long event description"
+                "long event description long event description"
+                "long event description long event description"
+                "long event description long event description"
+            ),
             "P",
             canvas,
             paragraph_style,

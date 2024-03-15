@@ -3,7 +3,9 @@ from django.test import TestCase
 
 from age_timelines.models import AgeEvent, AgeTimeline
 from age_timelines.pdf.age import Age
-from age_timelines.pdf.age_timeline_scale_description import AgeTimelineScaleDescription
+from age_timelines.pdf.age_timeline_scale_description import (
+    AgeTimelineScaleDescription
+)
 
 
 class AgeTimelineScaleDescriptionTest(TestCase):
@@ -53,7 +55,9 @@ class AgeTimelineScaleDescriptionTest(TestCase):
             page_orientation="L",
             page_scale_position=0,
         )
-        self.scale_description_no_events = AgeTimelineScaleDescription(age_timeline_no_events)
+        self.scale_description_no_events = AgeTimelineScaleDescription(
+            age_timeline_no_events
+        )
 
     def test_start_age(self):
         years = self.scale_description.start_age.years

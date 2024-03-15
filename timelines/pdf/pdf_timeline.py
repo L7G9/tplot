@@ -220,7 +220,10 @@ class PDFTimeline(ABC):
             events: List[Event] = self._get_events(event_area.id)
 
             for event in events:
-                pdf_event: PDFEvent = self.__create_pdf_event(event, pdf_event_area)
+                pdf_event: PDFEvent = self.__create_pdf_event(
+                    event,
+                    pdf_event_area
+                )
                 coordinates = self.__get_event_position(
                     event, pdf_event, pdf_event_area
                 )
@@ -231,7 +234,7 @@ class PDFTimeline(ABC):
 
                 pdf_event_area.events.append(pdf_event)
 
-                # todo - handle case where event is too big to fit into event area
+                # todo - handle case where event is too big to fit event area
                 overlap = self.__get_event_overlap(pdf_event, pdf_event_area)
                 if overlap > max_overlap:
                     max_overlap = overlap

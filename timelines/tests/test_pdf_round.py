@@ -1,7 +1,7 @@
-from django.contrib.auth.models import User
 from django.test import TestCase
 
 from timelines.pdf.round import Round
+
 
 class RoundTest(TestCase):
     @classmethod
