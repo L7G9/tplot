@@ -1,12 +1,12 @@
-## 0.1.0 (2024-03-15)
+## 0.1.0 (2024-03-19)
 
 ### Feat
 
 - **PDFScale**: add plot method
 - **pdf_event.py**: add class for event with a start and end
 - **PDFEvent**: add orientation
-- **AgeTimelinePDF**: use PDFEvent to diplay events in event areas
-- **PDFEvent**: class to dsiplay Event on pdf
+- **AgeTimelinePDF**: use PDFEvent to display events in event areas
+- **PDFEvent**: class to display Event on pdf
 - timeline scale added generated pdf
 - **pfd_view.py**: view that creates a pdf containing graphical representation of timeline
 - **layout.py**: class describing pdf timeline layout
@@ -15,6 +15,7 @@
 
 ### Fix
 
+- **AgeEventCreateView-&-AgeEventUpdateView**: only display tags and event areas from current timeline
 - **PDFStartEndEvent**: fix bug where width_increment is set to 0
 - **PDFEvent**: fix draw method error
 - **PDFEvent**: fix error with max_width not taking into account border_size
@@ -24,6 +25,7 @@
 
 ### Refactor
 
+- renamed uses of area & timeline area to event area for consistency
 - update to use PDFAgeTimeline
 - reworked so can make pdf_timeline for any type of timeline
 - increase range of tests Area class can perform
@@ -33,7 +35,7 @@
 - remove unused file
 - add class for timeline's unit
 - remove unused files
-- **TimelineLayout**: update all measurments from mm to canvas units
+- **TimelineLayout**: update all measurements from mm to canvas units
 - breaking into smaller classes
 
 ## 0.0.3 (2023-10-05)
@@ -84,7 +86,7 @@
 ### Fix
 
 - **main.yaml**: update database name inline with settings.py
-- move .github directory to cortect location
+- move .github directory to correct location
 - **views.py**: add missing mixims
 - **AgeEventDeleteViewTest**: add missing follow values
 - **AgeEventUpdateView**: add AgeTimelineOwnerMixim to ensure user is owner of agetimeline

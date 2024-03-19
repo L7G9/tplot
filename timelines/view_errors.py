@@ -1,7 +1,7 @@
 from .models import EventArea
 
 
-def area_position_error(form, timeline, area_id=None):
+def event_area_position_error(form, timeline, area_id=None):
     position = form.cleaned_data["page_position"]
 
     if area_id:

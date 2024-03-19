@@ -63,23 +63,23 @@ urlpatterns = [
         views.TagDeleteView.as_view(),
         name="tag-delete",
     ),
-    # ex: 1/area/add/
+    # ex: 1/event_area/add/
     path(
-        "<int:age_timeline_id>/area/add/",
-        views.AreaCreateView.as_view(),
-        name="area-add",
+        "<int:age_timeline_id>/event_area/add/",
+        views.EventAreaCreateView.as_view(),
+        name="event-area-add",
     ),
-    # ex: 1/area/1/update/
+    # ex: 1/event_area/1/update/
     path(
-        "<int:age_timeline_id>/area/<int:pk>/update/",
-        views.AreaUpdateView.as_view(),
-        name="area-update",
+        "<int:age_timeline_id>/event_area/<int:pk>/update/",
+        views.EventAreaUpdateView.as_view(),
+        name="event-area-update",
     ),
-    # ex: 1/area/1/delete/
+    # ex: 1/event_area/1/delete/
     path(
-        "<int:age_timeline_id>/area/<int:pk>/delete/",
-        views.AreaDeleteView.as_view(),
-        name="area-delete",
+        "<int:age_timeline_id>/event_area/<int:pk>/delete/",
+        views.EventAreaDeleteView.as_view(),
+        name="event-area-delete",
     ),
     # ex: 1/pdf/
     path(

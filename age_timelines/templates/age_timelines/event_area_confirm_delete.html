@@ -1,6 +1,6 @@
-{% extends "timelines/area_confirm_delete.html" %}
+{% extends "timelines/event_area_confirm_delete.html" %}
 {% block nav_links %}
     <li class="nav-item"><a class="nav-link link-light" href="{% url 'timelines:user-timelines' %}">User Timelines</a></li>
     <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-detail' view.kwargs.age_timeline_id %}">Timeline</a></li>
-    <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:area-update' view.kwargs.age_timeline_id view.kwargs.pk %}">Area</a></li>
+    <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:event-area-update' view.kwargs.age_timeline_id view.kwargs.pk %}">Area</a></li>
 {% endblock %}

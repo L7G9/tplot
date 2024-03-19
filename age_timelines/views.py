@@ -7,7 +7,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 
 from timelines.mixins import OwnerRequiredMixin
-from timelines.view_errors import area_position_error
+from timelines.view_errors import event_area_position_error
 from timelines.models import Tag, EventArea
 
 from .models import AgeEvent, AgeTimeline
@@ -94,7 +94,7 @@ AGE_EVENT_FIELD_ORDER = [
     "end_year",
     "end_month",
     "tags",
-    "timeline_area",
+    "event_area",
 ]
 
 
@@ -129,6 +129,13 @@ class AgeEventValidateMixim(object):
             return super().form_valid(form)
 
 
+def get_timeline_from_age_timeline(view):
+    age_timeline = AgeTimeline.objects.get(
+            pk=view.kwargs["age_timeline_id"]
+        )
+    return age_timeline.timeline_ptr.pk
+
+
 class AgeEventCreateView(
     LoginRequiredMixin,
     AgeTimelineOwnerMixim,
@@ -139,6 +146,17 @@ class AgeEventCreateView(
     model = AgeEvent
     fields = AGE_EVENT_FIELD_ORDER
     template_name = "age_timelines/age_event_add_form.html"
+
+    def get_form_class(self):
+        modelform = super().get_form_class()
+        timeline_id = get_timeline_from_age_timeline(self)
+        modelform.base_fields['tags'].limit_choices_to = {
+            'timeline': timeline_id
+        }
+        modelform.base_fields['event_area'].limit_choices_to = {
+            'timeline': timeline_id
+        }
+        return modelform
 
 
 class AgeEventUpdateView(
@@ -152,6 +170,17 @@ class AgeEventUpdateView(
     model = AgeEvent
     fields = AGE_EVENT_FIELD_ORDER
     template_name = "age_timelines/age_event_edit_form.html"
+
+    def get_form_class(self):
+        modelform = super().get_form_class()
+        timeline_id = get_timeline_from_age_timeline(self)
+        modelform.base_fields['tags'].limit_choices_to = {
+            'timeline': timeline_id
+        }
+        modelform.base_fields['event_area'].limit_choices_to = {
+            'timeline': timeline_id
+        }
+        return modelform
 
 
 class AgeEventDeleteView(
@@ -211,7 +240,7 @@ class TagDeleteView(
     template_name = "age_timelines/tag_confirm_delete.html"
 
 
-class AreaValidateMixim(object):
+class EventAreaValidateMixim(object):
     def form_valid(self, form):
         age_timeline = AgeTimeline.objects.get(
             pk=self.kwargs["age_timeline_id"]
@@ -223,7 +252,7 @@ class AreaValidateMixim(object):
         if "pk" in self.kwargs:
             area_id = self.get_object().id
 
-        position_error = area_position_error(
+        position_error = event_area_position_error(
             form,
             age_timeline.timeline_ptr,
             area_id,
@@ -237,32 +266,32 @@ class AreaValidateMixim(object):
             return super().form_valid(form)
 
 
-class AreaCreateView(
+class EventAreaCreateView(
     LoginRequiredMixin,
     AgeTimelineOwnerMixim,
-    AreaValidateMixim,
+    EventAreaValidateMixim,
     SuccessMixim,
     CreateView,
 ):
     model = EventArea
     fields = ["name", "page_position", "weight"]
-    template_name = "age_timelines/area_add_form.html"
+    template_name = "age_timelines/event_area_add_form.html"
 
 
-class AreaUpdateView(
+class EventAreaUpdateView(
     LoginRequiredMixin,
     AgeTimelineOwnerMixim,
     OwnerRequiredMixin,
-    AreaValidateMixim,
+    EventAreaValidateMixim,
     SuccessMixim,
     UpdateView,
 ):
     model = EventArea
     fields = ["name", "page_position", "weight"]
-    template_name = "age_timelines/area_edit_form.html"
+    template_name = "age_timelines/event_area_edit_form.html"
 
 
-class AreaDeleteView(
+class EventAreaDeleteView(
     LoginRequiredMixin,
     AgeTimelineOwnerMixim,
     OwnerRequiredMixin,
@@ -270,7 +299,7 @@ class AreaDeleteView(
     DeleteView,
 ):
     model = EventArea
-    template_name = "age_timelines/area_confirm_delete.html"
+    template_name = "age_timelines/event_area_confirm_delete.html"
 
 
 def pdf_view(request, age_timeline_id):

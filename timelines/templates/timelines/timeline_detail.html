@@ -33,7 +33,7 @@
     <p>Size: {{ object.get_page_size_display }}</p>
     <p>Orientation: {{ object.get_page_orientation_display }}</p>
     <p>Scale Position: {{ object.page_scale_position }}</p>
-    <p class="h4">Areas</p>
+    <p class="h4">Event Areas</p>
     <div class="list-group">
         {% block area_list %}
         {% for area in object.eventarea_set.all %}
