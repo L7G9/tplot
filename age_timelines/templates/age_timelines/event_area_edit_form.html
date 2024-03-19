@@ -1,5 +1,6 @@
-{% extends "timelines/area_add_form.html"  %}
+{% extends "timelines/event_area_edit_form.html"  %}
 {% block nav_links %}
     <li class="nav-item"><a class="nav-link link-light" href="{% url 'timelines:user-timelines' %}">User Timelines</a></li>
     <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-detail' view.kwargs.age_timeline_id %}">Timeline</a></li>
+    <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:event-area-delete' view.kwargs.age_timeline_id view.kwargs.pk %}">Delete</a></li>
 {% endblock %}

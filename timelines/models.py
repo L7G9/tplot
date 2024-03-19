@@ -85,8 +85,8 @@ class Event(models.Model):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
-    timeline_area = models.ForeignKey(
-       EventArea, blank=True, null=True, on_delete=models.SET_NULL,
+    event_area = models.ForeignKey(
+        EventArea, blank=True, null=True, on_delete=models.SET_NULL,
     )
     has_end = models.BooleanField(default=False)
 

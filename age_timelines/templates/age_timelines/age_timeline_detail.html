@@ -9,7 +9,7 @@
 <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-update' view.kwargs.pk %}">Edit Age Timeline</a></li>
 <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-event-add' view.kwargs.pk %}">New Age Event</a></li>
 <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:tag-add' view.kwargs.pk %}">New Tag</a></li>
-<li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:area-add' view.kwargs.pk %}">New Area</a></li>
+<li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:event-area-add' view.kwargs.pk %}">New Event Area</a></li>
 <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-pdf' view.kwargs.pk %}">View PDF</a></li>
 {% endblock %}
 
@@ -27,6 +27,6 @@
 
  {% block area_list %}
  {% for area in object.eventarea_set.all %}
-    <a class="list-group-item list-group-item-action" href="{% url 'age_timelines:area-update' view.kwargs.pk area.id %}">{{ area }}</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'age_timelines:event-area-update' view.kwargs.pk area.id %}">{{ area }}</a>
  {% endfor %}
  {% endblock %}
