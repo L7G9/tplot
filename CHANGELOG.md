@@ -1,3 +1,13 @@
+## 0.1.1 (2024-03-19)
+
+### Fix
+
+- **AgeEventCreateView-&-AgeEventUpdateView**: only display tags and event areas from current timeline
+
+### Refactor
+
+- renamed uses of area & timeline area to event area for consistency
+
 ## 0.1.0 (2024-03-19)
 
 ### Feat
