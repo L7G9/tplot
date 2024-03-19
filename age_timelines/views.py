@@ -129,6 +129,13 @@ class AgeEventValidateMixim(object):
             return super().form_valid(form)
 
 
+def get_timeline_from_age_timeline(view):
+    age_timeline = AgeTimeline.objects.get(
+            pk=view.kwargs["age_timeline_id"]
+        )
+    return age_timeline.timeline_ptr.pk
+
+
 class AgeEventCreateView(
     LoginRequiredMixin,
     AgeTimelineOwnerMixim,
@@ -139,6 +146,17 @@ class AgeEventCreateView(
     model = AgeEvent
     fields = AGE_EVENT_FIELD_ORDER
     template_name = "age_timelines/age_event_add_form.html"
+
+    def get_form_class(self):
+        modelform = super().get_form_class()
+        timeline_id = get_timeline_from_age_timeline(self)
+        modelform.base_fields['tags'].limit_choices_to = {
+            'timeline': timeline_id
+        }
+        modelform.base_fields['timeline_area'].limit_choices_to = {
+            'timeline': timeline_id
+        }
+        return modelform
 
 
 class AgeEventUpdateView(
@@ -152,6 +170,17 @@ class AgeEventUpdateView(
     model = AgeEvent
     fields = AGE_EVENT_FIELD_ORDER
     template_name = "age_timelines/age_event_edit_form.html"
+
+    def get_form_class(self):
+        modelform = super().get_form_class()
+        timeline_id = get_timeline_from_age_timeline(self)
+        modelform.base_fields['tags'].limit_choices_to = {
+            'timeline': timeline_id
+        }
+        modelform.base_fields['timeline_area'].limit_choices_to = {
+            'timeline': timeline_id
+        }
+        return modelform
 
 
 class AgeEventDeleteView(
