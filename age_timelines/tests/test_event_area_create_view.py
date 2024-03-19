@@ -68,7 +68,10 @@ class EventAreaCreateViewTest(TestCase):
         )
         self.assertEqual(str(response.context["user"]), self.user0.username)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "age_timelines/event_area_add_form.html")
+        self.assertTemplateUsed(
+            response,
+            "age_timelines/event_area_add_form.html"
+        )
 
     def test_redirect_if_not_logged_in(self):
         response = self.client.get(
