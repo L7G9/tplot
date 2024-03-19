@@ -6,7 +6,7 @@ from age_timelines.models import AgeTimeline
 from timelines.models import EventArea
 
 
-class AreaUpdateViewTest(TestCase):
+class EventAreaDeleteViewTest(TestCase):
     USER_COUNT = 2
     AGE_TIMELINES_PER_USER = 1
     EVENT_AREAS_PER_TIMELINE = 1
@@ -32,12 +32,6 @@ class AreaUpdateViewTest(TestCase):
         cls.user1_event_area_id = users[1]["age_timelines"][0][
             "event_area_ids"
         ][0]
-        cls.area_event_update_data = {
-            "timeline": cls.user0_timeline_id,
-            "name": "Updated Test Event Area",
-            "page_position": 1,
-            "weight": 1,
-        }
 
     def test_view_url_exists_at_desired_location(self):
         self.client.login(
@@ -46,7 +40,7 @@ class AreaUpdateViewTest(TestCase):
         timeline_id = self.user0_age_timeline_id
         event_id = self.user0_event_area_id
         response = self.client.get(
-            f"/timelines/age/{timeline_id}/area/{event_id}/update/"
+            f"/timelines/age/{timeline_id}/event_area/{event_id}/delete/"
         )
         self.assertEqual(str(response.context["user"]), self.user0.username)
         self.assertEqual(response.status_code, 200)
@@ -57,7 +51,7 @@ class AreaUpdateViewTest(TestCase):
         )
         response = self.client.get(
             reverse(
-                "age_timelines:area-update",
+                "age_timelines:event-area-delete",
                 kwargs={
                     "age_timeline_id": self.user0_age_timeline_id,
                     "pk": self.user0_event_area_id,
@@ -73,7 +67,7 @@ class AreaUpdateViewTest(TestCase):
         )
         response = self.client.get(
             reverse(
-                "age_timelines:area-update",
+                "age_timelines:event-area-delete",
                 kwargs={
                     "age_timeline_id": self.user0_age_timeline_id,
                     "pk": self.user0_event_area_id,
@@ -82,12 +76,14 @@ class AreaUpdateViewTest(TestCase):
         )
         self.assertEqual(str(response.context["user"]), self.user0.username)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "age_timelines/area_edit_form.html")
+        self.assertTemplateUsed(
+            response, "age_timelines/event_area_confirm_delete.html"
+        )
 
     def test_redirect_if_not_logged_in(self):
         response = self.client.get(
             reverse(
-                "age_timelines:area-update",
+                "age_timelines:event-area-delete",
                 kwargs={
                     "age_timeline_id": self.user0_age_timeline_id,
                     "pk": self.user0_event_area_id,
@@ -103,7 +99,7 @@ class AreaUpdateViewTest(TestCase):
         )
         response = self.client.get(
             reverse(
-                "age_timelines:area-update",
+                "age_timelines:event-area-delete",
                 kwargs={
                     "age_timeline_id": self.user1_age_timeline_id,
                     "pk": self.user0_event_area_id,
@@ -118,7 +114,7 @@ class AreaUpdateViewTest(TestCase):
         )
         response = self.client.get(
             reverse(
-                "age_timelines:area-update",
+                "age_timelines:event-area-delete",
                 kwargs={
                     "age_timeline_id": self.user0_age_timeline_id,
                     "pk": self.user1_event_area_id,
@@ -127,40 +123,39 @@ class AreaUpdateViewTest(TestCase):
         )
         self.assertEqual(response.status_code, 403)
 
-    def test_event_area_updated(self):
+    def test_event_area_deleted(self):
         self.client.login(
             username=self.user0.username, password=self.user0_password
         )
         response = self.client.post(
             reverse(
-                "age_timelines:area-update",
+                "age_timelines:event-area-delete",
                 kwargs={
                     "age_timeline_id": self.user0_age_timeline_id,
                     "pk": self.user0_event_area_id,
                 },
             ),
-            data=self.area_event_update_data,
             follow=True,
         )
         self.assertEqual(str(response.context["user"]), self.user0.username)
         self.assertEqual(response.status_code, 200)
 
-        area_event = EventArea.objects.get(id=self.user0_event_area_id)
-        self.assertEqual(area_event.name, self.area_event_update_data["name"])
+        age_events = EventArea.objects.filter(timeline=self.user0_timeline_id)
+        expected_event_area_count = self.EVENT_AREAS_PER_TIMELINE - 1
+        self.assertEqual(len(age_events), expected_event_area_count)
 
-    def test_redirect_after_event_area_updated(self):
+    def test_redirect_after_event_area_deleted(self):
         self.client.login(
             username=self.user0.username, password=self.user0_password
         )
         response = self.client.post(
             reverse(
-                "age_timelines:area-update",
+                "age_timelines:event-area-delete",
                 kwargs={
                     "age_timeline_id": self.user0_age_timeline_id,
                     "pk": self.user0_event_area_id,
                 },
             ),
-            data=self.area_event_update_data,
             follow=True,
         )
         self.assertEqual(str(response.context["user"]), self.user0.username)

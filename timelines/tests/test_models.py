@@ -135,12 +135,12 @@ class EventModel(TestCase):
 
     def test_timeline_area_blank(self):
         event = Event.objects.get(id=self.event_id)
-        blank = event._meta.get_field("timeline_area").blank
+        blank = event._meta.get_field("event_area").blank
         self.assertTrue(blank)
 
     def test_timeline_area_null(self):
         event = Event.objects.get(id=self.event_id)
-        null = event._meta.get_field("timeline_area").null
+        null = event._meta.get_field("event_area").null
         self.assertTrue(null)
 
     def test_has_end_default(self):
