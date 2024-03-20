@@ -34,12 +34,11 @@ class PDFAgeTimeline(PDFTimeline):
     def _create_scale_description(
         self, timeline: AgeTimeline
     ) -> AgeTimelineScaleDescription:
-        """Create a ScaleDescription specific to an AgeTimeline."""
         return AgeTimelineScaleDescription(timeline)
 
     def _get_events(self, event_area_id: int) -> List[AgeEvent]:
         """Get AgeEvents linked to given EventArea in AgeTimeline."""
-        return AgeEvent.objects.filter(timeline_area=event_area_id)
+        return AgeEvent.objects.filter(event_area=event_area_id)
 
     def _get_event_start_time(self, event: AgeEvent) -> str:
         """Get string describing the time that an AgeEvent with start time
