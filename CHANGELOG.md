@@ -1,3 +1,9 @@
+## 0.2.1 (2024-03-22)
+
+### Fix
+
+- **UI**: updates to make hyperlinks more user friendly
+
 ## 0.2.0 (2024-03-22)
 
 ### Feat
