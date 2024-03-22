@@ -1,3 +1,14 @@
+## 0.2.0 (2024-03-22)
+
+### Feat
+
+- **PDFTimeline-&-PDFEvent**: update to use PDFJoiningLines
+- **PDFJoiningLines**: add class to draw lines joining the PDFEvents and PDFScale in a PDFTimeline
+
+### Fix
+
+- **PDFAgeTimeline**: fix error where filtering AgeEvent by timeline_area instead of event_area
+
 ## 0.1.1 (2024-03-19)
 
 ### Fix
