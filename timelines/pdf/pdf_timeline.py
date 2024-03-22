@@ -8,7 +8,7 @@ import io
 from abc import ABC, abstractmethod
 from typing import List, Union
 
-from reportlab.lib.colors import black
+from reportlab.lib.colors import black, white
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
@@ -16,6 +16,7 @@ from reportlab.platypus import Paragraph
 from timelines.models import Event, EventArea, Timeline
 from timelines.pdf.inside import Inside
 from timelines.pdf.pdf_event import PDFEvent
+from timelines.pdf.pdf_joining_lines import PDFJoiningLines
 from timelines.pdf.pdf_scale import PDFScale
 from timelines.pdf.pdf_start_end_event import PDFStartEndEvent
 from timelines.pdf.pdf_timeline_layout import PDFTimelineLayout
@@ -46,6 +47,8 @@ class PDFTimeline(ABC):
         title_paragraph: A Paragraph instance to draw the timeline title.
         description_paragraph: A Paragraph instance to draw the timeline
         description.
+        joining_lines: A PDFJoiningLines instance to draw lines joining events
+        to the scale.
     """
 
     def __init__(self, timeline: Timeline):
@@ -112,6 +115,12 @@ class PDFTimeline(ABC):
         if overlap > 0:
             self.layout.expand_event_overlap(overlap)
             self.scale.move(self.layout.scale_area.x, self.layout.scale_area.y)
+
+        self.joining_lines = PDFJoiningLines(
+            self.canvas,
+            self.layout.drawable_area
+        )
+        self.__add_joining_lines()
 
         # set final page size & draw
         self.canvas.setPageSize(
@@ -246,16 +255,16 @@ class PDFTimeline(ABC):
     ) -> Union[tuple[float, float], None]:
         """Get the best position for pdf_event in pdf_event_area."""
         # find preferred position of pdf_event from start of pdf_event_area
-        event_position = self._plot_event(event, pdf_event)
+        pdf_event.position_on_scale = self._plot_event(event, pdf_event)
 
         # place pdf_event in preferred position then get best position making
         # sure it does not overlap any other PDFEvents or any part of it's
         # PDFEventArea which cannot be expanded
         if self.timeline.page_orientation == "L":
-            pdf_event.x = event_position
+            pdf_event.x = pdf_event.position_on_scale
             return pdf_event_area.get_landscape_position(pdf_event, True, True)
         else:
-            pdf_event.y = event_position
+            pdf_event.y = pdf_event.position_on_scale
             return pdf_event_area.get_portrait_position(pdf_event, True, True)
 
     def __get_event_overlap(
@@ -273,6 +282,25 @@ class PDFTimeline(ABC):
 
         return 0
 
+    def __add_joining_lines(self):
+        """Call after all PDFEvents have been created to add a line to join
+        the event and scale."""
+        for pdf_event_area in self.layout.event_areas:
+            event_before_scale = self.joining_lines.is_before(
+                pdf_event_area.event_area,
+                self.timeline
+            )
+
+            for pdf_event in pdf_event_area.events:
+                line = self.joining_lines.get_line(
+                    pdf_event_area,
+                    pdf_event,
+                    self.scale,
+                    self.timeline.page_orientation,
+                    event_before_scale
+                )
+                self.joining_lines.add_line(line)
+
     def __draw(self):
         """Draw all the graphical elements of the timeline on the PDF."""
         self.title_paragraph.drawOn(
@@ -288,6 +316,8 @@ class PDFTimeline(ABC):
         )
 
         self.scale.draw()
+
+        self.joining_lines.draw()
 
         for pdf_event_area in self.layout.event_areas:
             self.canvas.saveState()
@@ -305,6 +335,7 @@ class PDFTimeline(ABC):
             fontName="Times-Roman",
             fontSize=16,
             borderColor=black,
+            backColor=white,
             borderWidth=0,
             leading=22,
         )
@@ -316,6 +347,7 @@ class PDFTimeline(ABC):
             fontName="Times-Roman",
             fontSize=10,
             borderColor=black,
+            backColor=white,
             borderWidth=0,
             leading=14,
         )

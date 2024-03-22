@@ -74,6 +74,9 @@ class PDFEvent(Area):
             on a portrait timeline.
             max_height: A float storing the maximum width the PDFEvent can be
             on a landscape timeline.
+            position_on_scale: A float storing where along the scale (either x
+            or y depending on timeline orientation) this instance should
+            ideally be positioned.  Set by PDFTimeline.
 
         Raises:
             ValueError: If orientation is not L for landscape or P for
@@ -110,6 +113,8 @@ class PDFEvent(Area):
         self.sized_to_min_width = False
         self.sized_to_max_width = False
         self.sized_to_max_height = False
+
+        self.position_on_scale = 0.0
 
         if orientation == "L":
             self.width, self.height = self.__landscape_init(
