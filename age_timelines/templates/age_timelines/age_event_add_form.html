@@ -1,8 +1,8 @@
 {% extends 'timelines/form_base.html' %}
 {% block title %}TPlot - New Age Event{% endblock %}
 {% block nav_links %}
-    <li class="nav-item"><a class="nav-link link-light" href="{% url 'timelines:user-timelines' %}">User Timelines</a></li>
-    <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-detail' view.kwargs.age_timeline_id %}">Timeline</a></li>
+    <li class="nav-item"><a class="nav-link link-light" href="{% url 'timelines:user-timelines' %}">Home</a></li>
+    <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-detail' view.kwargs.age_timeline_id %}">Back</a></li>
 {% endblock %}
 {% block heading %}New Age Event{% endblock %}
 {% block button_name %}Add{% endblock %}

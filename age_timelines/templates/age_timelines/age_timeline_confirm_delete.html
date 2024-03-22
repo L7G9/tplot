@@ -1,8 +1,7 @@
 {% extends "timelines/confirm_delete.html" %}
 {% block title %}TPlot - Delete Age Timeline{% endblock %}
 {% block nav_links %}
-    <li class="nav-item"><a class="nav-link link-light" href="{% url 'timelines:user-timelines' %}">User Timelines</a></li>
-    <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-detail' view.kwargs.pk %}">Timeline</a></li>
+    <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-update' view.kwargs.pk %}">Back</a></li>
 {% endblock %}
 {% block heading %}Delete Age Timeline{% endblock %}
 {% block description %}{{ object }}{% endblock %}
