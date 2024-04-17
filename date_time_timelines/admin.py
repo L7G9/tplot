@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import DateTimeTimeline, DateTimeEvent
+
+
+admin.site.register(DateTimeTimeline)
+admin.site.register(DateTimeEvent)
