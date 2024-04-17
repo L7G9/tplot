@@ -1,3 +1,15 @@
+## 0.3.0 (2024-04-17)
+
+### Feat
+
+- date & time timelines added
+- **DateTime**: added timeunit sub-class for timelines ordered by the callender date and clock time
+- started date and time timeline app
+
+### Fix
+
+- **age_timeline_conform_delete.html**: add missing home link
+
 ## 0.2.1 (2024-03-22)
 
 ### Fix
