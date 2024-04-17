@@ -1,35 +1,20 @@
 from datetime import datetime
 from django.test import TestCase
 
-from date_time_timelines.models import (
-    WEEK_1,
-    MONTH_1,
-    MONTH_2,
-    MONTH_3,
-    MONTH_6,
-    YEAR_1,
-    YEAR_5,
-    YEAR_10,
-    YEAR_100,
-    YEAR_1000
-)
 from timelines.pdf.round import Round
-from date_time_timelines.pdf.datetime import (
-    DateTime,
-    round_datetime,
+from date_time_timelines.pdf.datetime_utls import (
     round_by_seconds,
     round_by_weeks,
     round_by_months,
     round_by_years,
-    is_week_scale_unit,
-    is_month_scale_unit,
-    is_year_scale_unit,
-    get_months_in_scale_unit,
-    get_years_in_scale_unit
+    get_start_of_month,
+    get_start_of_next_month,
+    seconds_between,
+    get_month_completion
 )
 
 
-class DateTimeTest(TestCase):
+class DateTimeUtlsTest(TestCase):
     def test_round_by_seconds_up_rounding_not_required(self):
         date_time = datetime(
             year=2000, month=1, day=1, hour=0, minute=0, second=0
@@ -230,12 +215,6 @@ class DateTimeTest(TestCase):
         )
         self.assertEqual(result, expected)
 
-    def test_is_week_scale_unit_true(self):
-        self.assertTrue(is_week_scale_unit(WEEK_1))
-
-    def test_is_week_scale_unit_false(self):
-        self.assertFalse(is_week_scale_unit(MONTH_1))
-
     def test_round_by_months_up_rounding_not_required(self):
         date_time = datetime(
             year=2000, month=7, day=1, hour=0, minute=0, second=0
@@ -275,33 +254,6 @@ class DateTimeTest(TestCase):
             year=2000, month=1, day=1, hour=0, minute=0, second=0
         )
         self.assertEqual(result, expected)
-
-    def test_is_month_scale_unit_1(self):
-        self.assertTrue(is_month_scale_unit(MONTH_1))
-
-    def test_is_month_scale_unit_2(self):
-        self.assertTrue(is_month_scale_unit(MONTH_2))
-
-    def test_is_month_scale_unit_3(self):
-        self.assertTrue(is_month_scale_unit(MONTH_3))
-
-    def test_is_month_scale_unit_6(self):
-        self.assertTrue(is_month_scale_unit(MONTH_6))
-
-    def test_is_month_scale_unit_false(self):
-        self.assertFalse(is_month_scale_unit(YEAR_1))
-
-    def test_get_months_in_scale_unit_1(self):
-        self.assertEqual(get_months_in_scale_unit(MONTH_1), 1)
-
-    def test_get_months_in_scale_unit_2(self):
-        self.assertEqual(get_months_in_scale_unit(MONTH_2), 2)
-
-    def test_get_months_in_scale_unit_3(self):
-        self.assertEqual(get_months_in_scale_unit(MONTH_3), 3)
-
-    def test_get_months_in_scale_unit_6(self):
-        self.assertEqual(get_months_in_scale_unit(MONTH_6), 6)
 
     def test_round_by_years_up_rounding_not_required(self):
         date_time = datetime(
@@ -343,65 +295,123 @@ class DateTimeTest(TestCase):
         )
         self.assertEqual(result, expected)
 
-    def test_is_year_scale_unit_1(self):
-        self.assertTrue(is_year_scale_unit(YEAR_1))
-
-    def test_is_year_scale_unit_5(self):
-        self.assertTrue(is_year_scale_unit(YEAR_5))
-
-    def test_is_year_scale_unit_10(self):
-        self.assertTrue(is_year_scale_unit(YEAR_10))
-
-    def test_is_year_scale_unit_100(self):
-        self.assertTrue(is_year_scale_unit(YEAR_100))
-
-    def test_is_year_scale_unit_1000(self):
-        self.assertTrue(is_year_scale_unit(YEAR_1000))
-
-    def test_is_year_scale_unit_false(self):
-        self.assertFalse(is_year_scale_unit(MONTH_1))
-
-    def test_get_years_in_scale_unit_1(self):
-        self.assertEqual(get_years_in_scale_unit(YEAR_1), 1)
-
-    def test_get_years_in_scale_unit_5(self):
-        self.assertEqual(get_years_in_scale_unit(YEAR_5), 5)
-
-    def test_get_years_in_scale_unit_10(self):
-        self.assertEqual(get_years_in_scale_unit(YEAR_10), 10)
-
-    def test_get_years_in_scale_unit_100(self):
-        self.assertEqual(get_years_in_scale_unit(YEAR_100), 100)
-
-    def test_get_years_in_scale_unit_1000(self):
-        self.assertEqual(get_years_in_scale_unit(YEAR_1000), 1000)
-
-    def test_round_weeks(self):
-        input = datetime(year=2000, month=2, day=2)
-        result = round_datetime(input, WEEK_1, Round.DOWN)
-        expected = datetime(year=2000, month=1, day=31)
+    def test_get_start_of_month_at_start(self):
+        input = datetime(
+            year=2000, month=11, day=1, hour=0, minute=0, second=0
+        )
+        result = get_start_of_month(input)
+        expected = datetime(
+            year=2000, month=11, day=1, hour=0, minute=0, second=0
+        )
         self.assertEqual(result, expected)
 
-    def test_round_months(self):
-        input = datetime(year=2000, month=3, day=1)
-        result = round_datetime(input, MONTH_3, Round.DOWN)
-        expected = datetime(year=2000, month=1, day=1)
+    def test_get_start_of_month_days_over(self):
+        input = datetime(
+            year=2000, month=11, day=4, hour=0, minute=0, second=0
+        )
+        result = get_start_of_month(input)
+        expected = datetime(
+            year=2000, month=11, day=1, hour=0, minute=0, second=0
+        )
         self.assertEqual(result, expected)
 
-    def test_round_years(self):
-        input = datetime(year=2015, month=1, day=1)
-        result = round_datetime(input, YEAR_10, Round.DOWN)
-        expected = datetime(year=2010, month=1, day=1)
+    def test_get_start_of_month_seconds_over(self):
+        input = datetime(
+            year=2000, month=11, day=1, hour=0, minute=0, second=1
+        )
+        result = get_start_of_month(input)
+        expected = datetime(
+            year=2000, month=11, day=1, hour=0, minute=0, second=0
+        )
         self.assertEqual(result, expected)
 
-    def test_round_seconds(self):
-        input = datetime(year=2000, month=1, day=1, hour=0, minute=0, second=43)
-        result = round_datetime(input, 5, Round.DOWN)
-        expected = datetime(year=2000, month=1, day=1, second=40)
+    def test_get_start_of_next_month_at_start(self):
+        input = datetime(
+            year=2000, month=11, day=1, hour=0, minute=0, second=0
+        )
+        result = get_start_of_next_month(input)
+        expected = datetime(
+            year=2000, month=12, day=1, hour=0, minute=0, second=0
+        )
         self.assertEqual(result, expected)
 
-    def test_datetime_round(self):
-        result = DateTime(datetime(year=2015, month=1, day=1))
-        result.round_to_scale_unit(YEAR_10, Round.DOWN)
-        expected = datetime(year=2010, month=1, day=1)
-        self.assertEqual(result.date_time, expected)
+    def test_get_start_of_next_month_days_over(self):
+        input = datetime(
+            year=2000, month=11, day=1, hour=0, minute=0, second=0
+        )
+        result = get_start_of_next_month(input)
+        expected = datetime(
+            year=2000, month=12, day=1, hour=0, minute=0, second=0
+        )
+        self.assertEqual(result, expected)
+
+    def test_get_start_of_next_month_seconds_over(self):
+        input = datetime(
+            year=2000, month=11, day=1, hour=0, minute=0, second=0
+        )
+        result = get_start_of_next_month(input)
+        expected = datetime(
+            year=2000, month=12, day=1, hour=0, minute=0, second=0
+        )
+        self.assertEqual(result, expected)
+
+    def test_get_start_of_next_month_dec_to_jan(self):
+        input = datetime(
+            year=2000, month=12, day=15, hour=0, minute=0, second=0
+        )
+        result = get_start_of_next_month(input)
+        expected = datetime(
+            year=2001, month=1, day=1, hour=0, minute=0, second=0
+        )
+        self.assertEqual(result, expected)
+
+    def test_seconds_between_same(self):
+        from_date = datetime(
+            year=2000, month=11, day=16, hour=0, minute=0, second=0
+        )
+        to_date = datetime(
+            year=2000, month=11, day=16, hour=0, minute=0, second=0
+        )
+        result = seconds_between(from_date, to_date)
+        self.assertEqual(result, 0)
+
+    def test_seconds_between_smaller(self):
+        from_date = datetime(
+            year=2000, month=11, day=16, hour=0, minute=0, second=0
+        )
+        to_date = datetime(
+            year=2000, month=11, day=16, hour=0, minute=1, second=0
+        )
+        result = seconds_between(from_date, to_date)
+        self.assertEqual(result, 60)
+
+    def test_seconds_between_larger(self):
+        from_date = datetime(
+            year=2000, month=11, day=16, hour=0, minute=1, second=0
+        )
+        to_date = datetime(
+            year=2000, month=11, day=16, hour=0, minute=0, second=0
+        )
+        result = seconds_between(from_date, to_date)
+        self.assertEqual(result, -60)
+
+    def test_get_month_completion_0(self):
+        input = datetime(
+            year=2000, month=11, day=1, hour=0, minute=0, second=0
+        )
+        result = get_month_completion(input)
+        self.assertEqual(result, 0)
+
+    def test_get_month_completion_50(self):
+        input = datetime(
+            year=2000, month=11, day=16, hour=0, minute=0, second=0
+        )
+        result = get_month_completion(input)
+        self.assertEqual(result, 0.5)
+
+    def test_get_month_completion_75(self):
+        input = datetime(
+            year=2000, month=11, day=23, hour=12, minute=0, second=0
+        )
+        result = get_month_completion(input)
+        self.assertAlmostEqual(result, 0.75)

@@ -4,6 +4,7 @@
 
 {% block nav_links %}
 <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-add' %}">New Age Timeline</a></li>
+<li class="nav-item"><a class="nav-link link-light" href="{% url 'date_time_timelines:date-time-timeline-add' %}">New Date & Time Timeline</a></li>
 <li class="nav-item"><a class="nav-link link-light" href="{% url 'accounts:logout' %}">Logout</a></li>
 {% endblock %}
 
@@ -18,7 +19,12 @@
     {% endfor %}
     </div>
 
-    <p class="h3">Date and Time Timelines</p>
+    <p class="h3">Date & Time Timelines</p>
+    <div class="list-group">
+        {% for date_time_timeline in date_time_timeline_list %}
+            <a class="list-group-item list-group-item-action" href="{% url 'date_time_timelines:date-time-timeline-detail' date_time_timeline.id %}">{{ date_time_timeline.title }}</a>
+        {% endfor %}
+    </div>
 
     <p class="h3">Historical Timelines</p>
 

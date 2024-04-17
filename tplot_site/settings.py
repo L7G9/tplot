@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "accounts",
     "timelines",
     "age_timelines",
+    "date_time_timelines",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

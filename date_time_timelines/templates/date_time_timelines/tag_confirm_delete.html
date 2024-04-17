@@ -1,0 +1,5 @@
+{% extends "timelines/tag_confirm_delete.html" %}
+{% block nav_links %}
+    <li class="nav-item"><a class="nav-link link-light" href="{% url 'timelines:user-timelines' %}">Home</a></li>
+    <li class="nav-item"><a class="nav-link link-light" href="{% url 'date_time_timelines:tag-update' view.kwargs.date_time_timeline_id view.kwargs.pk %}">Back</a></li>
+{% endblock %}

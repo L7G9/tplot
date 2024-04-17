@@ -1,0 +1,9 @@
+{% extends 'timelines/form_base.html' %}
+{% block title %}TPlot - Date & Time Timeline Settings{% endblock %}
+{% block nav_links %}
+    <li class="nav-item"><a class="nav-link link-light" href="{% url 'timelines:user-timelines' %}">Home</a></li>
+    <li class="nav-item"><a class="nav-link link-light" href="{% url 'date_time_timelines:date-time-timeline-detail' view.kwargs.pk %}">Back</a></li>
+    <li class="nav-item"><a class="nav-link link-light" href="{% url 'date_time_timelines:date-time-timeline-delete' view.kwargs.pk %}">Delete</a></li>
+{% endblock %}
+{% block heading %}Date & Time Timeline Settings{% endblock %}
+{% block button_name %}Update{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "timelines/timeline_detail.html" %}
+
+{% block title %}TPlot - Date & Time Timeline Detail{% endblock %}
+
+{% block timeline_type %}Date & Time Timeline{% endblock %}
+
+{% block nav_links %}
+<li class="nav-item"><a class="nav-link link-light" href="{% url 'timelines:user-timelines' %}">Home</a></li>
+<li class="nav-item"><a class="nav-link link-light" href="{% url 'date_time_timelines:date-time-timeline-update' view.kwargs.pk %}">Timeline Settings</a></li>
+<li class="nav-item"><a class="nav-link link-light" href="{% url 'date_time_timelines:date-time-event-add' view.kwargs.pk %}">New Event</a></li>
+<li class="nav-item"><a class="nav-link link-light" href="{% url 'date_time_timelines:tag-add' view.kwargs.pk %}">New Tag</a></li>
+<li class="nav-item"><a class="nav-link link-light" href="{% url 'date_time_timelines:event-area-add' view.kwargs.pk %}">New Event Area</a></li>
+<li class="nav-item"><a class="nav-link link-light" href="{% url 'date_time_timelines:date-time-timeline-pdf' view.kwargs.pk %}">View PDF</a></li>
+{% endblock %}
+
+{% block events %}
+{% for date_time_event in object.datetimeevent_set.all %}
+    <a class="list-group-item list-group-item-action" href="{% url 'date_time_timelines:date-time-event-update' view.kwargs.pk date_time_event.id %}">{{ date_time_event }}</a>
+{% endfor %}
+{% endblock %}
+
+{% block tag_list %}
+{% for tag in object.tag_set.all %}
+    <a class="list-group-item list-group-item-action" href="{% url 'date_time_timelines:tag-update' view.kwargs.pk tag.id %}">{{ tag }}</a>
+{% endfor %}
+{% endblock %}
+
+{% block area_list %}
+{% for area in object.eventarea_set.all %}
+    <a class="list-group-item list-group-item-action" href="{% url 'date_time_timelines:event-area-update' view.kwargs.pk area.id %}">{{ area }}</a>
+{% endfor %}
+{% endblock %}
