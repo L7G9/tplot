@@ -52,7 +52,7 @@ class WeeksScaleDescription(DateTimeScaleDescription):
             self.start_date_time.date_time.timestamp()
             + (scale_index * SECONDS_PER_WEEK)
         )
-        return str(date_time)
+        return date_time.strftime(self.timeline.get_scale_display_format())
 
     # TODO: check if DateTime type can be added to time_unit
     def plot(self, time_unit) -> float:

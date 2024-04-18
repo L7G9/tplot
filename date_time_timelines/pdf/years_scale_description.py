@@ -54,7 +54,7 @@ class YearsScaleDescription(DateTimeScaleDescription):
             month=1,
             day=1,
         )
-        return str(date_time)
+        return date_time.strftime(self.timeline.get_scale_display_format())
 
     def plot(self, time_unit) -> float:
         """Calculates to scale where along timeline scale time_unit should be

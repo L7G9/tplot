@@ -58,15 +58,20 @@ class PDFDateTimeTimeline(PDFTimeline):
     def _get_event_start_time(self, event: DateTimeEvent) -> str:
         """Get string describing the time that an AgeEvent with start time
         only occurs."""
-        start_date_time = DateTime(event.start_date_time)
-        return str(start_date_time)
+        return event.start_date_time.strftime(
+            self.timeline.get_event_display_format()
+        )
 
     def _get_event_start_to_end_time(self, event: DateTimeEvent) -> str:
         """Get string describing the time that an AgeEvent with start and end
         time occurs."""
-        start_date_time = DateTime(event.start_date_time)
-        end_date_time = DateTime(event.end_date_time)
-        return start_date_time.start_end_string(end_date_time)
+        start_date_time = event.start_date_time.strftime(
+            self.timeline.get_event_display_format()
+        )
+        end_date_time = event.end_date_time.strftime(
+            self.timeline.get_event_display_format()
+        )
+        return f"{start_date_time} to {end_date_time}"
 
     def _get_event_start_to_end_size(self, event: DateTimeEvent) -> float:
         """Get size (length or height depending on Timeline orientation) that

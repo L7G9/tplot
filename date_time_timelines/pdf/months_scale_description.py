@@ -61,7 +61,7 @@ class MonthsScaleDescription(DateTimeScaleDescription):
             month=months_from_start,
             day=1,
         )
-        return str(date_time)
+        return date_time.strftime(self.timeline.get_scale_display_format())
 
     # TODO: check if DateTime type can be added to time_unit
     def plot(self, time_unit) -> float:
