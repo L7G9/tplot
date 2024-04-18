@@ -1,3 +1,9 @@
+## 0.4.0 (2024-04-18)
+
+### Feat
+
+- added functionality for user to choose format for how datetime are displayed on events and scale
+
 ## 0.3.0 (2024-04-17)
 
 ### Feat
