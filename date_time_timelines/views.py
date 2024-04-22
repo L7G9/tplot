@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 from django.http import FileResponse, HttpResponseForbidden
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -37,7 +38,17 @@ class DateTimeTimelineDetailView(
         context = super().get_context_data(**kwargs)
         context["now"] = timezone.now()
 
+        events = self.get_related_events()
+        context['related_events'] = events
+        context['page_obj'] = events
         return context
+
+    def get_related_events(self):
+        queryset = self.object.datetimeevent_set.all()
+        paginator = Paginator(queryset, 10)
+        page = self.request.GET.get('page')
+        events = paginator.get_page(page)
+        return events
 
 
 class DateTimeTimelineCreateView(LoginRequiredMixin, CreateView):

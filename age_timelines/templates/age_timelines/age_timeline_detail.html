@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block events %}
-{% for age_event in object.ageevent_set.all %}
+{% for age_event in related_events %}
     <a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-event-update' view.kwargs.pk age_event.id %}">{{ age_event }}</a>
 {% endfor %}
 {% endblock %}
