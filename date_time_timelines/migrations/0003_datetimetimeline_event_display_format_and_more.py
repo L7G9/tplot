@@ -42,9 +42,9 @@ class Migration(migrations.Migration):
         (24, "03 Apr 2000 13:30:15 (day:month:year hour:min:sec)"),
         (25, "03 Apr 2000 13:30 (day:month:year hour:min)"),
         (26, "03 Apr 2000 (day:month:year)"),
-        (27, "03 Apr (day:month"),
-        (28, "Apr 2000 (month:year"),
-        (29, "Apr (month"),
+        (27, "03 Apr (day:month)"),
+        (28, "Apr 2000 (month:year)"),
+        (29, "Apr (month)"),
     ]
 
     operations = [
