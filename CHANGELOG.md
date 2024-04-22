@@ -1,3 +1,9 @@
+## 0.5.0 (2024-04-22)
+
+### Feat
+
+- pagination implemented for events listed in timeline detail templates
+
 ## 0.4.1 (2024-04-22)
 
 ### Fix
