@@ -1,3 +1,9 @@
+## 0.4.1 (2024-04-22)
+
+### Fix
+
+- **DateTimeLineline**: add missing ) to scale unit option
+
 ## 0.4.0 (2024-04-18)
 
 ### Feat
