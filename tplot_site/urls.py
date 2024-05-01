@@ -24,5 +24,6 @@ urlpatterns = [
     path("timelines/", include("timelines.urls")),
     path("timelines/age/", include("age_timelines.urls")),
     path("timelines/datetime/", include("date_time_timelines.urls")),
+    path("user_guide/", include("user_guide.urls")),
     path("", accounts.views.login_request),
 ]

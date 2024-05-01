@@ -1,0 +1,42 @@
+{% extends 'user_guide/base.html' %}
+
+{% block brand %}<a class="navbar-brand ps-3" href="{% url 'user_guide:introduction' %}">TPlot</a>{% endblock %}
+
+{% block side_menu_options %}
+    <a class="nav-link" href="{% url 'user_guide:introduction' %}">Introduction</a>
+    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseGettingStartedPages" aria-expanded="false" aria-controls="collapsePages">
+        Getting started
+        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+    </a>
+    <div class="collapse" id="collapseGettingStartedPages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+            <a class="nav-link link-light" href="{% url 'user_guide:getting-started-age' %}">Age Timelines</a>
+            <a class="nav-link link-light" href="{% url 'user_guide:getting-started-date-time' %}">Date & time Timelines</a>
+            <a class="nav-link link-light" href="{% url 'user_guide:getting-started-historical' %}">Historical Timelines</a>
+            <a class="nav-link link-light" href="{% url 'user_guide:getting-started-scientific' %}">Scientific Timelines</a>
+        </nav>
+    </div>
+    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseReferencePages" aria-expanded="false" aria-controls="collapsePages">
+        Reference Guide
+        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+    </a>
+    <div class="collapse" id="collapseReferencePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+            <a class="nav-link" href="#">Timelines</a>
+            <a class="nav-link" href="#">Scales</a>
+            <a class="nav-link" href="#">Layout</a>
+        </nav>
+    </div>
+    <a class="nav-link" href="#">Trouble Shooting</a>
+    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseProjectPages" aria-expanded="false" aria-controls="collapsePages">
+        Project
+        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+    </a>
+    <div class="collapse" id="collapseProjectPages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+            <a class="nav-link" href="#">About</a>
+            <a class="nav-link" href="#">Roadmap</a>
+        </nav>
+    </div>
+    <a class="nav-link" href="#">Contact</a>
+{% endblock %}
