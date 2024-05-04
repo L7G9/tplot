@@ -1,8 +1,14 @@
 {% extends "timelines/confirm_delete.html" %}
+
 {% block title %}TPlot - Delete Date & Time Timeline{% endblock %}
-{% block nav_links %}
-    <li class="nav-item"><a class="nav-link link-light" href="{% url 'timelines:user-timelines' %}">Home</a></li>
-    <li class="nav-item"><a class="nav-link link-light" href="{% url 'date_time_timelines:date-time-timeline-update' view.kwargs.pk %}">Back</a></li>
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+<li class="breadcrumb-item"><a href="{% url 'date_time_timelines:date-time-timeline-detail' view.kwargs.pk %}">Date & Time Timeline</a></li>
+<li class="breadcrumb-item active">Delete</li>
 {% endblock %}
+
 {% block heading %}Delete Date & Time Timeline{% endblock %}
+
 {% block description %}{{ object }}{% endblock %}

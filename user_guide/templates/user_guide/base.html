@@ -27,7 +27,7 @@
 
 
             <!-- Navbar-->
-            {% block navbar_options %}
+            {% block nav_links %}
             {% endblock %}
 
             <ul class="navbar-nav ms-auto ms-md-auto me-3 me-lg-4">
@@ -50,7 +50,10 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-							{% block side_menu_options %}
+							{% block side_menu_logged_in_options %}
+							{% endblock %}
+
+                            {% block side_menu_options %}
 							{% endblock %}
                         </div>
                     </div>

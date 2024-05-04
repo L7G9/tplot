@@ -1,9 +1,19 @@
 {% extends 'timelines/form_base.html' %}
+
 {% block title %}TPlot - Age Timeline Settings{% endblock %}
-{% block nav_links %}
-    <li class="nav-item"><a class="nav-link link-light" href="{% url 'timelines:user-timelines' %}">Home</a></li>
-    <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-detail' view.kwargs.pk %}">Back</a></li>
-    <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-delete' view.kwargs.pk %}">Delete</a></li>
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+<li class="breadcrumb-item"><a href="{% url 'age_timelines:age-timeline-detail' view.kwargs.pk %}">Age Timeline</a></li>
+<li class="breadcrumb-item active">Settings</li>
 {% endblock %}
+
+{% block side_menu_logged_in_options %}
+<div class="sb-sidenav-menu-heading">Options</div>
+<li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:age-timeline-delete' view.kwargs.pk %}">Delete</a></li>
+{% endblock %}
+
 {% block heading %}Age Timeline Settings{% endblock %}
+
 {% block button_name %}Update{% endblock %}

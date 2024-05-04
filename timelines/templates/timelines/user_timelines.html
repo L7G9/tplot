@@ -1,34 +1,72 @@
-{% extends "timelines/base.html" %}
+{% extends "user_guide/user_guide_base.html" %}
 
-{% block title %}TPlot - Your Timelines{% endblock %}
+{% block title %}TPlot - Timelines{% endblock %}
 
-{% block nav_links %}
-<li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-add' %}">New Age Timeline</a></li>
-<li class="nav-item"><a class="nav-link link-light" href="{% url 'date_time_timelines:date-time-timeline-add' %}">New Date & Time Timeline</a></li>
-<li class="nav-item"><a class="nav-link link-light" href="{% url 'accounts:logout' %}">Logout</a></li>
+{% block heading %}Timelines{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+<li class="breadcrumb-item active">Timelines</li>
+{% endblock %}
+
+{% block side_menu_logged_in_options %}
+<div class="sb-sidenav-menu-heading">Options</div>
+<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNewPages" aria-expanded="false" aria-controls="collapsePages">
+    New
+    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+</a>
+<div class="collapse" id="collapseNewPages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+    <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+        <a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-add' %}">Age Timeline</a>
+        <a class="nav-link link-light" href="{% url 'date_time_timelines:date-time-timeline-add' %}">Date & Time Timeline</a>
+    </nav>
+</div>
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <p class="h2">Your Timelines!</p>
-
-    <p class="h3">Age Timelines</p>
-    <div class="list-group">
-    {% for age_timeline in age_timeline_list %}
-        <a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-timeline-detail' age_timeline.id %}">{{ age_timeline.title }}</a>
-    {% endfor %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <p class="h3">Age Timelines</p>
+        </div>
+        <div class="card-body">
+            <div class="list-group">
+                {% for age_timeline in age_timeline_list %}
+                    <a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-timeline-detail' age_timeline.id %}">{{ age_timeline.title }}</a>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 
-    <p class="h3">Date & Time Timelines</p>
-    <div class="list-group">
-        {% for date_time_timeline in date_time_timeline_list %}
-            <a class="list-group-item list-group-item-action" href="{% url 'date_time_timelines:date-time-timeline-detail' date_time_timeline.id %}">{{ date_time_timeline.title }}</a>
-        {% endfor %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <p class="h3">Date & Time Timelines</p>
+        </div>
+        <div class="card-body">
+            <div class="list-group">
+                {% for date_time_timeline in date_time_timeline_list %}
+                    <a class="list-group-item list-group-item-action" href="{% url 'date_time_timelines:date-time-timeline-detail' date_time_timeline.id %}">{{ date_time_timeline.title }}</a>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 
-    <p class="h3">Historical Timelines</p>
+    <div class="card mb-4">
+        <div class="card-header">
+            <p class="h3">Historical Timelines</p>
+        </div>
+        <div class="card-body">
+            <div class="list-group">
+            </div>
+        </div>
+    </div>
 
-    <p class="h3">Scientific Timelines</p>
-
-</div>
+    <div class="card mb-4">
+        <div class="card-header">
+            <p class="h3">Scientific Timelines</p>
+        </div>
+        <div class="card-body">
+            <div class="list-group">
+            </div>
+        </div>
+    </div>
 {% endblock %}

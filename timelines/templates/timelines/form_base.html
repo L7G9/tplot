@@ -1,13 +1,17 @@
-{% extends 'timelines/base.html' %}
+{% extends 'user_guide/user_guide_base.html' %}
 
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container">
-    <p class="h2">{% block heading %}Form Heading{% endblock %}</p>
-    <form method="POST" class="post-form">{% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit" class="btn btn-primary">{% block button_name %}Submit{% endblock %}</button>
-    </form>
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h2">{% block heading %}Form Heading{% endblock %}</p>
+    </div>
+    <div class="card-body">
+        <form method="POST" class="post-form">{% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary">{% block button_name %}Submit{% endblock %}</button>
+        </form>
+    </div>
 </div>
 {% endblock %}

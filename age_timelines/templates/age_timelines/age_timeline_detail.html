@@ -2,20 +2,35 @@
 
 {% block title %}TPlot - Age Timeline Detail{% endblock %}
 
-{% block timeline_type %}Age Timeline{% endblock %}
+{% block heading %}Age Timeline{% endblock %}
 
-{% block nav_links %}
-<li class="nav-item"><a class="nav-link link-light" href="{% url 'timelines:user-timelines' %}">Home</a></li>
-<li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-update' view.kwargs.pk %}">Timeline Settings</a></li>
-<li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-event-add' view.kwargs.pk %}">New Event</a></li>
-<li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:tag-add' view.kwargs.pk %}">New Tag</a></li>
-<li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:event-area-add' view.kwargs.pk %}">New Event Area</a></li>
-<li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-timeline-pdf' view.kwargs.pk %}">View PDF</a></li>
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+    <li class="breadcrumb-item active">Age Timeline</li>
 {% endblock %}
+
+{% block side_menu_logged_in_options %}
+    <div class="sb-sidenav-menu-heading">Options</div>
+    <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:age-timeline-update' view.kwargs.pk %}">Timeline Settings</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:age-event-add' view.kwargs.pk %}">New Event</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:event-area-add' view.kwargs.pk %}">New Event Area</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:tag-add' view.kwargs.pk %}">New Tag</a></li>
+    <div class="sb-sidenav-menu-heading">View</div>
+    <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:age-timeline-pdf' view.kwargs.pk %}">PDF</a></li>
+{% endblock %}
+
+{% block event_table_head_unit %}Age{% endblock %}
+
+{% block event_table_foot_unit %}Age{% endblock %}
 
 {% block events %}
 {% for age_event in related_events %}
-    <a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-event-update' view.kwargs.pk age_event.id %}">{{ age_event }}</a>
+    <tr>
+        <td><a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-event-update' view.kwargs.pk age_event.id %}">{{ age_event.age_description }}</a></td>
+        <td><a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-event-update' view.kwargs.pk age_event.id %}">{{ age_event.title }}</a></td>
+        <td><a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-event-update' view.kwargs.pk age_event.id %}">{{ age_event.event_ptr.event_area }}</a></td>
+    </tr>
 {% endfor %}
 {% endblock %}
 
@@ -25,8 +40,8 @@
 {% endfor %}
 {% endblock %}
 
- {% block area_list %}
- {% for area in object.eventarea_set.all %}
+{% block area_list %}
+{% for area in object.eventarea_set.all %}
     <a class="list-group-item list-group-item-action" href="{% url 'age_timelines:event-area-update' view.kwargs.pk area.id %}">{{ area }}</a>
- {% endfor %}
- {% endblock %}
+{% endfor %}
+{% endblock %}

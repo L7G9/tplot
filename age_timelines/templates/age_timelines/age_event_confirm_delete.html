@@ -1,8 +1,14 @@
 {% extends "timelines/confirm_delete.html" %}
+
 {% block title %}TPlot - Delete Age Event{% endblock %}
-{% block nav_links %}
-    <li class="nav-item"><a class="nav-link link-light" href="{% url 'timelines:user-timelines' %}">Home</a></li>
-    <li class="nav-item"><a class="nav-link link-light" href="{% url 'age_timelines:age-event-update' view.kwargs.age_timeline_id view.kwargs.pk %}">Back</a></li>
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+<li class="breadcrumb-item"><a href="{% url 'age_timelines:age-timeline-detail' view.kwargs.age_timeline_id %}">Age Timeline</a></li>
+<li class="breadcrumb-item active">Delete Age Event</li>
 {% endblock %}
+
 {% block heading %}Delete Age Event{% endblock %}
+
 {% block description %}{{ object.title }}{% endblock %}

@@ -1,11 +1,15 @@
-{% extends 'timelines/base.html' %}
+{% extends 'timelines/form_base.html' %}
 {% block title %}TPlot - Delete{% endblock %}
 {% block content %}
-<div class="container">
-    <p class="h2">{% block heading %}Delete{% endblock %}</p>
-    <form method="post" class="post-form">{% csrf_token %}
-        <p>Are you sure you want to delete {% block description %}{{ object }}{% endblock %}?</p>
-        <button type="submit" class="btn btn-primary">{% block button_name %}Confirm{% endblock %}</button>
-    </form>
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h2">{% block heading %}Delete{% endblock %}</p>
+    </div>
+    <div class="card-body">
+        <form method="post" class="post-form">{% csrf_token %}
+            <p>Are you sure you want to delete {% block description %}{{ object }}{% endblock %}?</p>
+            <button type="submit" class="btn btn-primary">{% block button_name %}Confirm{% endblock %}</button>
+        </form>
+    </div>
 </div>
 {% endblock %}

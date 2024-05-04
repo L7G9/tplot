@@ -1,62 +1,95 @@
-{% extends "timelines/base.html" %}
+{% extends "user_guide/user_guide_base.html" %}
 
 {% block title %}TPlot - Timeline Detail{% endblock %}
 
 {% block content %}
-<div class="container">
-    <p class="h2">{% block timeline_type %}Timeline{% endblock %}: {{ object.title }}</p>
-    <p>{{ object.description }}</p>
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h2">{{ object.title }}</p>
+    </div>
+    <div class="card-body">
+        <p>{{ object.description }}</p>
+    </div>
+</div>
 
-    <p class="h3">Events</p>
-    <div class="list-group">
-        {% block events %}
-        {% for event in object.event_set.all %}
-            <a class="list-group-item list-group-item-action" href="">{{ event }}</a>
-        {% endfor %}
-        {% endblock %}
-        <div class="pagination">
-            <span class="step-links">
-                {% if page_obj.has_previous %}
-                    <a href="?page=1">&laquo; first</a>
-                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-                {% endif %}
-
-                <span class="current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
-
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">next</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                {% endif %}
-            </span>
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Events</p>
+    </div>
+    <div class="card-body">
+        <div class="list-group">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>{% block event_table_head_unit %}Time{% endblock %}</th>
+                        <th>Title</th>
+                        <th>Event Area</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>{% block event_table_foot_unit %}Time{% endblock %}</th>
+                        <th>Title</th>
+                        <th>Event Area</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {% block events %}
+                    {% endblock %}
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 
-
-    <p class="h3">Tags</p>
-    <div class="list-group">
-        {% block tag_list %}
-        {% for tag in object.tag_set.all %}
-            <a class="list-group-item list-group-item-action" href="">{{ tag }}</a>
-        {% endfor %}
-        {% endblock %}
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Scale</p>
     </div>
+    <div class="card-body">
+        <p>{{ object.get_scale_unit_display }} per {{ object.get_scale_length_display }}</p>
+    </div>
+</div>
 
-    <p class="h3">Scale</p>
-    <p>{{ object.get_scale_unit_display }} per {{ object.get_scale_length_display }}</p>
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Page Setup</p>
+    </div>
+    <div class="card-body">
+        <p>Size: {{ object.get_page_size_display }}</p>
+        <p>Orientation: {{ object.get_page_orientation_display }}</p>
+        <p>Scale Position: {{ object.page_scale_position }}</p>
+    </div>
+</div>
 
-    <p class="h3">Page Setup</p>
-    <p>Size: {{ object.get_page_size_display }}</p>
-    <p>Orientation: {{ object.get_page_orientation_display }}</p>
-    <p>Scale Position: {{ object.page_scale_position }}</p>
-    <p class="h4">Event Areas</p>
-    <div class="list-group">
-        {% block area_list %}
-        {% for area in object.eventarea_set.all %}
-            <a class="list-group-item list-group-item-action" href="">{{ area }}</a>
-        {% endfor %}
-        {% endblock %}
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h4">Event Areas</p>
+
+    </div>
+    <div class="card-body">
+        <div class="list-group">
+            {% block area_list %}
+            {% for area in object.eventarea_set.all %}
+                <a class="list-group-item list-group-item-action" href="">{{ area }}</a>
+            {% endfor %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Tags</p>
+    </div>
+    <div class="card-body">
+        <div class="list-group">
+            {% block tag_list %}
+            {% for tag in object.tag_set.all %}
+                <a class="list-group-item list-group-item-action" href="">{{ tag }}</a>
+            {% endfor %}
+            {% endblock %}
+        </div>
     </div>
 </div>
 {% endblock %}
