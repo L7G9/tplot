@@ -103,8 +103,8 @@ AGE_EVENT_FIELD_ORDER = [
     "has_end",
     "end_year",
     "end_month",
-    "tags",
     "event_area",
+    "tags",
 ]
 
 

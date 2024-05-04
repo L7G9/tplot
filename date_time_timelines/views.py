@@ -104,8 +104,8 @@ DATE_TIME_EVENT_FIELD_ORDER = [
     "start_date_time",
     "has_end",
     "end_date_time",
-    "tags",
     "event_area",
+    "tags",
 ]
 
 
