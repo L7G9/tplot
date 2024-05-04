@@ -190,8 +190,11 @@ class DateTimeEvent(timelines.Event):
         end = self.end_date_time.strftime(DISPLAY_FORMATS[0])
         return f"{start} to {end}"
 
-    def __str__(self):
+    def date_time_description(self):
         if self.has_end:
-            return f"{self.start_end_description()} : {self.title}"
+            return self.start_end_description()
         else:
-            return f"{self.start_description()} : {self.title}"
+            return self.start_description()
+
+    def __str__(self):
+        return f"{self.date_time_description()} : {self.title}"
