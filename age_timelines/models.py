@@ -45,7 +45,7 @@ class AgeEvent(timelines.Event):
     class Meta:
         ordering = ["start_year", "start_month"]
 
-    def age_description(self, years, months):
+    def age_string(self, years, months):
         if months == 0:
             return f"{years} Years"
         elif years == 0:
@@ -54,15 +54,18 @@ class AgeEvent(timelines.Event):
             return f"{years} Years {months} Months"
 
     def start_description(self):
-        return f"{self.age_description(self.start_year, self.start_month)}"
+        return f"{self.age_string(self.start_year, self.start_month)}"
 
     def start_end_description(self):
-        start = self.age_description(self.start_year, self.start_month)
-        end = self.age_description(self.end_year, self.end_month)
+        start = self.age_string(self.start_year, self.start_month)
+        end = self.age_string(self.end_year, self.end_month)
         return f"{start} to {end}"
 
-    def __str__(self):
+    def age_description(self):
         if self.has_end:
-            return f"{self.start_end_description()} : {self.title}"
+            return self.start_end_description()
         else:
-            return f"{self.start_description()} : {self.title}"
+            return self.start_description()
+
+    def __str__(self):
+        return f"{self.age_description()} : {self.title}"
