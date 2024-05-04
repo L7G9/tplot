@@ -139,24 +139,24 @@ class AgeEventModel(TestCase):
         self.assertEqual(ordering[0], "start_year")
         self.assertEqual(ordering[1], "start_month")
 
-    def test_age_description_no_months_no_years(self):
+    def test_age_string_no_months_no_years(self):
         event = AgeEvent.objects.get(id=self.start_age_event_id)
-        description = event.age_description(0, 0)
+        description = event.age_string(0, 0)
         self.assertEqual(description, "0 Years")
 
-    def test_age_description_months_no_years(self):
+    def test_age_string_months_no_years(self):
         event = AgeEvent.objects.get(id=self.start_age_event_id)
-        description = event.age_description(0, 1)
+        description = event.age_string(0, 1)
         self.assertEqual(description, "1 Months")
 
-    def test_age_description_years_no_months(self):
+    def test_age_string_years_no_months(self):
         event = AgeEvent.objects.get(id=self.start_age_event_id)
-        description = event.age_description(1, 0)
+        description = event.age_string(1, 0)
         self.assertEqual(description, "1 Years")
 
-    def test_age_description_years_and_months(self):
+    def test_age_string_years_and_months(self):
         event = AgeEvent.objects.get(id=self.start_age_event_id)
-        description = event.age_description(1, 1)
+        description = event.age_string(1, 1)
         self.assertEqual(description, "1 Years 1 Months")
 
     def test_start_description(self):
@@ -167,6 +167,16 @@ class AgeEventModel(TestCase):
     def test_start_and_description(self):
         event = AgeEvent.objects.get(id=self.end_age_event_id)
         description = event.start_end_description()
+        self.assertEqual(description, "6 Months to 2 Years")
+
+    def test_age_description(self):
+        event = AgeEvent.objects.get(id=self.start_age_event_id)
+        description = event.age_description()
+        self.assertEqual(description, "1 Years")
+
+    def test_age_description_has_end(self):
+        event = AgeEvent.objects.get(id=self.end_age_event_id)
+        description = event.age_description()
         self.assertEqual(description, "6 Months to 2 Years")
 
     def test_object_name_no_end(self):
