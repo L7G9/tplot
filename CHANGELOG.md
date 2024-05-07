@@ -1,3 +1,22 @@
+## 0.6.0 (2024-05-07)
+
+### Feat
+
+- update ui to use new base template
+- **user-guide**: base template created for user guide
+- start user_guide app
+
+### Fix
+
+- **01_django.config**: update so static files will be served by ebs
+
+### Refactor
+
+- remove unused imports
+- **DateTimeEvent**: add method to get description of event's date & time without title
+- **AgeEvent**: add method to get description of event's age without title
+- update for consisten order of event areas and tags
+
 ## 0.5.0 (2024-04-22)
 
 ### Feat
