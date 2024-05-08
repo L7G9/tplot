@@ -1,3 +1,9 @@
+## 0.6.2 (2024-05-08)
+
+### Fix
+
+- **01_django.config**: fix wrong quote marks
+
 ## 0.6.1 (2024-05-08)
 
 ### Fix
