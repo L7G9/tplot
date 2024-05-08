@@ -1,3 +1,9 @@
+## 0.6.1 (2024-05-08)
+
+### Fix
+
+- **01_django.config**: fix error with collectstatic command
+
 ## 0.6.0 (2024-05-07)
 
 ### Feat
