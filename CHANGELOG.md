@@ -1,3 +1,10 @@
+## 0.6.5 (2024-05-10)
+
+### Fix
+
+- add link to return to user's timelines or login/register
+- **login.html-and-register.html**: update to use new template
+
 ## 0.6.4 (2024-05-10)
 
 ### Fix
