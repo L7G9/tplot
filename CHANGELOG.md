@@ -1,3 +1,9 @@
+## 0.6.4 (2024-05-10)
+
+### Fix
+
+- **event_area_add_form.html**: fix error with breadcrumb back to timeline
+
 ## 0.6.3 (2024-05-08)
 
 ### Fix
