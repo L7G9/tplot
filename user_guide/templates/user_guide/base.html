@@ -35,8 +35,8 @@
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         {% if user.is_authenticated == False %}
-                        <li><a class="dropdown-item" href="{% url 'accounts:register' %}">Register</a></li>
                         <li><a class="dropdown-item" href="{% url 'accounts:login' %}">Login</a></li>
+                        <li><a class="dropdown-item" href="{% url 'accounts:register' %}">Register</a></li>
                         {% endif %}
                         {% if user.is_authenticated %}
                         <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a></li>
@@ -51,9 +51,20 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
 							{% block side_menu_logged_in_options %}
+                            <div class="sb-sidenav-menu-heading">User</div>
+                            {% if user.is_authenticated == False %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'accounts:register' %}">Register</a></li>
+                            {% endif %}
+                            {% if user.is_authenticated %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+                            {% endif %}
 							{% endblock %}
 
-                            {% block side_menu_options %}
+                            {% block side_menu_timeline_options %}
+							{% endblock %}
+
+                            {% block side_menu_user_guide_options %}
 							{% endblock %}
                         </div>
                     </div>
