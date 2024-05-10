@@ -1,13 +1,24 @@
-{% extends 'timelines/base.html' %}
+{% extends "user_guide/user_guide_base.html" %}
 
 {% load crispy_forms_tags %}
 
 {% block title %}TPlot - Login{% endblock %}
+
+{% block heading %}Login{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+<li class="breadcrumb-item active">Login</li>
+{% endblock %}
+
 {% block content %}
-<h1>Login</h1>
-<form method="POST"> {% csrf_token %}
-    {{ login_form|crispy }}
-    <button type="submit">Login</button>
-</form>
-<p>Don't have an account? <a href="{% url 'accounts:register' %}">Create an account</a>.</p>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="POST"> {% csrf_token %}
+                {{ login_form|crispy }}
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <p>Don't have an account? <a href="{% url 'accounts:register' %}">Register</a>.</p>
+        </div>
+    </div>
 {% endblock %}
