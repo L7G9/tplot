@@ -6,9 +6,234 @@
 
 {% block breadcrumbs %}
 <li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
-<li class="breadcrumb-item active">Getting started</li>
+<li class="breadcrumb-item active">Getting started - Age Timeline</li>
 {% endblock %}
 
 {% block content %}
-Add getting started guide
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Introduction</p>
+    </div>
+    <div class="card-body">
+        <p>In this guide we are going to walk through how to create an Age Timeline using the TPlot.  An Age Timeline is a timeline that has events ordered by age in years and months, for example “1 Year and 2 months Jane took her first steps” or “3 Years to 5 Years Company developed new product”.</p>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn" data-toggle="modal" data-target="#exampleTimelineModal">
+                    <img
+                    src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1715635649/tplot/new_age_timeline_aurjqb.jpg"
+                    alt="Example Timeline"
+                    style="width:100%;max-width:200px">
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleTimelineModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Example Timeline</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <img
+                                src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1715635649/tplot/new_age_timeline_aurjqb.jpg"
+                                alt="Example Timeline"
+                                style="width:100%;max-width:800px">
+                        </div>
+                    </div>
+                    </div>
+                </div>
+        <p>The information we are going to use are the developmental milestones of a child.</p>
+        <table>
+            <tr><th>Milestone</th></tr>
+            <tr><td>At 1 month Emily started opening and closing fist.</td></tr>
+            <tr><td>At 2 months Emily started to put her hands in mouth.</td></tr>
+            <tr><td>At 2 months we noticed Emily's first smile.</td></tr>
+            <tr><td>At 3 months Emily looks at you when you talk to her.</td></tr>
+            <tr><td>At 3 months Emily smiles when family and friends talk to her.</td></tr>
+            <tr><td>At 4 months Emily can focus on her favourite soft toy.</td></tr>
+            <tr><td>At 4 months Emily gets visibly excited when hearing Mum and Dad's voices.</td></tr>
+            <tr><td>At 5 months Emily started putting objects in her mouth.</td></tr>
+            <tr><td>Between 6 and 9 months Emily learned to sit unsupported for several minutes.</td></tr>
+            <tr><td>At 8 months Emily starts enjoying giving and receiving hugs.</td></tr>
+            <tr><td>Between 9 Months to 2 Years Emily's language develops from her first word to a vocabulary of around 50 words.</td></tr>
+            <tr><td>At 11 months Emily started to respond to her name.</td></tr>
+            <tr><td>At 1 Year 2 Months Emily started pointing to things she wanted.</td></tr>
+            <tr><td>Between 1 Year and 1 Year 5 Months Emily learned to walk starting by using the sofa for support then progressed to walking unaided.</td></tr>
+            <tr><td>At 1 Year and 8 months Emily can point to people and toys when asked.</td></tr>
+        </table>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Create an Age timeline</p>
+    </div>
+    <div class="card-body">
+        <p>Make sure you have registered and are logged in.</p>
+        <p>From the user timelines page you'll see all the timelines you have created so far and the options to create new timelines.  Select the new age timeline option from the side menu.</p>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn" data-toggle="modal" data-target="#newTimelineModal">
+            <img
+            src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1715635649/tplot/new_age_timeline_aurjqb.jpg"
+            alt="New Timeline option"
+            style="width:100%;max-width:200px">
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="newTimelineModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New Timeline option</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <img
+                        src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1715635649/tplot/new_age_timeline_aurjqb.jpg"
+                        alt="New Timeline option"
+                        style="width:100%;max-width:800px">
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <p>In the title box enter “Early years development.”  A title is required, it is used to identify the timeline in TPlot and as a main heading on the PDF of the timeline.  In the description box, enter “Emily Hunter's development years 0-2.”  This optional description is used to add additional information about the timeline.</p>
+        <p>There are two settings for the scale, these are scale unit and scale length.  Set these to “1 year” and “20 cm” respectively.  The scale unit determines how many years between each unit marked on the scale of the PDF timeline.  The scale unit length determines the distance between these units.  In this example we are using 1 year every 20 cm as the scale because there are lots of events over a small range of years.</p>
+        <p>There are three settings for page layout, these are page size, page orientation and scale position.  Set these to “A4”, “Landscape” and 0 respectively.  Page size and orientation should be pretty self-explanatory.  Scale position is used to position the scale on the PDF relative to the timeline’s event areas.  Leaving it as 0 will ensure the scale is placed at the bottom of the page with all the events above it.</p>
+        <p>Select the Add button to save the new timeline.</p>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn" data-toggle="modal" data-target="#completedNewTimelineModal">
+            <img
+            src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1715635649/tplot/new_age_timeline_aurjqb.jpg"
+            alt="Completed New Timeline form"
+            style="width:100%;max-width:200px">
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="completedNewTimelineModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Completed Age Timeline form</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <img
+                        src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1715635649/tplot/new_age_timeline_aurjqb.jpg"
+                        alt="Completed New Timeline form"
+                        style="width:100%;max-width:800px">
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Add an Event Area</p>
+    </div>
+    <div class="card-body">
+        <p>For any events to appear on the PDF of the timeline they need to be placed in an event area.  Select the new event area option from the side bar.</p>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn" data-toggle="modal" data-target="#newEventAreaModal">
+            <img
+            src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1715635649/tplot/new_age_timeline_aurjqb.jpg"
+            alt="New Event Area option"
+            style="width:100%;max-width:200px">
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="newEventAreaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New Event Area option</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <img
+                        src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1715635649/tplot/new_age_timeline_aurjqb.jpg"
+                        alt="New Event Area option"
+                        style="width:100%;max-width:800px">
+                </div>
+            </div>
+
+
+            </div>
+        </div>
+
+        <p>Enter “Main” as the name, leave page position and weight as 0 and 1 respectively, then press add.</p>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn" data-toggle="modal" data-target="#completedNewEventAreaModal">
+            <img
+            src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1715635649/tplot/new_age_timeline_aurjqb.jpg"
+            alt="Completed New Event Area form"
+            style="width:100%;max-width:200px">
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="completedNewEventAreaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Completed New Event Area form</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <img
+                        src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1715635649/tplot/new_age_timeline_aurjqb.jpg"
+                        alt="Completed New Event Area form"
+                        style="width:100%;max-width:800px">
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <p>This will create a single event area above the scale which will contain all our events in.  For more information about using event areas see the reference here.</p>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Adding an Event</p>
+    </div>
+    <div class="card-body">
+        <p>Now we are ready to add our first event, select the new event option on the side menu.</p>
+        <p>The 1st event in the table above is “At 1 month Emily started opening and closing fist.”  Using this information fill in the new event form as follows…</p>
+        <p>Select add to save the event.</p>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Adding an Event with a start and end</p>
+    </div>
+    <div class="card-body">
+        <p>Some of the events in the table above occur over a period of time, for example “Between 1 Year and 1 Year 5 Months – Learned to walk starting by using the sofa for support then progressing to walking unaided.”</p>
+        <p>These can be added using “has end”, “end year” and “end month” as follows…</p>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">View Timeline PDF</p>
+    </div>
+    <div class="card-body">
+        <p>Continue adding as many of the events as you wish then select the view PDF option and open the downloaded PDF.</p>
+    </div>
+</div>
 {% endblock %}
