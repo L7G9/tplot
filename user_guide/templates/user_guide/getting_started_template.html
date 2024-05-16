@@ -1,0 +1,101 @@
+{% extends 'user_guide/user_guide_base.html' %}
+
+{% block title %}TPlot - Getting started{% endblock %}
+
+{% block heading %}Getting started{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+<li class="breadcrumb-item active">{% block active_breadcrumb %}Getting started{% endblock active_breadcrumb %}</li>
+{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        {% block introduction_heading %}<p class="h3">Introduction</p>{% endblock introduction_heading %}
+    </div>
+    <div class="card-body">
+		{% block introduction_content %}
+		{% endblock introduction_content %}
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">{% block timeline_heading %}Create a Timeline</p>{% endblock timeline_heading %}
+    </div>
+    <div class="card-body">
+		{% block timeline_content %}
+		{% endblock timeline_content %}
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        {% block event_area_heading %}<p class="h3">Add an Event Area</p>{% endblock event_area_heading %}
+    </div>
+    <div class="card-body">
+		{% block event_area_content %}
+		{% endblock event_area_content %}
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        {% block event_heading %}<p class="h3">Adding an Event</p>{% endblock event_heading %}
+    </div>
+    <div class="card-body">
+		{% block event_content %}
+		{% endblock event_content %}
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        {% block start_end_event_heading %}<p class="h3">Adding an Event with a start and end</p>{% endblock start_end_event_heading %}
+    </div>
+    <div class="card-body">
+		{% block start_end_event_content %}
+		{% endblock start_end_event_content %}
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        {% block view_pdf_heading %}<p class="h3">View Timeline PDF</p>{% endblock view_pdf_heading %}
+    </div>
+    <div class="card-body">
+		{% block view_pdf_content %}
+		{% endblock view_pdf_content %}
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-content">
+	  <div class="modal-header">
+	  <h5 class="modal-title" id="modalTitle">Image Modal</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	  </div>
+	  <div class="modal-body">
+		<img
+		  id="modalImage"
+		  src=""
+		  alt="Image Modal"
+		  style="width:100%;max-width:800px">
+	  </div>
+  </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+function ShowImageModal(image_src, image_alt) {
+  $('#modalTitle').html(image_alt);
+  var modalImage = document.getElementById('modalImage');
+  modalImage.src = image_src;
+  modalImage.alt = image_alt;
+  $('#imageModal').modal('show');
+}
+</script>
+{% endblock content %}
