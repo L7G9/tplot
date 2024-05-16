@@ -7,7 +7,10 @@
 {% block active_breadcrumb %}Getting started - Age Timeline{% endblock active_breadcrumb %}
 
 {% block introduction_content %}
-<p>In this guide we are going to walk through how to create an age timeline using TPlot.  An age timeline is a timeline that has events ordered by age in years and months, for example “1 Year and 2 months Jane took her first steps” or “3 Years to 5 Years Company developed new product”.</p>
+<p>
+    In this guide we are going to walk through how to create an age timeline using TPlot.
+    An age timeline is a timeline that has events ordered by age in years and months, for example “1 Year and 2 months Jane took her first steps” or “3 Years to 5 Years Company developed new product”.
+</p>
 <img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1715863609/tplot/age/age_timeline_complete_ncgblv.jpg"
 	alt="Image Modal"
 	style="width:100%;max-width:1600px">
@@ -34,15 +37,34 @@
 
 {% block timeline_content %}
 <p>Make sure you have registered and are logged in.</p>
-<p>From the user timelines page you'll see all the timelines you have created so far and the options to create new timelines.  Select the new age timeline option from the side menu.</p>
+<p>
+    From the user timelines page you'll see all the timelines you have created so far and the options to create new timelines.
+    Select the new age timeline option from the side menu.
+</p>
 <button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1715809854/tplot/age/new_age_timeline_option_nreuby.jpg', 'New Age Timeline Option')">
 	<img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1715863609/tplot/age/new_age_timeline_option_small_hgmefw.jpg"
 	alt="New Age Timeline Option"
 	style="width:100%;max-width:200px">
 </button>
-<p>In the title box enter “Early years development.”  A title is required, it is used to identify the timeline in TPlot and as a main heading on the PDF of the timeline.  In the description box, enter “Emily Hunter's development years 0-2.”  This optional description is used to add additional information about the timeline.</p>
-<p>There are two settings for the scale, these are scale unit and scale length.  Set these to “1 year” and “20 cm” respectively.  The scale unit determines how many years between each unit marked on the scale of the PDF timeline.  The scale unit length determines the distance between these units.  In this example we are using 1 year every 20 cm as the scale because there are lots of events over a small range of years.</p>
-<p>There are three settings for page layout, these are page size, page orientation and scale position.  Set these to “A4”, “Landscape” and 0 respectively.  Page size and orientation are self-explanatory.  Scale position is used to position the scale on the PDF relative to the timeline’s event areas.  Leaving it as 0 will ensure the scale is placed at the bottom of the page with all the events above it.</p>
+<p>
+    In the title box enter “Early years development.”
+    A title is required, it is used to identify the timeline in TPlot and as a main heading on the PDF of the timeline.
+    In the description box, enter “Emily Hunter's development years 0-2.”
+    This optional description is used to add additional information about the timeline.
+</p>
+<p>
+    There are two settings for the scale, these are scale unit and scale length.
+    The scale unit determines how many years between each unit marked on the scale of the PDF timeline.
+    The scale unit length determines the distance between these units.
+    Set these to “1 year” and “20 cm” respectively.
+    We are using 1 year every 20 cm as the scale because there are lots of events over a small range of years.
+</p>
+<p>
+    There are three settings for page layout, these are page size, page orientation and scale position.
+    Set these to “A4”, “Landscape” and 0 respectively.  Page size and orientation are self-explanatory.
+    Scale position is used to position the scale on the PDF relative to the timeline’s event areas.
+    Leaving it as 0 will ensure the scale is placed at the bottom of the page with all the events above it.
+</p>
 <button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1715863610/tplot/age/new_age_timeline_form_nfw6ir.jpg', 'New Age Timeline Form')">
 	<img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1715863609/tplot/age/new_age_timeline_form_small_s7yx1u.jpg"
 	alt="New Age Timeline Form"
@@ -58,13 +80,19 @@
 {% endblock timeline_content %}
 
 {% block event_area_content %}
-<p>For any events to appear on the PDF of the timeline they need to be placed in an event area.  Select the new event area option from the side bar.</p>
+<p>
+    For any events to appear on the PDF of the timeline they need to be placed in an event area.
+    Select the new event area option from the side bar.
+</p>
 <button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1715863620/tplot/age/new_event_area_option_l9q4ca.jpg', 'New Event Area Option')">
 	<img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1715863611/tplot/age/new_event_area_option_small_cpiyxx.jpg"
 	alt="New Event Area Option"
 	style="width:100%;max-width:200px">
 </button>
-<p>Enter “Main” as the name, leave page position and weight as 0 and 1 respectively.  This will create a single event area above the scale which will contain all our events.</p>
+<p>
+    Enter “Main” as the name, leave page position and weight as 0 and 1 respectively.
+    This will create a single event area above the scale which will contain all our events.
+</p>
 <button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1715863610/tplot/age/new_event_area_form_ypay30.jpg', 'New Event Aea Form')">
 	<img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1715863608/tplot/age/new_event_area_form_small_ovs4jg.jpg"
 	alt="New Event Aea Form"
@@ -90,7 +118,7 @@
 <p>In the title box enter "Started opening and closing her hands", leave the description box empty because we have no further information to add.</p>
 <p>Set start year to 0 and start month to 1 to represent the age that this event occurred.</p>
 <p>Leave has end, end year and end month alone because this event only has a start age.</p>
-<p>Select "Main" from the list of available event areas.<p/>
+<p>Select "Main" from the list of available event areas.</p>
 <button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1715863619/tplot/age/new_event_form_ic5zim.jpg', 'New Event Form')">
 	<img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1715863611/tplot/age/new_event_form_small_awznn0.jpg"
 	alt="New Event Form"
