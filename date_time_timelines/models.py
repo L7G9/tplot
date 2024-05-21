@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.urls import reverse
 
@@ -176,8 +178,8 @@ class DateTimeEvent(timelines.Event):
     date_time_timeline = models.ForeignKey(
         DateTimeTimeline, on_delete=models.CASCADE
     )
-    start_date_time = models.DateTimeField()
-    end_date_time = models.DateTimeField()
+    start_date_time = models.DateTimeField(default=datetime.now)
+    end_date_time = models.DateTimeField(default=datetime.now)
 
     class Meta:
         ordering = ["start_date_time"]
