@@ -1,3 +1,23 @@
+## 0.7.0 (2024-05-21)
+
+### Feat
+
+- 1st version of timeline user guide
+
+### Fix
+
+- add javascript to hide end time units when has end is not checked
+- add default value to start date and end date
+- update templates to not use pagination
+- remove paging from timeline detail views
+
+### Refactor
+
+- add block for additional scripts
+- add and use template for structure of user guides
+- move trouble shooting into user guide
+- remove inclusion of bootstarp 3
+
 ## 0.6.5 (2024-05-10)
 
 ### Fix
