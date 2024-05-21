@@ -14,27 +14,8 @@
 {% block button_name %}Add{% endblock %}
 
 {% block scripts %}
-<script type="text/javascript">
-    function displayEndTimeUnits(show) {
-        let endYearDiv = document.getElementById('div_id_end_year');
-        let endMonthDiv = document.getElementById('div_id_end_month');
-        if (show) {
-            endYearDiv.style.display = "block";
-            endMonthDiv.style.display = "block";
-        }
-        else
-        {
-            endYearDiv.style.display = "none";
-            endMonthDiv.style.display = "none";
-        }
-    }
 
-    var hasEndCheck = document.getElementById('id_has_end');
+{% load static %}
+<script src="{% static 'age_timelines/js/toggle_end_unit.js' %}"></script>
 
-    displayEndTimeUnits(hasEndCheck.checked)
-
-    hasEndCheck.onchange = function() {
-        displayEndTimeUnits(hasEndCheck.checked)
-    };
-</script>
 {% endblock scripts %}

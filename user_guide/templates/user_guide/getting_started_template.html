@@ -89,13 +89,7 @@
   </div>
 </div>
 
-<script type="text/javascript">
-function ShowImageModal(image_src, image_alt) {
-  $('#modalTitle').html(image_alt);
-  var modalImage = document.getElementById('modalImage');
-  modalImage.src = image_src;
-  modalImage.alt = image_alt;
-  $('#imageModal').modal('show');
-}
-</script>
+{% load static %}
+<script src="{% static 'user_guide/js/show_image_modal.js' %}"></script>
+
 {% endblock content %}
