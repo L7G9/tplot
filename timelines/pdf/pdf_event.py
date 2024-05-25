@@ -225,6 +225,13 @@ class PDFEvent(Area):
 
     def draw(self):
         """Draw PDFEvent on it's canvas."""
+        self.canvas.rect(
+            x=self.x,
+            y=self.y,
+            width=self.width,
+            height=self.height,
+            fill=1
+        )
         self.time_paragraph.drawOn(
             self.canvas,
             self.x + self.border_size,
@@ -249,12 +256,7 @@ class PDFEvent(Area):
             - self.title_paragraph.height
             - self.description_paragraph.height,
         )
-        self.canvas.rect(
-            self.x,
-            self.y,
-            self.width,
-            self.height,
-        )
+
 
 
 class PDFEventEmpty(PDFEvent):

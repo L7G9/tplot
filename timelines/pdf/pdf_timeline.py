@@ -80,6 +80,7 @@ class PDFTimeline(ABC):
             ),
         )
         self.canvas.setStrokeColorRGB(0, 0, 0)
+        self.canvas.setFillColorRGB(1, 1, 1)
 
         # init fonts
         self.title_style = self.__create_title_style()
@@ -335,7 +336,6 @@ class PDFTimeline(ABC):
             fontName="Times-Roman",
             fontSize=16,
             borderColor=black,
-            backColor=white,
             borderWidth=0,
             leading=22,
         )
@@ -347,7 +347,6 @@ class PDFTimeline(ABC):
             fontName="Times-Roman",
             fontSize=10,
             borderColor=black,
-            backColor=white,
             borderWidth=0,
             leading=14,
         )
