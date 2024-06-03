@@ -1,0 +1,142 @@
+{% extends 'user_guide/user_guide_base.html' %}
+
+{% block title %}Timeline Reference{% endblock %}
+
+{% block heading %}Timeline Reference{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:home' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'user_guide:reference-index' %}">Reference</a></li>
+<li class="breadcrumb-item active">Timelines</li>
+{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Introduction</p>
+    </div>
+    <div class="card-body">
+        <p>In TPlot a timeline is stored as a list of events and settings, using these the app can create a perfectly scaled PDF displaying the timeline.</p>
+        <p>
+            Each timeline has the following in common...
+            <ul>
+                <li><a href="#card_title">Title</a></li>
+                <li><a href="#card_description">Description</a></li>
+                <li><a href="#card_scale_unit">Scale Unit</a></li>
+                <li><a href="#card_scale_unit_length">Scale Unit Length</a></li>
+                <li><a href="#card_orientation">Orientation</a></li>
+                <li><a href="#card_page_size">Page Size</a></li>
+                <li><a href="#card_scale_page_position">Scale Page Position</a></li>
+                <li><a href="#card_events">Events</a></li>
+                <li><a href="#card_event_areas">Event Areas</a></li>
+                <li><a href="#card_tags">Tags</a></li>
+            </ul>
+        </p>
+    </div>
+</div>
+
+<div id="card_title" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Title</p>
+    </div>
+    <div class="card-body">
+        <p>A title which is used to identify the timeline in TPlot and displayed as a heading when a PDF timeline is created.</p>
+    </div>
+</div>
+
+<div id="card_description" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Description</p>
+    </div>
+    <div class="card-body">
+        <p>An optional description which can be used to add additional details about a timeline.</p>
+        <p>Is displayed under the title when a PDF timeline is created.</p>
+    </div>
+</div>
+
+<div id="card_scale_unit" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Scale Unit</p>
+    </div>
+    <div class="card-body">
+        <p>
+            Controls the amount of time between each unit on the scale of a PDF timeline.
+            Because each type of timeline uses different time units this setting varies between the different timeline types.
+        </p>
+        <p>See the getting started guide for <a href="{% url 'user_guide:getting-started-scales' %}">timeline scales</a> for more details.</p>
+    </div>
+</div>
+
+<div id="card_scale_unit_length" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Scale Unit Length</p>
+    </div>
+    <div class="card-body">
+        <p>Controls the distance in CM between each scale unit on the scale of a PDF timeline.</p>
+        <p>See the getting started guide for <a href="{% url 'user_guide:getting-started-scales' %}">timeline scales</a> for more details.</p>
+    </div>
+</div>
+
+<div id="card_orientation" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Orientation</p>
+    </div>
+    <div class="card-body">
+        <p>Set the page orientation  of a PDF timeline to landscape or portrait.</p>
+        <p>See the getting started guide for <a href="{% url 'user_guide:getting-started-orientation-size' %}">orientation &amp page size</a> for more details.</p>
+    </div>
+</div>
+
+<div id="card_page_size" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Page Size</p>
+    </div>
+    <div class="card-body">
+        <p>Set the page size of a PDF timeline to A5, A4 or A5.</p>
+        <p>See the getting started guide for <a href="{% url 'user_guide:getting-started-orientation-size' %}">orientation &amp page size</a> for more details.</p>
+    </div>
+</div>
+
+<div id="card_scale_page_position" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Scale Page Position</p>
+    </div>
+    <div class="card-body">
+        <p>
+            Controls where to place the scale on the  PDF Timeline relative to the event areas.
+            The smaller the page position the closer it will be to the bottom of the page on a landscape timeline and to the left of the page on a portrait timeline.
+        </p>
+        <p>See the getting started guide for <a href="{% url 'user_guide:getting-started-positioning' %}">event area positioning</a> for more details.</p>
+    </div>
+</div>
+
+<div id="card_events" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Events</p>
+    </div>
+    <div class="card-body">
+        <p>Events to display on the timeline.</p>
+        <p>See the reference guide for <a href="{% url 'user_guide:reference-events' %}">events</a> for more details.</p>
+    </div>
+</div>
+
+<div id="card_event_areas" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Event Areas</p>
+    </div>
+    <div class="card-body">
+        <p>Event areas for organizing and displaying events in groups.</p>
+        <p>See the reference guide for <a href="{% url 'user_guide:reference-event-areas' %}">event areas</a> for more details.</p>
+    </div>
+</div>
+
+<div id="card_tags" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Tags</p>
+    </div>
+    <div class="card-body">
+        <p>Tags for adding category information to events.</p>
+        <p>See the reference guide for <a href="{% url 'user_guide:reference-tags' %}">tags</a> for more details.</p>
+    </div>
+</div>
+{% endblock content %}

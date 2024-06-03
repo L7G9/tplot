@@ -1,0 +1,76 @@
+{% extends 'user_guide/user_guide_base.html' %}
+
+{% block title %}Event Area Reference{% endblock %}
+
+{% block heading %}Event Area Reference{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:home' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'user_guide:reference-index' %}">Reference</a></li>
+<li class="breadcrumb-item active">Event Areas</li>
+{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Introduction</p>
+    </div>
+    <div class="card-body">
+        <p>
+            Event areas are used to group events together and position them on the timeline.
+            If you have multiple categories of events that you want to keep separate on a PDF timeline, you could achieve this using an event area for each category.
+        </P>
+        <P>
+            On a PDF timeline they effectively make a row or column depending on the timeline's orientation that runs parallel to the scale for all events with that event area to be placed in.
+            Multiple event areas can be added to a timeline then each event can be assigned to a single event area.
+        </p>
+        <p>
+            <b>An event must be in an event area to be displayed, therefore at least one event area needs to be created to to display any events.</b>
+        </p>
+        <p>
+            Each event area has the following in common...
+            <ul>
+                <li><a href="#card_name">Name</a></li>
+                <li><a href="#card_page_position">Page Position</a></li>
+                <li><a href="#card_weight">Weight</a></li>
+            </ul>
+        </p>
+    </div>
+</div>
+
+<div id="card_name" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Name</p>
+    </div>
+    <div class="card-body">
+        <p>A name which is used to identify the event area in TPlot.</p>
+    </div>
+</div>
+
+<div id="card_page_position" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Page Position</p>
+    </div>
+    <div class="card-body">
+        <p>
+            Controls where to place the event area on the  PDF timeline relative to the scale and other event areas.
+            The smaller the page position the closer it will be to the bottom of the page on a landscape timeline and to the left of the page on a portrait timeline.
+        </p>
+        <p>See the getting started guide for <a href="{% url 'user_guide:getting-started-positioning' %}">scale &amp event area positioning</a> for more details.</p>
+    </div>
+</div>
+
+<div id="card_weight" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Weight</p>
+    </div>
+    <div class="card-body">
+        <p>
+            Controls the size of the event area on the PDF timeline relative to the weight of the other event areas.
+            On the timeline there is a set amount of space for events to be displayed in, the greater the weight the more of this space an event area will have available to display events.
+        </p>
+        <p>See the getting started guide for <a href="{% url 'user_guide:getting-started-sizing' %}">event area sizing</a> for more details.</p>
+    </div>
+</div>
+
+{% endblock content %}

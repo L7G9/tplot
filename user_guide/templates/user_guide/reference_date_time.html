@@ -1,0 +1,53 @@
+{% extends 'user_guide/user_guide_base.html' %}
+
+{% block title %}Date &amp Time Timeline Reference{% endblock %}
+
+{% block heading %}Date &amp Time Timeline Reference{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:home' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'user_guide:reference-index' %}">Reference</a></li>
+<li class="breadcrumb-item active">Date &amp Time Timelines</li>
+{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Introduction</p>
+    </div>
+    <div class="card-body">
+        <p>Date & time timelines have events ordered by time units from the calendar and clock including years, months, weeks, days, hours, minutes and seconds.</p>
+        <p>For example a date & time timeline recording the history of space exploration would have events like this, “1969-07-21 02:56 - Neil Armstrong became the first person to walk on the moon”.</p>
+        <p>The range time units available in a date & time timeline gives a lot of flexibility, enabling you to create timelines using any of the above time units.</p>
+        <p>For example a date & time timeline recording your day would have events like this, “8:05 - Left home for work.”</p>
+        <p>See the getting started guide for <a href="{% url 'user_guide:getting-started-date-time' %}">date &amp timelines</a> for more details.</p>
+    </div>
+</div>
+
+<div id="card_events" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Date &amp Time Events</p>
+    </div>
+    <div class="card-body">
+        <p>
+            Events in a date & time timeline use this format 2000-04-12 05:30:00.
+            Entering 2000-04-12 would also be acceptable and be equivalent to  2000-04-12 00:0:00.
+        </p>
+    </div>
+</div>
+
+<div id="card_display_formats" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Display Formats</p>
+    </div>
+    <div class="card-body">
+        <p>
+            Date & time timelines have two additional settings, scale display format and event display format.
+            These are used to customize how the date and time are displayed on a PDF timeline's scale and events.
+        </p>
+        <p>
+            For example if creating a date & timeline focused on events happening on different days over many years, the scale display format could be set to display the year on the scale “1960” and the event display format could be set to display the year, month and day on each event “1969-07-21”
+        </p>
+    </div>
+</div>
+{% endblock content %}

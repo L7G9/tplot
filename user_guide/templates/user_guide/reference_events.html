@@ -1,0 +1,110 @@
+{% extends 'user_guide/user_guide_base.html' %}
+
+{% block title %}Event Reference{% endblock %}
+
+{% block heading %}Event Reference{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:home' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'user_guide:reference-index' %}">Reference</a></li>
+<li class="breadcrumb-item active">Events</li>
+{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Introduction</p>
+    </div>
+    <div class="card-body">
+        <p>Each event in a timeline occurs at a given time set by the user, the app uses this time and the scale settings to position the event accurately on the scale of a PDF timeline.</p>
+        <p>
+            Each event has the following in common...
+            <ul>
+                <li><a href="#card_start_time">Start Time</a></li>
+                <li><a href="#card_has_end">Has End</a></li>
+                <li><a href="#card_end_time">End Time</a></li>
+                <li><a href="#card_title">Title</a></li>
+                <li><a href="#card_description">Description</a></li>
+                <li><a href="#card_event_area">Event Area</a></li>
+                <li><a href="#card_tags">Tags</a></li>
+            </ul>
+        </p>
+    </div>
+</div>
+
+<div id="card_start_time" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Start Time</p>
+    </div>
+    <div class="card-body">
+        <p>
+            The time at which the event occurred or started.
+            Because each type of timeline uses different time units, this setting will vary between the different timeline types.
+            On a PDF timeline, an event with a start and no end time will start at the appropriate position on the scale and take up enough room to hold the description of the event only.  The start time is the first line describing the event.
+        </p>
+    </div>
+</div>
+
+<div id="card_has_end" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Has End</p>
+    </div>
+    <div class="card-body">
+        <p>Events can have an end time which is enabled by this option.</p>
+    </div>
+</div>
+
+<div id="card_end_time" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">End Time</p>
+    </div>
+    <div class="card-body">
+        <p>
+            The time at which the event ended.
+            Because each type of timeline uses different time units, this setting will vary between the different timeline types.
+            On a PDF timeline, an event with a start and end time will start and finish at the appropriate position on the scale.
+        </p>
+    </div>
+</div>
+
+<div id="card_title" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Title</p>
+    </div>
+    <div class="card-body">
+        <p>A title which is used to identify the event in TPlot and displayed as a heading of the event when it is displayed on a PDF timeline.</p>
+    </div>
+</div>
+
+<div id="card_description" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Description</p>
+    </div>
+    <div class="card-body">
+        <p>An optional description which can be used to add additional details about the event.</p>
+    </div>
+</div>
+
+<div id="card_event_area" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Event Area</p>
+    </div>
+    <div class="card-body">
+        <p>
+            Each event can have a single event area, which is used to position groups of events on a PDF timeline.
+            An event must have an event area otherwise it won't be displayed on a PDF timeline.
+        </p>
+        <p>See the reference guide for <a href="{% url 'user_guide:reference-event-areas' %}">event areas</a> for more details.</p>
+    </div>
+</div>
+
+<div id="card_tags" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Tags</p>
+    </div>
+    <div class="card-body">
+        <p>Each event can have multiple tags.</p>
+        <p>See the reference guide for <a href="{% url 'user_guide:reference-tags' %}">tags</a> for more details.</p>
+    </div>
+</div>
+{% endblock content %}

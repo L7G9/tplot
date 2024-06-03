@@ -1,0 +1,37 @@
+{% extends 'user_guide/user_guide_base.html' %}
+
+{% block title %}Age Timeline Reference{% endblock %}
+
+{% block heading %}Age Timeline Reference{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:home' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'user_guide:reference-index' %}">Reference</a></li>
+<li class="breadcrumb-item active">Age Timelines</li>
+{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Introduction</p>
+    </div>
+    <div class="card-body">
+        <p>
+            Age timelines have events ordered by age in years and months.
+        </P>
+        <p>
+            For example an age timeline recording a child's milestones would have events like this, "1 year and 2 months - Nina took her first steps."
+        </P>
+        <p>See the getting started guide for <a href="{% url 'user_guide:getting-started-age' %}">age timelines</a> for more details.</p>
+    </div>
+</div>
+
+<div id="card_age_events" class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Age Events</p>
+    </div>
+    <div class="card-body">
+        <p>Events in an age timeline use a single number for both year and a month, these can be negative.</p>
+    </div>
+</div>
+{% endblock content %}
