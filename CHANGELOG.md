@@ -1,3 +1,18 @@
+## 0.8.0 (2024-06-03)
+
+### Feat
+
+- getting started guide added
+- added reference guide
+
+### Fix
+
+- joining lines visible through some start end events
+
+### Refactor
+
+- move javascrip into own files
+
 ## 0.7.0 (2024-05-21)
 
 ### Feat
