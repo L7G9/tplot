@@ -84,13 +84,13 @@ class SuccessMixim(object):
 
 
 AGE_EVENT_FIELD_ORDER = [
-    "title",
-    "description",
     "start_year",
     "start_month",
     "has_end",
     "end_year",
     "end_month",
+    "title",
+    "description",
     "event_area",
     "tags",
 ]

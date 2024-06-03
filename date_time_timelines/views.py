@@ -88,11 +88,11 @@ class SuccessMixim(object):
 
 
 DATE_TIME_EVENT_FIELD_ORDER = [
-    "title",
-    "description",
     "start_date_time",
     "has_end",
     "end_date_time",
+    "title",
+    "description",
     "event_area",
     "tags",
 ]
