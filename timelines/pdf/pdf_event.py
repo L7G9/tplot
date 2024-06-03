@@ -258,7 +258,6 @@ class PDFEvent(Area):
         )
 
 
-
 class PDFEventEmpty(PDFEvent):
     """An empty PDFEvent for testing only."""
     def __init__(self, x: float, y: float, width: float, height: float):
