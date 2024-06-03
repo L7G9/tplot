@@ -8,7 +8,7 @@ import io
 from abc import ABC, abstractmethod
 from typing import List, Union
 
-from reportlab.lib.colors import black, white
+from reportlab.lib.colors import black
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
