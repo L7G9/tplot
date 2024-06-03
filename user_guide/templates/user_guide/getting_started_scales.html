@@ -1,0 +1,75 @@
+{% extends 'user_guide/getting_started_base.html' %}
+
+{% block title %}Getting started with Timeline Scales{% endblock %}
+
+{% block heading %}Getting started with Timeline Scales{% endblock %}
+
+{% block active_breadcrumb %}Timeline Scales{% endblock active_breadcrumb %}
+
+{% block guide %}
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Introduction</p>
+    </div>
+    <div class="card-body">
+	<p>
+	This guide demonstrates how to use the settings that control the scale of a timeline when it is drawn on a PDF.
+	Each timeline has two settings for its scale.
+	Scale unit controls the amount of time between each unit on the scale, because each type of timeline using different time units this setting varies between the different timeline types.
+	The number of scale units in a timeline is calculated automatically using the scale unit, the smallest and greatest last time unit in the timelines events.
+	Scale unit length controls the distance in CM between each scale unit.
+	</p>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Example</p>
+    </div>
+    <div class="card-body">
+	<p>This age timeline has...</p>
+	<ul>
+	  <li>A scale unit of 5 years.</li>
+	  <li>A scale unit length of 4 cm.</li>
+	  <li>A first event at 6 years.</li>
+	  <li>A last event at 22 Years.</li>
+	</ul>
+	<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1716673495/tplot/gs/scale/settings_bpvf46.jpg', 'Timeline Scale Settings')">
+	<img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1716673494/tplot/gs/scale/settings_sml_fusd0j.jpg"
+	alt="Timeline Scale Settings"
+	style="width:100%;max-width:200px">
+	</button>
+	<p>The resulting pdf timeline will have the following scale...</P>
+	<ul>
+	  <li>Starts at 5 years (6 years from first event rounded down to the nearest scale unit of 5 years).</li>
+	  <li>Ends at 25 years (22 years from last event rounded up to the nearest scale unit of 5 years).</li>
+	  <li>Has units at 10 years, 15 years and 20 years (every 5 years between start and end).</li>
+	  <li>Is 16 cm long (25 years - 5 years = 20 years, 20 years / 5 years per scale unit = 4 scale units, 4 scale units * scale unit length of 4 cm = 16 cm).</li>
+	</ul>
+	<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1716673494/tplot/gs/scale/result_xwifwe.jpg', 'Resulting Timeline Scale')">
+	<img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1716673494/tplot/gs/scale/result_sml_pcmjgw.jpg"
+	alt="Resulting Timeline Scale"
+	style="width:100%;max-width:200px">
+	</button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modalTitle">Image Modal</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img
+                id="modalImage"
+                src=""
+                alt="Image Modal"
+                style="width:100%;max-width:800px">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock guide %}

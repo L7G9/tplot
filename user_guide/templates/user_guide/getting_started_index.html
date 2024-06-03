@@ -1,0 +1,29 @@
+{% extends 'user_guide/user_guide_base.html' %}
+
+{% block title %}Getting Started{% endblock %}
+
+{% block heading %}Getting Started{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:home' %}">TPlot</a></li>
+<li class="breadcrumb-item active">{% block active_breadcrumb %}Getting Started{% endblock active_breadcrumb %}</li>
+{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Index</p>
+    </div>
+    <div class="card-body">
+	<p>In this section you will find the following guides to help you get started.</P>
+	<ul>
+	  <li><a href="{% url 'user_guide:getting-started-age' %}">Age Timelines</a> - Create a timeline with events ordered by age in years and months.</li>
+	  <li><a href="{% url 'user_guide:getting-started-date-time' %}">Date &amp Time Timelines 1</a> - Create a timeline with events ordered by years.</li>
+	  <li><a href="{% url 'user_guide:getting-started-scales' %}">Timeline Scales</a> - How a timeline's scale unit and scale unit length settings work.</li>
+	  <li><a href="{% url 'user_guide:getting-started-orientation-size' %}">Orientation &amp Page Size</a> - See how these affect the layout of a  PDF timeline.</li>
+	  <li><a href="{% url 'user_guide:getting-started-positioning' %}">Scale &amp Event Area Positioning</a> - Control the position of the scale and events on a PDF timeline.</li>
+	  <li><a href="{% url 'user_guide:getting-started-sizing' %}">Event Area Sizing</a> - Control the space on a PDF timeline an event area takes up.</li>
+	</ul>
+    </div>
+</div>
+{% endblock content %}

@@ -1,10 +1,17 @@
 from django.shortcuts import render
 
 
-def introduction(request):
+def home(request):
     return render(
         request,
-        "user_guide/index.html",
+        "user_guide/home.html",
+    )
+
+
+def getting_started_index(request):
+    return render(
+        request,
+        "user_guide/getting_started_index.html",
     )
 
 
@@ -36,71 +43,92 @@ def getting_started_scientific(request):
     )
 
 
-def e401(request):
+def getting_started_scales(request):
     return render(
         request,
-        "user_guide/401.html",
+        "user_guide/getting_started_scales.html",
     )
 
 
-def e404(request):
+def getting_started_orientation_size(request):
     return render(
         request,
-        "user_guide/404.html",
+        "user_guide/getting_started_orientation_size.html",
     )
 
 
-def e500(request):
+def getting_started_positioning(request):
     return render(
         request,
-        "user_guide/500.html",
+        "user_guide/getting_started_positioning.html",
     )
 
 
-def charts(request):
+def getting_started_sizing(request):
     return render(
         request,
-        "user_guide/charts.html",
+        "user_guide/getting_started_sizing.html",
     )
 
 
-def layout_sidenav_light(request):
+def reference_index(request):
     return render(
         request,
-        "user_guide/layout-sidenav-light.html",
+        "user_guide/reference_index.html",
     )
 
 
-def layout_static(request):
+def reference_timelines(request):
     return render(
         request,
-        "user_guide/layout-static.html",
+        "user_guide/reference_timelines.html",
     )
 
 
-def login(request):
+def reference_events(request):
     return render(
         request,
-        "user_guide/login.html",
+        "user_guide/reference_events.html",
     )
 
 
-def password(request):
+def reference_event_areas(request):
     return render(
         request,
-        "user_guide/password.html",
+        "user_guide/reference_event_areas.html",
     )
 
 
-def register(request):
+def reference_tags(request):
     return render(
         request,
-        "user_guide/register.html",
+        "user_guide/reference_tags.html",
     )
 
 
-def tables(request):
+def reference_age(request):
     return render(
         request,
-        "user_guide/tables.html",
+        "user_guide/reference_age.html",
+    )
+
+
+def reference_date_time(request):
+    return render(
+        request,
+        "user_guide/reference_date_time.html",
+    )
+
+
+def reference_historical(request):
+    return render(
+        request,
+        "user_guide/reference_historical.html",
+    )
+
+
+def reference_scientific(request):
+    return render(
+        request,
+        "user_guide/reference_scientific.html",
     )

@@ -1,14 +1,192 @@
-{% extends 'user_guide/user_guide_base.html' %}
+{% extends 'user_guide/getting_started_base.html' %}
 
-{% block title %}TPlot - Getting started Date & Time Timelines{% endblock %}
+{% block title %}Getting started with Date &amp Time Timelines{% endblock %}
 
-{% block heading %}Getting started with Date & Time Timelines{% endblock %}
+{% block heading %}Getting started with Date &amp Time Timelines{% endblock %}
 
-{% block breadcrumbs %}
-<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
-<li class="breadcrumb-item active">Getting started</li>
-{% endblock %}
+{% block active_breadcrumb %}Date &amp Time Timelines{% endblock active_breadcrumb %}
 
-{% block content %}
-Add getting started guide
-{% endblock %}
+{% block introduction_content %}
+<p>
+	In this guide we are going to walk through how to create a date &amp time timeline using TPlot.
+	A date &amp time timeline has events ordered by units from the calendar and clock, for example “1969-7-20 - Neil Armstrong became the 1st person to walk on the moon.” or “6:50 - I woke up.”
+	Date & time timelines can use time units including years, months, weeks, days, hours, minutes and seconds, the following guide will show you how to make a timeline using years only.
+</p>
+<img src=""
+	alt="Image Modal"
+	style="width:100%;max-width:1600px">
+<p>The topic we are going to use in guide is the history of aviation.</p>
+<table>
+	<tr><th>History of Aviation</th></tr>
+	<tr><td>1783 1st free aerial voyage in a hot air balloon, Jean Francois Pilatre Dr Rozier and Marquis d'Arlandesin Montgolfier.</td></tr>
+	<tr><td>1785 English Channel is crossed in a balloon, Jean-Pierre Blanchard and John Jefferies.</td></tr>
+	<tr><td>1797 1st human parachute descent, Andre Jacques Garnerin.</td></tr>
+	<tr><td>1852 1st flight of steam-powered airship, Henri Giffard.</td></tr>
+	<tr><td>1895 Flight of biplane gliders, Otto Lilienthal.</td></tr>
+	<tr><td>1903 1st powered, sustained and controllable flight in a heavier than air flying machine, Orville and Wilbur Wright.</td></tr>
+	<tr><td>1906 1st successful powered flight in Europe, Alberto Santos-Dumont.</td></tr>
+	<tr><td>1909 1st airplane crossing of English Channel, Louis Bleriot.</td></tr>
+	<tr><td>1926 1st free flight of a liquid-fuelled rocket, Robert H. Goddard.</td></tr>
+	<tr><td>1927 1st solo trans-Atlantic flight, Charles A. Lindbergh.</td></tr>
+	<tr><td>1930 Jet engine is invented, Frank Whittle.</td></tr>
+	<tr><td>1932 1st woman to fly a solo nonstop trans-Atlantic flight, Amelia Earhart.</td></tr>
+	<tr><td>1933 1st modern airliner, Boeing 247.</td></tr>
+	<tr><td>1939 1st fully jet propelled aircraft, Henkel 178.</td></tr>
+	<tr><td>1939 1st successful helicopter, US Sikorsky V300.</td></tr>
+	<tr><td>1947 1st aircraft to exceed speed of sound in level flight, Bell X-1 piloted by Charles E. Yeager.</td></tr>
+	<tr><td>1949 1st nonstop round the world flight the USAF B-50, Lucky Lady II.</td></tr>
+	<tr><td>1957 to 1969 The space race, starts with the launch of Sputnik 1, the 1st man-made earth satellite and ends with Neil Armstrong being the 1st person on the moon.</td></tr>
+	<tr><td>1969 1st flights of supersonic transports, TU-144 and Concorde.</td></tr>
+	<tr><td>1981 1st reusable space craft, Colombia shuttle.</td></tr>
+	<tr><td>1986 Non-stop around flight the world in 9 days without refuelling, US ultra light Voyager piloted by Dick Rutan and Jeana Yeager.</td></tr>
+	<tr><td>2000 International space station, receives it's 1st crew.</td></tr>
+</table>
+{% endblock introduction_content %}
+
+{% block timeline_content %}
+<p>Make sure you have registered and are logged in.</p>
+<p>
+	From the user timelines page you'll see all the timelines you have created so far and the options to create new timelines.
+	Select the new date &amp time timeline option from the side menu.
+</p>
+<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'New Date &amp Time Timeline Option')">
+	<img src=""
+	alt="New Date &amp Time Timeline Option"
+	style="width:100%;max-width:200px">
+</button>
+<p>
+	In the title box enter “History of Flight.”  A title is required, it is used to identify the timeline in TPlot and as a main heading on the PDF of the timeline.
+	In the description box, enter “By John Doe.”  This optional description is used to add additional information about the timeline.
+</p>
+<p>
+	There are three settings for the scale, these are scale unit, scale length and scale display format.
+	The scale unit determines how many date or time units are between each unit marked on the scale of the PDF timeline.
+	The scale unit length determines the distance between these units.
+	The scale display format determines the which time units from the calendar and clock are used on scale.
+	Set these to “10 years”, “3cm” and "2000 (year)" respectively.
+	In this example we are using 10 years every 3 cm as the scale because in the list of aviation events there are a few events every decade.
+	The scale display format is set to display year only because our events only have a year and no other information.
+</p>
+<p>
+	There are three settings for page layout, page size, page orientation and scale position.
+	Page size and orientation are self-explanatory.
+	Scale position is used to position the scale on the PDF relative to the timeline's event areas.
+	Set these to “A4”, “Landscape” and 0 respectively.
+	Leaving scale position as 0 will place the scale at the bottom of the page with all the events above it.
+</p>
+<p>
+	There is a final setting called "Event display format".
+	This determines the which time units from the calendar and clock are used on all events."
+	Set this to "2000 (year)" again because our events only have a year and no other time units.
+</p>
+<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'New date and Timeline Form')">
+	<img src=""
+	alt="New Date and Time Timeline Form"
+	style="width:100%;max-width:200px">
+</button>
+<p>Select the add button to create the new timeline.</p>
+<p>All these settings can be edited later or the timeline deleted by selecting the timeline settings option on from the side menu.</p>
+<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'Timeline Settings Option')">
+	<img src=""
+	alt="Timeline Settings Option"
+	style="width:100%;max-width:200px">
+</button>
+{% endblock timeline_content %}
+
+{% block event_area_content %}
+<p>
+	For any events to appear on the PDF of the timeline they need to be placed in an event area.
+	Select the new event area option from the side bar.
+</p>
+<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'New Event Area Option')">
+	<img src=""
+	alt="New Event Area Option"
+	style="width:100%;max-width:200px">
+</button>
+<p>
+	Enter “Main” as the name, leave page position and weight as 0 and 1 respectively.
+	This will create a single event area above the scale which will contain all our events.
+</p>
+<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'New Event Aea Form')">
+	<img src=""
+	alt="New Event Aea Form"
+	style="width:100%;max-width:200px">
+</button>
+<p>Select the add button to create the new event area.</p>
+<p>The new event area will be displayed in a list on age timeline page and can be edited or deleted by selecting it from the the list.</p>
+<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'Event area list')">
+	<img src=""
+	alt="Event area list"
+	style="width:100%;max-width:200px">
+</button>
+{% endblock event_area_content %}
+
+{% block event_content %}
+<p>Now we are ready to add our first event, select the new event option on the side menu.</p>
+<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'New Event Option')">
+	<img src=""
+	alt="New Event Option"
+	style="width:100%;max-width:200px">
+</button>
+<p>
+	The 1st event in the table above is “1783 1st free aerial voyage in a hot air balloon, Jean Francois Pilatre Dr Rozier and Marquis d'Arlandesin Montgolfier.”
+	In the title box enter "1st free aerial voyage in a hot air balloon".
+	In the description box enter "Jean Francois Pilatre Dr Rozier and Marquis d'Arlandesin Montgolfier".
+	Set start date time to "1783-01-01" to the year this event occurred.
+	We are purposely setting the month and day as the January 1st and omitting the time because we don't have that information in our table.
+	This will cause the event to be positioned at the start of the year 1783 on the scale of the PDF timeline which is good enough for this example.
+	We could set the date and time to the nearest second and TPlot would be able to position the event accurately.
+	Leave has end, end date time alone because this event only has a start date time.
+	Select "Main" from the list of available event areas.
+</p>
+<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'New Event Form')">
+	<img src=""
+	alt="New Event Form"
+	style="width:100%;max-width:200px">
+</button>
+<p>Select add to create the event.</p>
+<p>The event area will be displayed in a list on date &amp time timeline page and can be edited or deleted by selecting it from the list.</p>
+<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'Event List')">
+	<img src=""
+	alt="Event List"
+	style="width:100%;max-width:200px">
+</button>
+{% endblock event_content %}
+
+{% block start_end_event_content %}
+<p>
+	One event in the table above occurs over a period of time, “1957 to 1969 The space race...”
+	This can be added using has end and end date time.
+	In the title box enter "The Space Race".
+	In the description box enter "Starts with the launch of Sputnik 1, the 1st man-made earth satellite and ends with Neil Armstrong being the 1st person to walk on the moon."
+	Set start date time to "1957-01-01", then tick the has end option and set the end date time to "1969-01-01".
+	Select "Main" from the list of available event areas.
+</p>
+<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'New Event with start and end Form')">
+	<img src=""
+	alt="New Event with start and end Form"
+	style="width:100%;max-width:200px">
+</button>
+<p>Select add to create the event.</p>
+{% endblock start_end_event_content %}
+
+{% block view_pdf_content %}
+<p>Select the view PDF option on the side menu.</p>
+<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'PDF Option')">
+	<img src=""
+	alt="PDF Option"
+	style="width:100%;max-width:200px">
+</button>
+<p>Open the downloaded PDF to see your progress so far.  You should see a timeline with the two events you added.</p>
+<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'In progress Date &amp Time Timeline')">
+	<img src=""
+	alt="In progress Date &amp Time Timeline"
+	style="width:100%;max-width:200px">
+</button>
+<p>Continue to add the rest of the events to complete the timeline.</p>
+<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'Completed Date &amp Time Timeline')">
+	<img src=""
+	alt="Completed Date &amp Time Timeline"
+	style="width:100%;max-width:200px">
+</button>
+{% endblock view_pdf_content %}

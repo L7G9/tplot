@@ -1,0 +1,77 @@
+{% extends 'user_guide/getting_started_base.html' %}
+
+{% block title %}Getting started with Scale &amp Event Area Positioning{% endblock %}
+
+{% block heading %}Getting started with Scale &amp Event Area Positioning{% endblock %}
+
+{% block active_breadcrumb %}Scale &amp Event Area Positioning{% endblock active_breadcrumb %}
+
+{% block guide %}
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Introduction</p>
+    </div>
+    <div class="card-body">
+		<p>
+		A timeline's scale and each event area has a page position setting, these are used to control where on the page they are in relation to each other.
+		The scale page position can be set when creating a new timeline or from timeline settings.
+		</p>
+		<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1716846043/tplot/gs/positioning/scale_position_setting_r5qyra.jpg', 'Scale Page Position Setting')">
+		<img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1716846043/tplot/gs/positioning/scale_position_setting_sml_cp2plm.jpg"
+		alt="Scale Page Position Setting"
+		style="width:100%;max-width:200px">
+		</button>
+		<p>
+		An event area page position can be set when creating a new event area or by editing the event area.
+		</p>
+		<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1716846034/tplot/gs/positioning/area_position_setting_witdae.jpg', 'Event Area Page Position Setting')">
+		<img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1716846034/tplot/gs/positioning/area_position_setting_sml_gcidsw.jpg"
+		alt="Event Area Page Position Setting"
+		style="width:100%;max-width:200px">
+		</button>
+	</div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Example 1</p>
+    </div>
+    <div class="card-body">
+		<p>The scale’s page position is 0, event area A’s position is 1 and event area B’s position 2.</p>
+		<p>When landscape, the scale will be at the bottom of the page, event area A will be above the scale and event area B will be above A.</p>
+		<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1716846034/tplot/gs/positioning/example1_ls_hxddka.jpg', 'Example 1 Landscape')">
+		<img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1716846035/tplot/gs/positioning/example1_ls_sml_terami.jpg"
+		alt="Example 1 Landscape"
+		style="width:100%;max-width:200px">
+		</button>
+		<p>When portrait, the scale will be on the left hand side of the page, event area A will be to the right of the scale and event area B will be to the right of A.</p>
+		<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1716846035/tplot/gs/positioning/example1_pt_wsi5km.jpg', 'Example 1 Portrait')">
+		<img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1716846037/tplot/gs/positioning/example1_pt_sml_yf4svu.jpg"
+		alt="Example 1 Portrait"
+		style="width:100%;max-width:200px">
+		</button>
+	</div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Example 2</p>
+    </div>
+    <div class="card-body">
+		<p>The scale’s page position is 1, event area A’s position is 0 and event area B’s position 2.</p>
+		<p>When landscape, event area A will be at the bottom of the page, the scale will be above event area A and event area B will be above the scale.</p>
+		<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1716846037/tplot/gs/positioning/example2_ls_pxf0oo.jpg', 'Example 2 Landscape')">
+		<img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1716846038/tplot/gs/positioning/example2_ls_sml_wvy9sz.jpg"
+		alt="Example 2 Landscape"
+		style="width:100%;max-width:200px">
+		</button>
+		<p>When portrait, event area A will be on the left hand side of the page, the scale will be to the right of event area A and event area B will be to the right of the scale.</p>
+		<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1716846038/tplot/gs/positioning/example2_pt_kfn4im.jpg', 'Example 2 Portrait')">
+		<img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1716846038/tplot/gs/positioning/example2_pt_sml_vuyj8e.jpg"
+		alt="Example 2 Portrait"
+		style="width:100%;max-width:200px">
+		</button>
+	</div>
+</div>
+
+{% endblock guide %}

@@ -1,0 +1,94 @@
+{% extends 'user_guide/getting_started_base.html' %}
+
+{% block title %}Getting started with Orientation &amp Page Size{% endblock %}
+
+{% block heading %}Getting started with Orientation &amp Page Size{% endblock %}
+
+{% block active_breadcrumb %}Orientation &amp Page Size{% endblock active_breadcrumb %}
+
+{% block guide %}
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Introduction</p>
+    </div>
+    <div class="card-body">
+		<p>
+		This guide shows what effect the orientation &amp page size settings have on the PDF timelines timelines created by TPlot.
+		</p>
+	</div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Orientation</p>
+    </div>
+    <div class="card-body">
+		<p>
+		A timeline can have a landscape or portrait orientation, this controls the direction of the scale and how the timeline is laid out.
+		This can be set when creating a new timeline or from timeline settings.
+		</p>
+		<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1716677327/tplot/gs/orientation/orientation_setting_zqaivr.jpg', 'Orientation Setting')">
+		<img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1716677327/tplot/gs/orientation/orientation_setting_sml_myajcp.jpg"
+		alt="Orientation Setting"
+		style="width:100%;max-width:200px">
+		</button>
+	</div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Page Size</p>
+    </div>
+    <div class="card-body">
+		<p>
+		A PDF timeline can be created on one of the following page sizes A5, A4 or A5.
+		This can be set when creating a new timeline or from timeline settings.
+		</p>
+		<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1716844227/tplot/gs/orientation/size_setting_voyljl.jpg', 'Page Size Setting')">
+		<img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1716844227/tplot/gs/orientation/size_setting_sml_avsp5b.jpg"
+		alt="Page Size Setting"
+		style="width:100%;max-width:200px">
+		</button>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Example 1</p>
+    </div>
+    <div class="card-body">
+		<p>
+        In this example the orientation has been set to landscape and the page size as been set to A4 (210mm by 297mm).
+        The title and description are at the top, with the scale and events under them.
+        The scale runs from left to right and the PDF gets wider as the scale gets longer.
+        The timeline PDF's height will equal the smaller dimension from that page size (210mm) and its width will depend on length of scale.
+        </p>
+            <button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1716677327/tplot/gs/orientation/landscape_rac9eh.jpg', 'Landscape Example')">
+            <img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1716677327/tplot/gs/orientation/landscape_sml_y3grqg.jpg"
+            alt="Landscape Example"
+            style="width:100%;max-width:200px">
+            </button>
+		<p>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Example 2</p>
+    </div>
+    <div class="card-body">
+		<p>
+		In this example the orientation has been set to portrait and the page size has been set to A4 (210mm by 297mm).
+		The title and description are at the top, with the scale and events under them.
+		The scale runs from top to bottom and the PDF gets taller as the scale gets longer.
+		The timeline PDF's width will equal the smaller dimension from that page size (210mm) and its height will depend on the length of scale.
+		</p>
+		<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('https://res.cloudinary.com/dvkplmmwk/image/upload/v1716677327/tplot/gs/orientation/portrait_gzczow.jpg', 'Portrait Example')">
+		<img src="https://res.cloudinary.com/dvkplmmwk/image/upload/v1716677330/tplot/gs/orientation/portrait_sml_iujtcf.jpg"
+		alt="Portrait Example"
+		style="width:100%;max-width:200px">
+		</button>
+	</div>
+</div>
+
+{% endblock guide %}

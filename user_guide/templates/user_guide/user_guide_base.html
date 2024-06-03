@@ -4,34 +4,39 @@
 
 {% block side_menu_user_guide_options %}
     <div class="sb-sidenav-menu-heading">User Guide</div>
-    <a class="nav-link" href="{% url 'user_guide:introduction' %}">Introduction</a>
     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseGettingStartedPages" aria-expanded="false" aria-controls="collapsePages">
         Getting started
         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
     </a>
     <div class="collapse" id="collapseGettingStartedPages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
         <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+            <a class="nav-link" href="{% url 'user_guide:getting-started-index' %}">Index</a>
             <a class="nav-link" href="{% url 'user_guide:getting-started-age' %}">Age Timelines</a>
-            <a class="nav-link" href="{% url 'user_guide:getting-started-date-time' %}">Date & Time Timelines</a>
-            <a class="nav-link" href="{% url 'user_guide:getting-started-historical' %}">Historical Timelines</a>
-            <a class="nav-link" href="{% url 'user_guide:getting-started-scientific' %}">Scientific Timelines</a>
+            <a class="nav-link" href="{% url 'user_guide:getting-started-date-time' %}">Date &amp Time Timelines</a>
+            <a class="nav-link" href="{% url 'user_guide:getting-started-scales' %}">Scale</a>
+            <a class="nav-link" href="{% url 'user_guide:getting-started-orientation-size' %}">Page Orientation &amp Size</a>
+            <a class="nav-link" href="{% url 'user_guide:getting-started-positioning' %}">Scale &amp Event Area Positioning</a>
+            <a class="nav-link" href="{% url 'user_guide:getting-started-sizing' %}">Event Area Sizing</a>
         </nav>
     </div>
     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseReferencePages" aria-expanded="false" aria-controls="collapsePages">
-        Reference Guide
+        Reference
         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
     </a>
     <div class="collapse" id="collapseReferencePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
         <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-            <a class="nav-link" href="#">Timelines</a>
-            <a class="nav-link" href="#">Scales</a>
-            <a class="nav-link" href="#">Layout</a>
-            <a class="nav-link" href="#">Trouble Shooting</a>
+            <a class="nav-link" href="{% url 'user_guide:reference-index' %}">Index</a>
+            <a class="nav-link" href="{% url 'user_guide:reference-timelines' %}">Timelines</a>
+            <a class="nav-link" href="{% url 'user_guide:reference-events' %}">Events</a>
+            <a class="nav-link" href="{% url 'user_guide:reference-event-areas' %}">Event Area</a>
+            <a class="nav-link" href="{% url 'user_guide:reference-tags' %}">Tags</a>
+            <a class="nav-link" href="{% url 'user_guide:reference-age' %}">Age Timelines</a>
+            <a class="nav-link" href="{% url 'user_guide:reference-date-time' %}">Date &amp Time Timelines</a>
+            <a class="nav-link" href="{% url 'user_guide:reference-historical' %}">Historical Timelines</a>
+            <a class="nav-link" href="{% url 'user_guide:reference-scientific' %}">Scientific Timelines</a>
         </nav>
     </div>
 
     <div class="sb-sidenav-menu-heading">Project</div>
-    <a class="nav-link" href="#">About</a>
-    <a class="nav-link" href="#">Roadmap</a>
     <a class="nav-link" href="#">Contact</a>
 {% endblock %}

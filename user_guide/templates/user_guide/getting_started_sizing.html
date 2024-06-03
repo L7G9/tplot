@@ -1,0 +1,69 @@
+{% extends 'user_guide/getting_started_base.html' %}
+
+{% block title %}Getting Started with Event Area Sizing{% endblock %}
+
+{% block heading %}Getting Started with Event Area Sizing{% endblock %}
+
+{% block active_breadcrumb %}Event Area Sizing{% endblock active_breadcrumb %}
+
+{% block guide %}
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Introduction</p>
+    </div>
+    <div class="card-body">
+		<p>
+		Each event area has a weight setting, this is used to control the size of each event area in relation to each other.
+		An event area weight can be set when creating a new event area or by editing the event area.
+		</p>
+		<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'Scale Page Position Setting')">
+		<img src=""
+		alt="Event Area Weight Setting"
+		style="width:100%;max-width:200px">
+		</button>
+	</div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Example 1</p>
+    </div>
+    <div class="card-body">
+		<p>Event area A’s weight is 1 and event area B’s weight is 1..</p>
+		<p>When landscape, event area A is the same height as event area B because its weight is the same. Both are as wide as the scale.</p>
+		<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'Example 1 Landscape')">
+		<img src=""
+		alt="Example 1 Landscape"
+		style="width:100%;max-width:200px">
+		</button>
+		<p>When portrait, event area A is the same width as event area B because its weight is the same.  Both are as high as the scale.</p>
+		<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'Example 1 Portrait')">
+		<img src=""
+		alt="Example 1 Portrait"
+		style="width:100%;max-width:200px">
+		</button>
+	</div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Example 2</p>
+    </div>
+    <div class="card-body">
+		<p>Event area A’s weight is 2 and event area B’s weight is 1.</p>
+		<p>When landscape, event area A is twice as high as event area B because its weight is twice as big. Both are as wide as the scale.</p>
+		<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'Example 2 Landscape')">
+		<img src=""
+		alt="Example 2 Landscape"
+		style="width:100%;max-width:200px">
+		</button>
+		<p>When portrait, event area A is twice as wide as event area B because its weight is twice as big.  Both are as high as the scale.</p>
+		<button type="button" class="btn" data-toggle="modal" data-target="#imageModal" onclick="ShowImageModal('', 'Example 2 Portrait')">
+		<img src=""
+		alt="Example 2 Portrait"
+		style="width:100%;max-width:200px">
+		</button>
+	</div>
+</div>
+
+{% endblock guide %}
