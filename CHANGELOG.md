@@ -1,3 +1,10 @@
+## 0.8.1 (2024-06-03)
+
+### Fix
+
+- remvoe unsed import
+- **pdf_event.py**: remove extra blank line
+
 ## 0.8.0 (2024-06-03)
 
 ### Feat
