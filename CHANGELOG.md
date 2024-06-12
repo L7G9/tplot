@@ -1,3 +1,9 @@
+## 0.8.2 (2024-06-12)
+
+### Fix
+
+- move all javascript files to main static folder
+
 ## 0.8.1 (2024-06-03)
 
 ### Fix
