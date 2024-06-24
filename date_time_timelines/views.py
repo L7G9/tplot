@@ -1,8 +1,11 @@
+import json
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import FileResponse, HttpResponseForbidden
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -321,7 +324,6 @@ def pdf_view(request, date_time_timeline_id):
 class AIRequestView(
     LoginRequiredMixin,
     DateTimeTimelineOwnerMixim,
-    SuccessMixim,
     FormView
 ):
     form_class = AIRequestForm
@@ -368,3 +370,73 @@ class AIRequestView(
             self.template_name,
             {"form": form, "view": self}
         )
+
+    def get_success_url(self) -> str:
+        return reverse_lazy(
+            "date_time_timelines:date-time-timeline-ai-result",
+            kwargs={"date_time_timeline_id": self.kwargs["date_time_timeline_id"]},
+        )
+
+
+class AIResultView(
+    LoginRequiredMixin,
+    DateTimeTimelineOwnerMixim,
+    SuccessMixim,
+    TemplateView
+):
+    template_name = "date_time_timelines/ai_result.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["events"] = json.loads("""[
+            {
+                "start": "1961-05-25 00:00:00",
+                "end": "",
+                "title": "Kennedy's Moon Landing Proposal",
+                "description": "President John F. Kennedy announced the goal of sending an American to the Moon before the end of the decade."
+            },
+            {
+                "start": "1967-01-27 00:00:00",
+                "end": "",
+                "title": "Apollo 1 Tragedy",
+                "description": "A cabin fire during a launch rehearsal test killed astronauts Gus Grissom, Ed White, and Roger B. Chaffee."
+            },
+            {
+                "start": "1968-12-21 00:00:00",
+                "end": "",
+                "title": "Launch of Apollo 8",
+                "description": "Apollo 8 launched and became the first manned spacecraft to orbit the Moon and return safely to Earth."
+            },
+            {
+                "start": "1969-07-16 13:32:00",
+                "end": "",
+                "title": "Launch of Apollo 11",
+                "description": "Apollo 11 was launched from Kennedy Space Center, carrying astronauts Neil Armstrong, Buzz Aldrin, and Michael Collins."
+            },
+            {
+                "start": "1969-07-20 20:17:40",
+                "end": "",
+                "title": "Apollo 11 Moon Landing",
+                "description": "The Lunar Module Eagle landed on the Moon's surface, and Neil Armstrong became the first human to set foot on the Moon."
+            },
+            {
+                "start": "1970-04-11 13:13:00",
+                "end": "",
+                "title": "Launch of Apollo 13",
+                "description": "Apollo 13 was launched but suffered a critical failure en route to the Moon, resulting in a mission abort and safe return of the crew."
+            },
+            {
+                "start": "1972-12-07 00:00:00",
+                "end": "",
+                "title": "Launch of Apollo 17",
+                "description": "Apollo 17 was launched, marking the last manned mission to the Moon, with astronauts Eugene Cernan, Ronald Evans, and Harrison Schmitt."
+            },
+            {
+                "start": "1972-12-19 00:00:00",
+                "end": "",
+                "title": "Return of Apollo 17",
+                "description": "Apollo 17 safely returned to Earth, concluding the Apollo program's manned lunar missions."
+            }
+            ]""")
+
+        return context

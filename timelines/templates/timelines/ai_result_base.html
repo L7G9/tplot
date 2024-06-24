@@ -1,0 +1,50 @@
+{% extends 'user_guide/user_guide_base.html' %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+{% block timeline_crumb %}<li class="breadcrumb-item"><a href="">Timeline</a></li>{% endblock timeline_crumb %}
+<li class="breadcrumb-item active">AI Assist Results</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h2">Results Form</p>
+    </div>
+    <div class="card-body">
+        <form method="POST" class="post-form">{% csrf_token %}
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td><input type="checkbox" class="form-check-input" id="selectAll"/></td>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                    <tr>
+                        <td><input type='checkbox' class="form-check-input"></td>
+                        <td>{{ event.start }}</td>
+                        <td>{{ event.end }}</td>
+                        <td>{{ event.title }}</td>
+                        <td>{{ event.description }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <button type="submit" class="btn btn-primary">{% block button_name %}Add Events{% endblock %}</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+{% load static %}
+<script src="{% static 'js/ai_result_select_all_events.js' %}"></script>
+{% endblock scripts %}
