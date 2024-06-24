@@ -1,17 +1,21 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import FileResponse, HttpResponseForbidden
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.views.generic.edit import FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 
 from timelines.mixins import OwnerRequiredMixin
 from timelines.view_errors import event_area_position_error
-from timelines.models import Tag, EventArea
+from timelines.models import EventArea, Tag
 
 from .models import DateTimeEvent, DateTimeTimeline
 from .pdf.pdf_date_time_timeline import PDFDateTimeTimeline
+
+from timelines.forms import AIRequestForm, USER_CHOICE
 
 DATE_TIME_TIMELINE_FIELD_ORDER = [
     "title",
@@ -312,3 +316,55 @@ def pdf_view(request, date_time_timeline_id):
         as_attachment=True,
         filename="timeline.pdf"
     )
+
+
+class AIRequestView(
+    LoginRequiredMixin,
+    DateTimeTimelineOwnerMixim,
+    SuccessMixim,
+    FormView
+):
+    form_class = AIRequestForm
+    template_name = "date_time_timelines/ai_request.html"
+
+    def form_valid(self, form):
+        if (
+            (form.cleaned_data["event_count_choice"] == USER_CHOICE)
+            and (form.cleaned_data["event_count_text"] == "")
+        ):
+            form.add_error(
+                "event_count_text",
+                "Event count must be defined."
+            )
+
+        if (
+            (form.cleaned_data["title_choice"] == USER_CHOICE)
+            and (form.cleaned_data["title_text"] == "")
+        ):
+            form.add_error(
+                "title_text",
+                "Title contents must be defined."
+            )
+
+        if (
+            (form.cleaned_data["description_choice"] == USER_CHOICE)
+            and (form.cleaned_data["description_text"] == "")
+        ):
+            form.add_error(
+                "description_text",
+                "Description contents must be defined."
+            )
+
+        if form.errors:
+            return self.form_invalid(form)
+        else:
+            return super().form_valid(form)
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+
+        return render(
+            request,
+            self.template_name,
+            {"form": form, "view": self}
+        )
