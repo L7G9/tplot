@@ -1,0 +1,29 @@
+{% extends 'user_guide/user_guide_base.html' %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+{% block timeline_crumb %}<li class="breadcrumb-item"><a href="">Timeline</a></li>{% endblock timeline_crumb %}
+<li class="breadcrumb-item active">AI Assist Request</li>
+{% endblock breadcrumbs %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h2">Find Events using ChatGPT</p>
+    </div>
+    <div class="card-body">
+        <form method="POST" class="post-form">{% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary">Get Events</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+{% load static %}
+<script src="{% static 'js/ai_request_toggle.js' %}"></script>
+{% endblock scripts %}

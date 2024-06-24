@@ -88,5 +88,17 @@ urlpatterns = [
         "<int:date_time_timeline_id>/pdf/",
         views.pdf_view,
         name="date-time-timeline-pdf",
-    )
+    ),
+    # ex: 1/ai_request/
+    path(
+        "<int:date_time_timeline_id>/ai_request/",
+        views.AIRequestView.as_view(),
+        name="date-time-timeline-ai-request",
+    ),
+    # ex: 1/ai_result/
+    path(
+        "<int:date_time_timeline_id>/ai_result/",
+        views.AIResultView.as_view(),
+        name="date-time-timeline-ai-result",
+    ),
 ]

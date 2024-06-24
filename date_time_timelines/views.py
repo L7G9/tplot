@@ -1,17 +1,27 @@
+from datetime import datetime
+import json
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import FileResponse, HttpResponseForbidden
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.views.generic.edit import FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-
+from timelines.ai_assist.chat_gpt_request import chat_gpt_request
+from timelines.ai_assist.event_choice import get_event_choices
+from timelines.ai_assist.request_text import role_text
+from timelines.forms import AIRequestForm, AIResultsForm, NEW_CHOICE
 from timelines.mixins import OwnerRequiredMixin
+from timelines.models import EventArea, Tag
 from timelines.view_errors import event_area_position_error
-from timelines.models import Tag, EventArea
 
+from .ai_assist.request_text import date_time_request_text
 from .models import DateTimeEvent, DateTimeTimeline
 from .pdf.pdf_date_time_timeline import PDFDateTimeTimeline
+
 
 DATE_TIME_TIMELINE_FIELD_ORDER = [
     "title",
@@ -305,6 +315,9 @@ def pdf_view(request, date_time_timeline_id):
         id=date_time_timeline_id
     )
 
+    if timeline.get_owner() != request.user:
+        return HttpResponseForbidden()
+
     timeline_pdf = PDFDateTimeTimeline(timeline)
 
     return FileResponse(
@@ -312,3 +325,138 @@ def pdf_view(request, date_time_timeline_id):
         as_attachment=True,
         filename="timeline.pdf"
     )
+
+
+class AIRequestView(
+    LoginRequiredMixin,
+    DateTimeTimelineOwnerMixim,
+    FormView
+):
+    form_class = AIRequestForm
+    template_name = "date_time_timelines/ai_request.html"
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+
+        return render(
+            request,
+            self.template_name,
+            {"form": form, "view": self}
+        )
+
+    def form_valid(self, form):
+        self.request.session['ai_role'] = role_text()
+        request_values = form.get_request_values()
+        self.request.session['ai_request'] = date_time_request_text(
+            topic=request_values[0],
+            sources=request_values[1],
+            count_description=request_values[2],
+            start_end_option=request_values[3],
+            title_info=request_values[4],
+            description_info=request_values[5],
+        )
+        return super().form_valid(form)
+
+    def get_success_url(self) -> str:
+        return reverse_lazy(
+            "date_time_timelines:date-time-timeline-ai-result",
+            kwargs={
+                "date_time_timeline_id": self.kwargs["date_time_timeline_id"],
+            },
+        )
+
+
+class AIResultView(
+    LoginRequiredMixin,
+    DateTimeTimelineOwnerMixim,
+    SuccessMixim,
+    FormView
+):
+    form_class = AIResultsForm
+    template_name = "date_time_timelines/ai_result.html"
+
+    def get_form_kwargs(self):
+        kwargs = super(AIResultView, self).get_form_kwargs()
+        kwargs['timeline_id'] = get_timeline_from_date_time_timeline(self)
+        kwargs['events'] = get_event_choices(self.request.session['ai_result'])
+
+        return kwargs
+
+    def get(self, request, *args, **kwargs):
+        role_text = self.request.session['ai_role']
+        request_text = self.request.session['ai_request']
+        result_text = chat_gpt_request(role_text, request_text)
+        self.request.session['ai_result'] = json.loads(result_text)
+
+        form = self.form_class(**self.get_form_kwargs())
+        context = self.get_context_data()
+        context['form'] = form
+        context['view'] = self
+
+        return render(
+            request,
+            self.template_name,
+            context,
+        )
+
+    def __new_event_area(self, form, timeline):
+        new_name = form.cleaned_data['new_event_area_name']
+        new_position = form.cleaned_data['new_event_area_position']
+        new_weight = form.cleaned_data['new_event_area_weight']
+
+        return EventArea.objects.create(
+            timeline=timeline,
+            name=new_name,
+            page_position=new_position,
+            weight=new_weight,
+        )
+
+    def __new_event(
+            self,
+            json_event,
+            date_time_timeline,
+            timeline,
+            event_area
+    ):
+        datetime_format = "%Y-%m-%d %H:%M:%S"
+        start = datetime.strptime(json_event["start"], datetime_format)
+        has_end = json_event['end'] != ""
+        if has_end:
+            end = datetime.strptime(json_event["end"], datetime_format)
+        else:
+            end = datetime.strptime(json_event["start"], datetime_format)
+        title = json_event['title']
+        description = json_event['description']
+
+        return DateTimeEvent.objects.create(
+            date_time_timeline=date_time_timeline,
+            timeline=timeline,
+            start_date_time=start,
+            has_end=has_end,
+            end_date_time=end,
+            title=title,
+            description=description,
+            event_area=event_area,
+        )
+
+    def form_valid(self, form):
+        date_time_timeline = DateTimeTimeline.objects.get(
+            pk=self.kwargs["date_time_timeline_id"]
+        )
+        timeline = date_time_timeline.timeline_ptr
+
+        if form.cleaned_data['event_area_choice'] == NEW_CHOICE:
+            event_area = self.__new_event_area(form, timeline)
+        else:
+            event_area = form.cleaned_data['existing_event_area_choice']
+
+        json_events = self.request.session['ai_result']
+        for event_index in form.cleaned_data['event_choice']:
+            self.__new_event(
+                json_events['events'][int(event_index)],
+                date_time_timeline,
+                timeline,
+                event_area
+            )
+
+        return super().form_valid(form)

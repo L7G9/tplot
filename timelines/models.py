@@ -86,7 +86,10 @@ class Event(models.Model):
     description = models.CharField(max_length=1000, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
     event_area = models.ForeignKey(
-        EventArea, blank=True, null=True, on_delete=models.SET_NULL,
+        EventArea,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
     )
     has_end = models.BooleanField(default=False)
 

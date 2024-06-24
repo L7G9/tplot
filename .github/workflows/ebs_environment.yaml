@@ -16,6 +16,7 @@ env:
   AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
   EB_DB_USER: ${{ secrets.EB_DB_USER }}
   EB_DB_PASSWORD: ${{ secrets.EB_DB_PASSWORD }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
 jobs:
   environment_status:
@@ -58,7 +59,8 @@ jobs:
         --elb-type "application" \
         --instance_type "t2.micro" \
         --min-instances 1 \
-        --max-instances 2
+        --max-instances 2 \
+        --envvars OPENAI_API_KEY=$EB_DB_PASSWORD
 
 
   setup_https:

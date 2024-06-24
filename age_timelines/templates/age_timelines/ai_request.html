@@ -1,0 +1,5 @@
+{% extends "timelines/ai_request_base.html"  %}
+
+{% block timeline_crumb %}<li class="breadcrumb-item"><a href="{% url 'age_timelines:age-timeline-detail' view.kwargs.age_timeline_id %}">Age Timeline</a></li>{% endblock timeline_crumb %}
+
+{% block heading %}AI Assist Request{% endblock %}

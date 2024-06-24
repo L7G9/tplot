@@ -1,0 +1,5 @@
+{% extends "timelines/ai_request_base.html"  %}
+
+{% block timeline_crumb %}<li class="breadcrumb-item"><a href="{% url 'date_time_timelines:date-time-timeline-detail' view.kwargs.date_time_timeline_id %}">Date & Time Timeline</a></li>{% endblock timeline_crumb %}
+
+{% block heading %}AI Assist Request{% endblock %}

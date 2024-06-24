@@ -86,5 +86,17 @@ urlpatterns = [
         "<int:age_timeline_id>/pdf/",
         views.pdf_view,
         name="age-timeline-pdf",
-    )
+    ),
+    # ex: 1/ai_request/
+    path(
+        "<int:age_timeline_id>/ai_request/",
+        views.AIRequestView.as_view(),
+        name="ai-request",
+    ),
+    # ex: 1/ai_result/
+    path(
+        "<int:age_timeline_id>/ai_result/",
+        views.AIResultView.as_view(),
+        name="ai-result",
+    ),
 ]

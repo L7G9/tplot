@@ -15,6 +15,6 @@ def user_timelines(request):
         "timelines/user_timelines.html",
         {
             "age_timeline_list": age_timeline_list,
-            "date_time_timeline_list": date_time_timeline_list
+            "date_time_timeline_list": date_time_timeline_list,
         },
     )
