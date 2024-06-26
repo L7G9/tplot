@@ -312,6 +312,9 @@ def pdf_view(request, date_time_timeline_id):
         id=date_time_timeline_id
     )
 
+    if timeline.get_owner() != request.user:
+        return HttpResponseForbidden()
+
     timeline_pdf = PDFDateTimeTimeline(timeline)
 
     return FileResponse(

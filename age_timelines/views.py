@@ -303,6 +303,9 @@ class EventAreaDeleteView(
 def pdf_view(request, age_timeline_id):
     age_timeline: AgeTimeline = AgeTimeline.objects.get(id=age_timeline_id)
 
+    if age_timeline.get_owner() != request.user:
+        return HttpResponseForbidden()
+
     timeline_pdf = PDFAgeTimeline(age_timeline)
 
     return FileResponse(
