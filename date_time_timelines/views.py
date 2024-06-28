@@ -5,7 +5,6 @@ from django.http import FileResponse, HttpResponseForbidden
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils import timezone
-from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -18,7 +17,7 @@ from timelines.models import EventArea, Tag
 from .models import DateTimeEvent, DateTimeTimeline
 from .pdf.pdf_date_time_timeline import PDFDateTimeTimeline
 
-from timelines.forms import AIRequestForm, USER_CHOICE
+from timelines.forms import AIRequestForm, AIResultsForm, USER_CHOICE
 
 DATE_TIME_TIMELINE_FIELD_ORDER = [
     "title",
@@ -385,8 +384,9 @@ class AIResultView(
     LoginRequiredMixin,
     DateTimeTimelineOwnerMixim,
     SuccessMixim,
-    TemplateView
+    FormView
 ):
+    form_class = AIResultsForm
     template_name = "date_time_timelines/ai_result.html"
 
     def get_context_data(self, **kwargs):
@@ -443,3 +443,18 @@ class AIResultView(
             ]""")
 
         return context
+
+    def get_form_kwargs(self):
+        print("***get_form_kwargs***")
+        kwargs = super(AIResultView, self).get_form_kwargs()
+        kwargs['timeline_id'] = get_timeline_from_date_time_timeline(self)
+        return kwargs
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(**self.get_form_kwargs())
+
+        return render(
+            request,
+            self.template_name,
+            {"form": form, "view": self}
+        )

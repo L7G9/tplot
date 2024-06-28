@@ -1,5 +1,7 @@
 from django import forms
+from django.core.validators import MinValueValidator
 
+from .models import EventArea
 
 AI_CHOICE = "1"
 USER_CHOICE = "2"
@@ -72,3 +74,57 @@ class AIRequestForm(forms.Form):
         max_length=100,
         required=False,
     )
+
+
+class AIResultsForm(forms.Form):
+    event_choice = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        label="Events",
+        required=False,
+        choices=[],
+    )
+    event_area_choice = forms.ChoiceField(
+        widget=forms.RadioSelect,
+        label="Event Area",
+        help_text="Create a new or use an existing event area.",
+        choices=NEW_EXISTING_CHOICES,
+        initial=NEW_CHOICE,
+    )
+    new_event_area_name = forms.CharField(
+        label="New Event Area Name",
+        max_length=25,
+        required=False,
+    )
+    new_event_area_position = forms.IntegerField(
+        label="Page Position",
+        initial=0,
+        required=False,
+        validators=[MinValueValidator(0)],
+    )
+    new_event_area_weight = forms.IntegerField(
+        label="Weight",
+        initial=1,
+        required=False,
+        validators=[MinValueValidator(0)],
+    )
+    existing_event_area_choice = forms.ModelChoiceField(
+        label="Existing Event Area",
+        required=False,
+        queryset=EventArea.objects.none(),
+    )
+
+    def __init__(self, *args, **kwargs):
+        timeline_id = kwargs.pop('timeline_id')
+        super(AIResultsForm, self).__init__(*args, **kwargs)
+
+        if timeline_id:
+            self.fields['existing_event_area_choice'].queryset = EventArea.objects.filter(timeline=timeline_id)
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        event_area_choice = cleaned_data.get("event_area_choice")
+        new_event_area_name = cleaned_data.get("new_event_area_name")
+        if event_area_choice == NEW_CHOICE and new_event_area_name == "":
+            msg = "When creating a new event area it must have a name."
+            self.add_error("new_event_area_name", msg)
