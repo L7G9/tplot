@@ -17,7 +17,7 @@ from timelines.models import EventArea, Tag
 from .models import DateTimeEvent, DateTimeTimeline
 from .pdf.pdf_date_time_timeline import PDFDateTimeTimeline
 
-from timelines.forms import AIRequestForm, AIResultsForm, USER_CHOICE
+from timelines.forms import AIRequestForm, AIResultsForm, USER_CHOICE, NEW_CHOICE
 
 DATE_TIME_TIMELINE_FIELD_ORDER = [
     "title",
@@ -380,6 +380,102 @@ class AIRequestView(
         )
 
 
+json_events = json.loads(
+    """[
+    {
+        "start": "1961-05-25 00:00:00",
+        "end": "",
+        "title": "Kennedy's Moon Landing Proposal",
+        "description": "President John F. Kennedy announced the goal of sending an American to the Moon before the end of the decade."
+    },
+    {
+        "start": "1967-01-27 00:00:00",
+        "end": "",
+        "title": "Apollo 1 Tragedy",
+        "description": "A cabin fire during a launch rehearsal test killed astronauts Gus Grissom, Ed White, and Roger B. Chaffee."
+    },
+    {
+        "start": "1968-12-21 00:00:00",
+        "end": "",
+        "title": "Launch of Apollo 8",
+        "description": "Apollo 8 launched and became the first manned spacecraft to orbit the Moon and return safely to Earth."
+    },
+    {
+        "start": "1969-07-16 13:32:00",
+        "end": "",
+        "title": "Launch of Apollo 11",
+        "description": "Apollo 11 was launched from Kennedy Space Center, carrying astronauts Neil Armstrong, Buzz Aldrin, and Michael Collins."
+    },
+    {
+        "start": "1969-07-20 20:17:40",
+        "end": "",
+        "title": "Apollo 11 Moon Landing",
+        "description": "The Lunar Module Eagle landed on the Moon's surface, and Neil Armstrong became the first human to set foot on the Moon."
+    },
+    {
+        "start": "1970-04-11 13:13:00",
+        "end": "",
+        "title": "Launch of Apollo 13",
+        "description": "Apollo 13 was launched but suffered a critical failure en route to the Moon, resulting in a mission abort and safe return of the crew."
+    },
+    {
+        "start": "1972-12-07 00:00:00",
+        "end": "",
+        "title": "Launch of Apollo 17",
+        "description": "Apollo 17 was launched, marking the last manned mission to the Moon, with astronauts Eugene Cernan, Ronald Evans, and Harrison Schmitt."
+    },
+    {
+        "start": "1972-12-19 00:00:00",
+        "end": "",
+        "title": "Return of Apollo 17",
+        "description": "Apollo 17 safely returned to Earth, concluding the Apollo program's manned lunar missions."
+    }
+    ]"""
+)
+
+
+class EventChoice:
+    """Class to hold details of an event in a format compatible for use with form.MultipleChoiceField."""
+    def __init__(self, start, end, title, description):
+        self.start = start
+        self.end = end
+        self.title = title
+        self.description = description
+
+    def __str__(self):
+        if self.end == "":
+            time = self.start
+        else:
+            time = f"{self.start} to {self.end}"
+
+        if self.description == "":
+            description = "none"
+        else:
+            description = self.description
+
+        return f"{time} : {self.title} : {description}"
+
+
+def get_event_choices(json_events):
+    """Get list of EventChoice objects from ChatGPT output."""
+    choices = []
+    index = 0
+    for event in json_events:
+        choices.append(
+            (
+                index,
+                EventChoice(
+                    event['start'],
+                    event['end'],
+                    event['title'],
+                    event['description']
+                )
+            )
+        )
+        index += 1
+    return choices
+
+
 class AIResultView(
     LoginRequiredMixin,
     DateTimeTimelineOwnerMixim,
@@ -391,70 +487,41 @@ class AIResultView(
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["events"] = json.loads("""[
-            {
-                "start": "1961-05-25 00:00:00",
-                "end": "",
-                "title": "Kennedy's Moon Landing Proposal",
-                "description": "President John F. Kennedy announced the goal of sending an American to the Moon before the end of the decade."
-            },
-            {
-                "start": "1967-01-27 00:00:00",
-                "end": "",
-                "title": "Apollo 1 Tragedy",
-                "description": "A cabin fire during a launch rehearsal test killed astronauts Gus Grissom, Ed White, and Roger B. Chaffee."
-            },
-            {
-                "start": "1968-12-21 00:00:00",
-                "end": "",
-                "title": "Launch of Apollo 8",
-                "description": "Apollo 8 launched and became the first manned spacecraft to orbit the Moon and return safely to Earth."
-            },
-            {
-                "start": "1969-07-16 13:32:00",
-                "end": "",
-                "title": "Launch of Apollo 11",
-                "description": "Apollo 11 was launched from Kennedy Space Center, carrying astronauts Neil Armstrong, Buzz Aldrin, and Michael Collins."
-            },
-            {
-                "start": "1969-07-20 20:17:40",
-                "end": "",
-                "title": "Apollo 11 Moon Landing",
-                "description": "The Lunar Module Eagle landed on the Moon's surface, and Neil Armstrong became the first human to set foot on the Moon."
-            },
-            {
-                "start": "1970-04-11 13:13:00",
-                "end": "",
-                "title": "Launch of Apollo 13",
-                "description": "Apollo 13 was launched but suffered a critical failure en route to the Moon, resulting in a mission abort and safe return of the crew."
-            },
-            {
-                "start": "1972-12-07 00:00:00",
-                "end": "",
-                "title": "Launch of Apollo 17",
-                "description": "Apollo 17 was launched, marking the last manned mission to the Moon, with astronauts Eugene Cernan, Ronald Evans, and Harrison Schmitt."
-            },
-            {
-                "start": "1972-12-19 00:00:00",
-                "end": "",
-                "title": "Return of Apollo 17",
-                "description": "Apollo 17 safely returned to Earth, concluding the Apollo program's manned lunar missions."
-            }
-            ]""")
+        context["json_events"] = json_events
 
         return context
 
     def get_form_kwargs(self):
-        print("***get_form_kwargs***")
         kwargs = super(AIResultView, self).get_form_kwargs()
         kwargs['timeline_id'] = get_timeline_from_date_time_timeline(self)
+        kwargs['events'] = get_event_choices(json_events)
+
         return kwargs
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(**self.get_form_kwargs())
 
+        context = self.get_context_data()
+        context['form'] = form
+        context['view'] = self
+
         return render(
             request,
             self.template_name,
-            {"form": form, "view": self}
+            context,
         )
+
+    def form_valid(self, form):
+        if form.cleaned_data['event_area_choice'] == NEW_CHOICE:
+            new_name = form.cleaned_data['new_event_area_name']
+            new_position = form.cleaned_data['new_event_area_position']
+            new_weight = form.cleaned_data['new_event_area_weight']
+            print(f"Creating new event area with name={new_name} position={new_position} weight={new_weight}")
+        else:
+            event_area: EventArea = form.cleaned_data['existing_event_area_choice']
+            print(f"Use existing event area {event_area}")
+
+        for event_index in form.cleaned_data['event_choice']:
+            print(f"adding event {event_index}")
+
+        return super().form_valid(form)

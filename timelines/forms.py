@@ -77,6 +77,7 @@ class AIRequestForm(forms.Form):
 
 
 class AIResultsForm(forms.Form):
+    """"""
     event_choice = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,
         label="Events",
@@ -115,10 +116,14 @@ class AIResultsForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         timeline_id = kwargs.pop('timeline_id')
+        events = kwargs.pop('events')
         super(AIResultsForm, self).__init__(*args, **kwargs)
 
         if timeline_id:
             self.fields['existing_event_area_choice'].queryset = EventArea.objects.filter(timeline=timeline_id)
+
+        if events:
+            self.fields['event_choice'].choices = events
 
     def clean(self):
         cleaned_data = super().clean()
@@ -126,5 +131,18 @@ class AIResultsForm(forms.Form):
         event_area_choice = cleaned_data.get("event_area_choice")
         new_event_area_name = cleaned_data.get("new_event_area_name")
         if event_area_choice == NEW_CHOICE and new_event_area_name == "":
-            msg = "When creating a new event area it must have a name."
+            msg = "When adding events to a new event area, the new event area must have a name."
             self.add_error("new_event_area_name", msg)
+
+        existing_event_area_name = cleaned_data.get("existing_event_area_choice")
+        if (
+            event_area_choice == EXISTING_CHOICE
+            and existing_event_area_name is None
+        ):
+            msg = "When add events to an existing event area, an event area must be selected."
+            self.add_error("existing_event_area_choice", msg)
+
+        selected_events = cleaned_data.get("event_choice")
+        if len(selected_events) == 0:
+            msg = "At least one event must be selected to add the timeline."
+            self.add_error("event_choice", msg)

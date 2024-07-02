@@ -9,28 +9,32 @@ function displayDiv(div, show) {
 }
 
 function setupToggle(
-    visibleRadio,
-    hiddenRadio,
-    nameDiv,
-    posDiv,
-    weightDiv,
-    existingDiv) {
-    displayDiv(nameDiv, visibleRadio.checked)
-    displayDiv(posDiv, visibleRadio.checked)
-    displayDiv(weightDiv, visibleRadio.checked)
-    displayDiv(existingDiv, hiddenRadio.checked)
-
-    hiddenRadio.onchange = function() {
-        displayDiv(nameDiv, !hiddenRadio.checked);
-        displayDiv(posDiv, !hiddenRadio.checked);
-        displayDiv(weightDiv, !hiddenRadio.checked);
-        displayDiv(existingDiv, hiddenRadio.checked);
+    option1Radio,
+    option2Radio,
+    option1Divs,
+    option2Divs,
+) {
+    for (var div in option1Divs) {
+        displayDiv(div, option1Radio.checked)
+    }
+    for (var div in option2Divs) {
+        displayDiv(div, option2Radio.checked)
+    }
+    option1Radio.onchange = function() {
+        for (var div in option1Divs) {
+            displayDiv(div, option1Radio.checked)
+        }
+        for (var div in option2Divs) {
+            displayDiv(div, !option1Radio.checked)
+        }
     };
-    visibleRadio.onchange = function() {
-        displayDiv(nameDiv, visibleRadio.checked);
-        displayDiv(posDiv, visibleRadio.checked);
-        displayDiv(weightDiv, visibleRadio.checked);
-        displayDiv(existingDiv, !visibleRadio.checked);
+    option2Radio.onchange = function() {
+        for (var div in option1Divs) {
+            displayDiv(div, !option2Radio.checked)
+        }
+        for (var div in option2Divs) {
+            displayDiv(div, option2Radio.checked)
+        }
     };
 }
 
@@ -44,8 +48,6 @@ var existingEventAreaList = document.getElementById('div_id_existing_event_area_
 setupToggle(
     newEventAreaRadio,
     existingEventAreaRadio,
-    newEventAreaName,
-    newEventAreaPosition,
-    newEventAreaWeight,
-    existingEventAreaList
+    [newEventAreaName, newEventAreaPosition, newEventAreaWeight],
+    [existingEventAreaList],
 )
