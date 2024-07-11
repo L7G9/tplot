@@ -1,3 +1,20 @@
+## 0.9.0 (2024-07-11)
+
+### Feat
+
+- 1st version of ai assist
+
+### Refactor
+
+- fix merge
+
+## 0.8.1 (2024-06-03)
+
+### Fix
+
+- remvoe unsed import
+- **pdf_event.py**: remove extra blank line
+
 ## 0.8.2 (2024-06-12)
 
 ### Fix
