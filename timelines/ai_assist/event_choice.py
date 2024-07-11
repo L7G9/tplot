@@ -26,7 +26,7 @@ class EventChoice:
 
 
 def get_event_choices(
-    json_events: List[Dict[str, str, str, str]]
+    json_events: List[Dict[str, str]]
 ) -> List[EventChoice]:
     """Get list of EventChoice objects from AI JSON output."""
     choices = []
