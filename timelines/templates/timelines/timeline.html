@@ -1,0 +1,29 @@
+{% extends "user_guide/user_guide_base.html" %}
+
+{% block head_additional %}
+{% load static %}
+<link href="{% static 'css/web_view.css' %}" rel="stylesheet" />
+{% endblock head_additional %}
+
+{% block title %}Timeline View{% endblock title %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h2">{{ object.title }}</p>
+    </div>
+    <div class="card-body">
+        <p>{{ object.description }}</p>
+    </div>
+</div>
+
+
+<div class="card mb-4">
+    <div class="card-header">
+        <div class="timeline">
+            {% block events %}
+            {% endblock events %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

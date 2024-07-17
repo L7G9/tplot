@@ -310,6 +310,13 @@ class EventAreaDeleteView(
     template_name = "date_time_timelines/event_area_confirm_delete.html"
 
 
+class TimelineView(
+    LoginRequiredMixin, OwnerRequiredMixin, DetailView
+):
+    model = DateTimeTimeline
+    template_name = "date_time_timelines/timeline.html"
+
+
 def pdf_view(request, date_time_timeline_id):
     timeline: DateTimeTimeline = DateTimeTimeline.objects.get(
         id=date_time_timeline_id

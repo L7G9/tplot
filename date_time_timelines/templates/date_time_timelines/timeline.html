@@ -1,0 +1,26 @@
+{% extends "timelines/timeline.html" %}
+
+{% block title %}Date &amp Time Timeline View{% endblock title%}
+
+{% block heading %}Date &amp Time Timeline View{% endblock heading %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'date_time_timelines:date-time-timeline-detail' view.kwargs.pk %}">Date &amp Time Timeline</a></li>
+	<li class="breadcrumb-item active">Timeline View</li>
+{% endblock breadcrumbs %}
+
+{% block events %}
+
+{% for date_time_event in object.datetimeevent_set.all %}
+	<div class="container {% if forloop.counter|divisibleby:2 %}right{% else %}left{% endif %}">
+		<div class="content">
+			<h3>{{ date_time_event.date_time_description }}</h3>
+			<h4>{{ date_time_event.title }}</h4>
+			<p>{{ date_time_event.description }}</p>
+		</div>
+	</div>
+{% endfor %}
+
+{% endblock events%}

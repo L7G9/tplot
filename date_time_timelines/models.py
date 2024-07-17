@@ -185,11 +185,17 @@ class DateTimeEvent(timelines.Event):
         ordering = ["start_date_time"]
 
     def start_description(self):
-        return self.start_date_time.strftime(DISPLAY_FORMATS[0])
+        return self.start_date_time.strftime(
+            DISPLAY_FORMATS[self.date_time_timeline.event_display_format]
+        )
 
     def start_end_description(self):
-        start = self.start_date_time.strftime(DISPLAY_FORMATS[0])
-        end = self.end_date_time.strftime(DISPLAY_FORMATS[0])
+        start = self.start_date_time.strftime(
+            DISPLAY_FORMATS[self.date_time_timeline.event_display_format]
+        )
+        end = self.end_date_time.strftime(
+            DISPLAY_FORMATS[self.date_time_timeline.event_display_format]
+        )
         return f"{start} to {end}"
 
     def date_time_description(self):

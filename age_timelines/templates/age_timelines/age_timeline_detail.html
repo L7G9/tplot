@@ -1,3 +1,4 @@
+Updates to keyboard shortcuts … On Thursday 1 August 2024, Drive keyboard shortcuts will be updated to give you first-letter navigation.Learn more
 {% extends "timelines/timeline_detail.html" %}
 
 {% block title %}TPlot - Age Timeline Detail{% endblock %}
@@ -16,10 +17,12 @@
     <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:age-event-add' view.kwargs.pk %}">New Event</a></li>
     <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:event-area-add' view.kwargs.pk %}">New Event Area</a></li>
     <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:tag-add' view.kwargs.pk %}">New Tag</a></li>
+    <div class="sb-sidenav-menu-heading">Views</div>
+    <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:timeline' view.kwargs.pk %}">Timeline</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:age-timeline-pdf' view.kwargs.pk %}">PDF</a></li>
     <div class="sb-sidenav-menu-heading">Tools</div>
     <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:ai-request' view.kwargs.pk %}">AI Request</a></li>
-    <div class="sb-sidenav-menu-heading">View</div>
-    <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:age-timeline-pdf' view.kwargs.pk %}">PDF</a></li>
+
 {% endblock %}
 
 {% block event_table_head_unit %}Age{% endblock %}

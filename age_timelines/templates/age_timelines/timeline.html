@@ -1,0 +1,26 @@
+{% extends "timelines/timeline.html" %}
+
+{% block title %}Age Timeline View{% endblock title%}
+
+{% block heading %}Age Timeline View{% endblock heading %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'age_timelines:age-timeline-detail' view.kwargs.pk %}">Age Timeline</a></li>
+	<li class="breadcrumb-item active">Timeline View</li>
+{% endblock breadcrumbs %}
+
+{% block events %}
+
+{% for age_event in object.ageevent_set.all %}
+	<div class="container {% if forloop.counter|divisibleby:2 %}right{% else %}left{% endif %}">
+		<div class="content">
+			<h3>{{ age_event.age_description }}</h3>
+			<h4>{{ age_event.title }}</h4>
+			<p>{{ age_event.description }}</p>
+		</div>
+	</div>
+{% endfor %}
+
+{% endblock events%}

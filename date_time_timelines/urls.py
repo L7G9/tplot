@@ -83,6 +83,12 @@ urlpatterns = [
         views.EventAreaDeleteView.as_view(),
         name="event-area-delete",
     ),
+    # ex: 1/timeline/
+    path(
+        "<int:pk>/timeline/",
+        views.TimelineView.as_view(),
+        name="timeline",
+    ),
     # ex: 1/pdf/
     path(
         "<int:date_time_timeline_id>/pdf/",
