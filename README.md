@@ -1,3 +1,4 @@
+Updates to keyboard shortcuts … On Thursday 1 August 2024, Drive keyboard shortcuts will be updated to give you first-letter navigation.Learn more
 ---
 # T-Plot
 
@@ -7,29 +8,43 @@
 Timeline web app
 
 ---
-T-Plot is a web app which users can use to create and store Timelines as a list of events.  It has been created to demonstrate how to use the web framework Django and deploy it on AWS using Elastic Beanstalk.  While many project features are still being implemented but the project has a fully functioning CI/CD pipeline which deploys the project on AWS.
-
+T-Plot is a web app which can be used to create timelines as a list of events, these are used to create a perfectly scaled PDF of the timeline.
+The user sets the scale and layout settings they want, and the app automatically handles the correct positioning of the events on PDF.
+Created to demonstrate the use of the web framework Django, it features a fully functional CI/CD pipeline that deploys it on AWS Elastic Beanstalk.
 
 The current release up and running [here](https://tplot.lukegregorydev.co.uk).
 
 ---
 ## Implemented Features
-  - Django Web App
-  - User registration, login and logout.
-  - Create, Read, Update and Delete information in a Postgres database running on AWS RDS.
-  - Permissions to ensure users can only view their database records.
-  - High availability using AWS EC2 instances in an Auto Scaling Group with a Load Balancer.
+  - User registration, login and logout
+  - Create, read, update and delete timeline information in a Postgres database running on AWS RDS
+  - Permissions to ensure users can only view their own database records
+  - Timeline Types
+    - Date and Time using events ordered by calendar and clock time units including years, months, weeks, days, hours, minutes and seconds
+    - Age using events ordered by age in years and months
+  - Timeline Views
+    - Web based timeline
+    - PDF timeline
+      - Set timeline scale
+      - Control PDF layout
+  - User Guide
+    - Getting started guides for common tasks
+    - Reference guides explaining all TPlot's objects, values and settings
+  - AI Assist
+    - Request ChatGPT find potential events you add to your timeline
+    - Review the results and select which events to add
+  - High availability using AWS EC2 instances in an Auto Scaling Group with a Load Balancer
 
 ## Project Road Map
-  - Scaled PDF timelines created from user’s data
-  - User guides and documentation
-  - Use AWS S3 to allow users to store images with their timelines
-  - Sharing and collaboration
-  - Register with Google, Github etc
-  - Implement timelines with different unit types
-    - Data & Time
+  - Timeline Types
     - Years BC to AD
     - Thousands/Millions/Billions of years in the past and future
+  - Ways to view timelines
+    - Web based representation
+    - Slide show
+  - Use AWS S3 to allow users to store images with their timelines
+  - Sharing and collaboration
+  - Register with Google, GitHub etc
 
 ---
 ## CI/CD
