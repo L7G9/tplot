@@ -1,0 +1,13 @@
+{% extends "timelines/event_area_edit_form.html"  %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+<li class="breadcrumb-item"><a href="{% url 'scientific_timelines:timeline-detail' view.kwargs.scientific_timeline_id %}">Scientific Timeline</a></li>
+<li class="breadcrumb-item active">Edit Event Area</li>
+{% endblock %}
+
+{% block side_menu_timeline_options %}
+<div class="sb-sidenav-menu-heading">Options</div>
+<li class="nav-item"><a class="nav-link" href="{% url 'scientific_timelines:event-area-delete' view.kwargs.scientific_timeline_id view.kwargs.pk %}">Delete</a></li>
+{% endblock %}

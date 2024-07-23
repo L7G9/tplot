@@ -1,0 +1,26 @@
+{% extends "timelines/timeline.html" %}
+
+{% block title %}Scientific Timeline View{% endblock title%}
+
+{% block heading %}Scientific Timeline View{% endblock heading %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'scientific_timelines:timeline-detail' view.kwargs.pk %}">Scientific Timeline</a></li>
+	<li class="breadcrumb-item active">Timeline View</li>
+{% endblock breadcrumbs %}
+
+{% block events %}
+
+{% for scientific_event in object.scientificevent_set.all %}
+	<div class="container {% if forloop.counter|divisibleby:2 %}right{% else %}left{% endif %}">
+		<div class="content">
+			<h3>{{ scientific_event.time_unit_description }}</h3>
+			<h4>{{ scientific_event.title }}</h4>
+			<p>{{ scientific_event.description }}</p>
+		</div>
+	</div>
+{% endfor %}
+
+{% endblock events%}

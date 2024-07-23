@@ -1,0 +1,13 @@
+{% extends 'timelines/form_base.html' %}
+
+{% block title %}New Scientific Timeline{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+<li class="breadcrumb-item active">Add Scientific Timeline</li>
+{% endblock %}
+
+{% block heading %}New Scientific Timeline{% endblock %}
+
+{% block button_name %}Add{% endblock %}
