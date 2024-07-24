@@ -1,3 +1,9 @@
+## 0.11.0 (2024-07-24)
+
+### Feat
+
+- first version of scientific timelines added
+
 ## 0.10.0 (2024-07-18)
 
 ### Feat
