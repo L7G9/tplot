@@ -1,3 +1,9 @@
+## 0.12.0 (2024-07-25)
+
+### Feat
+
+- historical timelines first version
+
 ## 0.11.0 (2024-07-24)
 
 ### Feat
