@@ -1,0 +1,28 @@
+{% extends 'timelines/form_base.html' %}
+
+{% load static %}
+
+{% block title %}Edit Historical Event{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+<li class="breadcrumb-item"><a href="{% url 'historical_timelines:timeline-detail' view.kwargs.historical_timeline_id %}">Historical Timeline</a></li>
+<li class="breadcrumb-item active">Edit Event</li>
+{% endblock %}
+
+{% block side_menu_timeline_options %}
+<div class="sb-sidenav-menu-heading">Options</div>
+<li class="nav-item"><a class="nav-link" href="{% url 'historical_timelines:event-delete' view.kwargs.historical_timeline_id view.kwargs.pk %}">Delete</a></li>
+{% endblock %}
+
+{% block heading %}Edit Historical Event{% endblock %}
+
+{% block button_name %}Update{% endblock %}
+
+{% block scripts %}
+
+{% load static %}
+<script src="{% static 'js/historical/toggle_end_unit.js' %}"></script>
+
+{% endblock scripts %}

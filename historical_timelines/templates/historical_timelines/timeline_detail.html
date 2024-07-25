@@ -1,0 +1,48 @@
+{% extends "timelines/timeline_detail.html" %}
+
+{% block title %}Historical Timeline Detail{% endblock %}
+
+{% block heading %}Historical Timeline{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+    <li class="breadcrumb-item active">Historical Timeline</li>
+{% endblock %}
+
+{% block side_menu_timeline_options %}
+    <div class="sb-sidenav-menu-heading">Options</div>
+    <li class="nav-item"><a class="nav-link" href="{% url 'historical_timelines:timeline-update' view.kwargs.pk %}">Timeline Settings</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'historical_timelines:event-add' view.kwargs.pk %}">New Event</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'historical_timelines:event-area-add' view.kwargs.pk %}">New Event Area</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'historical_timelines:tag-add' view.kwargs.pk %}">New Tag</a></li>
+    <div class="sb-sidenav-menu-heading">View</div>
+    <li class="nav-item"><a class="nav-link" href="{% url 'historical_timelines:timeline' view.kwargs.pk %}">Timeline</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'historical_timelines:timeline-pdf' view.kwargs.pk %}">PDF</a></li>
+{% endblock %}
+
+{% block event_table_head_unit %}Year{% endblock %}
+
+{% block event_table_foot_unit %}Year{% endblock %}
+
+{% block events %}
+{% for historical_event in object.historicalevent_set.all %}
+    <tr>
+        <td><a class="list-group-item list-group-item-action" href="{% url 'historical_timelines:event-update' view.kwargs.pk historical_event.id %}">{{ historical_event.time_unit_description }}</a></td>
+        <td><a class="list-group-item list-group-item-action" href="{% url 'historical_timelines:event-update' view.kwargs.pk historical_event.id %}">{{ historical_event.title }}</a></td>
+        <td><a class="list-group-item list-group-item-action" href="{% url 'historical_timelines:event-update' view.kwargs.pk historical_event.id %}">{{ historical_event.event_ptr.event_area }}</a></td>
+    </tr>
+{% endfor %}
+{% endblock %}
+
+{% block tag_list %}
+{% for tag in object.tag_set.all %}
+    <a class="list-group-item list-group-item-action" href="{% url 'historical_timelines:tag-update' view.kwargs.pk tag.id %}">{{ tag }}</a>
+{% endfor %}
+{% endblock %}
+
+{% block area_list %}
+{% for area in object.eventarea_set.all %}
+    <a class="list-group-item list-group-item-action" href="{% url 'historical_timelines:event-area-update' view.kwargs.pk area.id %}">{{ area }}</a>
+{% endfor %}
+{% endblock %}

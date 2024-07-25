@@ -19,6 +19,7 @@
     <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
         <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:age-timeline-add' %}">Age Timeline</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'date_time_timelines:date-time-timeline-add' %}">Date &amp Time Timeline</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'historical_timelines:timeline-add' %}">Historical Timeline</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'scientific_timelines:timeline-add' %}">Scientific Timeline</a></li>
     </nav>
 </div>
@@ -57,6 +58,9 @@
         </div>
         <div class="card-body">
             <div class="list-group">
+                {% for historical_timeline in historical_timeline_list %}
+                    <a class="list-group-item list-group-item-action" href="{% url 'historical_timelines:timeline-detail' historical_timeline.id %}">{{ historical_timeline.title }}</a>
+                {% endfor %}
             </div>
         </div>
     </div>

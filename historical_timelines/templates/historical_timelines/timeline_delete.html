@@ -1,0 +1,14 @@
+{% extends "timelines/confirm_delete.html" %}
+
+{% block title %}Delete Historical Timeline{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+<li class="breadcrumb-item"><a href="{% url 'historical_timelines:timeline-detail' view.kwargs.pk %}">Historical Timeline</a></li>
+<li class="breadcrumb-item active">Delete</li>
+{% endblock %}
+
+{% block heading %}Historical Timeline{% endblock %}
+
+{% block description %}{{ object }}{% endblock %}

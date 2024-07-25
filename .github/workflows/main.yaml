@@ -65,7 +65,7 @@ jobs:
       run: flake8 .
 
     - name: Bandit
-      run: bandit -c pyproject.toml -r accounts/ age_timelines/ date_time_timelines/ scientific_timelines/ timelines/ tplot_site/ user_guide/ -f html -o reports/bandit.html
+      run: bandit -c pyproject.toml -r accounts/ age_timelines/ date_time_timelines/ historical_timelines/ scientific_timelines/ timelines/ tplot_site/ user_guide/ -f html -o reports/bandit.html
 
     - name: Create bandit report artifact
       uses: actions/upload-artifact@v3
