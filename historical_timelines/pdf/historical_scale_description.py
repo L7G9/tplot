@@ -20,7 +20,7 @@ class HistoricalScaleDescription(ScaleDescription):
             self.end.round(self.timeline.scale_unit, Round.UP)
         else:
             self.start = HistoricalYear(-10)
-            self.end = HistoricalYear(10)
+            self.end = HistoricalYear(-10)
 
         self.scale_units: int = self.__scale_units()
         self.scale_length: int = self.__scale_length()
@@ -66,7 +66,7 @@ class HistoricalScaleDescription(ScaleDescription):
     def get_scale_label(self, scale_index: int) -> str:
         """Get label to got on timeline string."""
         label = HistoricalYear(self.start.year)
-        label.year += (scale_index * self.scale_unit)
+        label.year += scale_index * self.scale_unit
         return str(label)
 
     def plot(self, time_unit) -> float:

@@ -24,9 +24,7 @@ TIMELINE_FIELD_ORDER = [
 ]
 
 
-class TimelineDetailView(
-    LoginRequiredMixin, OwnerRequiredMixin, DetailView
-):
+class TimelineDetailView(LoginRequiredMixin, OwnerRequiredMixin, DetailView):
     model = HistoricalTimeline
     template_name = "historical_timelines/timeline_detail.html"
 
@@ -41,17 +39,13 @@ class TimelineCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class TimelineUpdateView(
-    LoginRequiredMixin, OwnerRequiredMixin, UpdateView
-):
+class TimelineUpdateView(LoginRequiredMixin, OwnerRequiredMixin, UpdateView):
     model = HistoricalTimeline
     fields = TIMELINE_FIELD_ORDER
     template_name = "historical_timelines/timeline_edit.html"
 
 
-class TimelineDeleteView(
-    LoginRequiredMixin, OwnerRequiredMixin, DeleteView
-):
+class TimelineDeleteView(LoginRequiredMixin, OwnerRequiredMixin, DeleteView):
     model = HistoricalTimeline
     template_name = "historical_timelines/timeline_delete.html"
     success_url = reverse_lazy("timelines:user-timelines")
@@ -60,6 +54,7 @@ class TimelineDeleteView(
 class TimelineOwnerMixim(object):
     """Check historical timeline found with historical_timeline_id is owned by
     logged in user."""
+
     def dispatch(self, request, *args, **kwargs):
         historical_timeline = HistoricalTimeline.objects.get(
             pk=self.kwargs["historical_timeline_id"]
@@ -71,6 +66,7 @@ class TimelineOwnerMixim(object):
 
 class SuccessMixim(object):
     """Return historical timeline detail."""
+
     def get_success_url(self) -> str:
         return reverse_lazy(
             "historical_timelines:timeline-detail",
@@ -110,12 +106,8 @@ class EventValidateMixim(object):
             end_total = end_bc_ad * end_year
 
             if end_total <= start_total:
-                form.add_error(
-                    "end_bc_ad", "End must be after than start"
-                )
-                form.add_error(
-                    "end_year", "End must be after than start"
-                )
+                form.add_error("end_bc_ad", "End must be after than start")
+                form.add_error("end_year", "End must be after than start")
 
         if form.errors:
             return self.form_invalid(form)
@@ -125,8 +117,8 @@ class EventValidateMixim(object):
 
 def get_timeline_from_historical_timeline(view):
     historical_timeline = HistoricalTimeline.objects.get(
-            pk=view.kwargs["historical_timeline_id"]
-        )
+        pk=view.kwargs["historical_timeline_id"]
+    )
     return historical_timeline.timeline_ptr.pk
 
 
@@ -144,11 +136,11 @@ class EventCreateView(
     def get_form_class(self):
         modelform = super().get_form_class()
         timeline_id = get_timeline_from_historical_timeline(self)
-        modelform.base_fields['tags'].limit_choices_to = {
-            'timeline': timeline_id
+        modelform.base_fields["tags"].limit_choices_to = {
+            "timeline": timeline_id
         }
-        modelform.base_fields['event_area'].limit_choices_to = {
-            'timeline': timeline_id
+        modelform.base_fields["event_area"].limit_choices_to = {
+            "timeline": timeline_id
         }
         return modelform
 
@@ -168,11 +160,11 @@ class EventUpdateView(
     def get_form_class(self):
         modelform = super().get_form_class()
         timeline_id = get_timeline_from_historical_timeline(self)
-        modelform.base_fields['tags'].limit_choices_to = {
-            'timeline': timeline_id
+        modelform.base_fields["tags"].limit_choices_to = {
+            "timeline": timeline_id
         }
-        modelform.base_fields['event_area'].limit_choices_to = {
-            'timeline': timeline_id
+        modelform.base_fields["event_area"].limit_choices_to = {
+            "timeline": timeline_id
         }
         return modelform
 
@@ -295,9 +287,7 @@ class EventAreaDeleteView(
     template_name = "historical_timelines/event_area_delete.html"
 
 
-class TimelineView(
-    LoginRequiredMixin, OwnerRequiredMixin, DetailView
-):
+class TimelineView(LoginRequiredMixin, OwnerRequiredMixin, DetailView):
     model = HistoricalTimeline
     template_name = "historical_timelines/timeline.html"
 
@@ -310,7 +300,5 @@ def pdf_view(request, historical_timeline_id):
     timeline_pdf = PDFHistoricalTimeline(historical_timeline)
 
     return FileResponse(
-        timeline_pdf.buffer,
-        as_attachment=True,
-        filename="timeline.pdf"
+        timeline_pdf.buffer, as_attachment=True, filename="timeline.pdf"
     )

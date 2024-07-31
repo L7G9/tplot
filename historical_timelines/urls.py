@@ -12,11 +12,7 @@ urlpatterns = [
         name="timeline-detail",
     ),
     # ex: add/
-    path(
-        "add/",
-        views.TimelineCreateView.as_view(),
-        name="timeline-add"
-    ),
+    path("add/", views.TimelineCreateView.as_view(), name="timeline-add"),
     # ex: 1/update/
     path(
         "<int:pk>/update/",
@@ -79,7 +75,7 @@ urlpatterns = [
     ),
     # ex: 1/event_area/1/delete/
     path(
-        "<int:scientific_timeline_id>/event_area/<int:pk>/delete/",
+        "<int:historical_timeline_id>/event_area/<int:pk>/delete/",
         views.EventAreaDeleteView.as_view(),
         name="event-area-delete",
     ),
@@ -94,5 +90,5 @@ urlpatterns = [
         "<int:historical_timeline_id>/pdf/",
         views.pdf_view,
         name="timeline-pdf",
-    )
+    ),
 ]

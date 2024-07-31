@@ -4,6 +4,7 @@ from timelines.pdf.round import Round
 
 class HistoricalYear(TimeUnit):
     """Class representing an age time unit in years and months."""
+
     def __init__(self, year: int):
         self.year = year
 

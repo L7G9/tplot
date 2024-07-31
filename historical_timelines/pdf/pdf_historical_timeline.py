@@ -67,9 +67,7 @@ class PDFHistoricalTimeline(PDFTimeline):
         return size
 
     def _plot_event(
-        self,
-        event: HistoricalEvent,
-        pdf_event: PDFEvent
+        self, event: HistoricalEvent, pdf_event: PDFEvent
     ) -> float:
         """Get distance (x or y depending on Timeline orientation) from start
         of Scale that an PDFEvent should be positioned."""

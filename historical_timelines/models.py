@@ -19,9 +19,7 @@ class HistoricalTimeline(timelines.Timeline):
         (500, "500 Years"),
         (1000, "1000 Years"),
     ]
-    scale_unit = models.IntegerField(
-        choices=SCALE_UNITS, default=10
-    )
+    scale_unit = models.IntegerField(choices=SCALE_UNITS, default=10)
 
     class Meta:
         ordering = ["title"]
@@ -37,8 +35,7 @@ class HistoricalTimeline(timelines.Timeline):
 
 class HistoricalEvent(timelines.Event):
     historical_timeline = models.ForeignKey(
-        HistoricalTimeline,
-        on_delete=models.CASCADE
+        HistoricalTimeline, on_delete=models.CASCADE
     )
 
     BC_AD = [
