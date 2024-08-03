@@ -4,6 +4,7 @@ from timelines.pdf.round import Round
 
 class ScientificYear(TimeUnit):
     """Class representing an age time unit in years and months."""
+
     def __init__(self, fraction: float, multiplier: int):
         self.fraction = fraction
         self.multiplier = multiplier
@@ -25,18 +26,18 @@ class ScientificYear(TimeUnit):
     def direction_string(self) -> str:
         """String describing if the event is in the past or future."""
         if self.fraction < 0:
-            return "ago"
+            return " ago"
         elif self.fraction > 0:
-            return "from now"
+            return " from now"
         else:
             return ""
 
     def __str__(self) -> str:
         return (
-                    f"{self.fraction_string()} "
-                    f"{self.multiplier_string()} years "
-                    f"{self.direction_string()}"
-                )
+            f"{self.fraction_string()} "
+            f"{self.multiplier_string()} years"
+            f"{self.direction_string()}"
+        )
 
     def start_end_string(self, end: "ScientificYear") -> str:
         same_multiplier = self.multiplier == end.multiplier

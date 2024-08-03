@@ -31,33 +31,30 @@ class ScientificScaleDescription(ScaleDescription):
 
     def __scale_unit_as_scientific_year(self, scale_unit) -> ScientificYear:
         if scale_unit <= 1000:
-            return ScientificYear(scale_unit/1000, 1000)
+            return ScientificYear(scale_unit / 1000, 1000)
         elif scale_unit <= 1000000:
-            return ScientificYear(scale_unit/1000000, 1000000)
+            return ScientificYear(scale_unit / 1000000, 1000000)
         else:
-            return ScientificYear(scale_unit/1000000000, 1000000000)
+            return ScientificYear(scale_unit / 1000000000, 1000000000)
 
     def __oldest_scientific_year(self) -> ScientificYear:
         """Finds the youngest scientific year in scientific_timeline."""
         first_event = self.timeline.scientificevent_set.first()
         return ScientificYear(
-            first_event.start_year_fraction,
-            first_event.start_multiplier
+            first_event.start_year_fraction, first_event.start_multiplier
         )
 
     def __newest_scientific_year(self) -> ScientificYear:
         """Finds the oldest scientific year in scientific_timeline."""
         last_event: ScientificEvent = self.timeline.scientificevent_set.last()
         oldest = ScientificYear(
-            last_event.start_year_fraction,
-            last_event.start_multiplier
+            last_event.start_year_fraction, last_event.start_multiplier
         )
 
         for event in self.timeline.scientificevent_set.all():
             if event.has_end:
                 scientific_year = ScientificYear(
-                    event.end_year_fraction,
-                    event.end_multiplier
+                    event.end_year_fraction, event.end_multiplier
                 )
                 if scientific_year > oldest:
                     oldest = scientific_year
@@ -87,13 +84,13 @@ class ScientificScaleDescription(ScaleDescription):
     def get_scale_label(self, scale_index: int) -> str:
         """Get label to got on timeline string."""
         label = ScientificYear(self.start.fraction, self.start.multiplier)
-        label.fraction += (scale_index * self.scale_unit.fraction)
+        label.fraction += scale_index * self.scale_unit.fraction
         return str(label)
 
     def plot(self, time_unit) -> float:
         """Calculate in mm where the scientific year should be relative to
         start of timeline scale."""
-        years_from_start: float = (time_unit.years() - self.start.years())
+        years_from_start: float = time_unit.years() - self.start.years()
         scale_units_from_start: float = (
             years_from_start / self.scale_unit.years()
         )

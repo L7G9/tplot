@@ -18,9 +18,7 @@ class ScientificTimeline(timelines.Timeline):
         (500000000, "0.5 Billion Years"),
         (1000000000, "1.0 Billion Years"),
     ]
-    scale_unit = models.IntegerField(
-        choices=SCALE_UNITS, default=10
-    )
+    scale_unit = models.IntegerField(choices=SCALE_UNITS, default=1000)
 
     class Meta:
         ordering = ["title"]
@@ -30,15 +28,13 @@ class ScientificTimeline(timelines.Timeline):
 
     def get_absolute_url(self):
         return reverse(
-            "scientific_timelines:timeline-detail",
-            kwargs={"pk": self.pk}
+            "scientific_timelines:timeline-detail", kwargs={"pk": self.pk}
         )
 
 
 class ScientificEvent(timelines.Event):
     scientific_timeline = models.ForeignKey(
-        ScientificTimeline,
-        on_delete=models.CASCADE
+        ScientificTimeline, on_delete=models.CASCADE
     )
 
     MULTIPLIERS = [
@@ -47,13 +43,9 @@ class ScientificEvent(timelines.Event):
         (1000000000, "Billion years"),
     ]
     start_year_fraction = models.FloatField(default=1.0)
-    start_multiplier = models.IntegerField(
-        choices=MULTIPLIERS, default=1000
-    )
+    start_multiplier = models.IntegerField(choices=MULTIPLIERS, default=1000)
     end_year_fraction = models.FloatField(default=1.0)
-    end_multiplier = models.IntegerField(
-        choices=MULTIPLIERS, default=1000
-    )
+    end_multiplier = models.IntegerField(choices=MULTIPLIERS, default=1000)
 
     class Meta:
         ordering = ["start_multiplier", "start_year_fraction"]

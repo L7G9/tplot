@@ -12,11 +12,7 @@ urlpatterns = [
         name="timeline-detail",
     ),
     # ex: add/
-    path(
-        "add/",
-        views.TimelineCreateView.as_view(),
-        name="timeline-add"
-    ),
+    path("add/", views.TimelineCreateView.as_view(), name="timeline-add"),
     # ex: 1/update/
     path(
         "<int:pk>/update/",
@@ -94,5 +90,5 @@ urlpatterns = [
         "<int:scientific_timeline_id>/pdf/",
         views.pdf_view,
         name="timeline-pdf",
-    )
+    ),
 ]

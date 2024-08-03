@@ -68,8 +68,7 @@ class PDFScientificTimeline(PDFTimeline):
         an ScientificEvent with a start and end should be on the PDF timeline.
         """
         start = ScientificYear(
-            event.start_year_fraction,
-            event.start_multiplier
+            event.start_year_fraction, event.start_multiplier
         )
         end = ScientificYear(
             event.end_year_fraction,
@@ -82,14 +81,11 @@ class PDFScientificTimeline(PDFTimeline):
         return size
 
     def _plot_event(
-            self,
-            event: ScientificEvent,
-            pdf_event: PDFEvent
+        self, event: ScientificEvent, pdf_event: PDFEvent
     ) -> float:
         """Get distance (x or y depending on Timeline orientation) from start
         of Scale that an PDFEvent should be positioned."""
         start = ScientificYear(
-            event.start_year_fraction,
-            event.start_multiplier
+            event.start_year_fraction, event.start_multiplier
         )
         return self.scale.plot(start, pdf_event)

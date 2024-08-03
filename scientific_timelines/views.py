@@ -24,9 +24,7 @@ TIMELINE_FIELD_ORDER = [
 ]
 
 
-class TimelineDetailView(
-    LoginRequiredMixin, OwnerRequiredMixin, DetailView
-):
+class TimelineDetailView(LoginRequiredMixin, OwnerRequiredMixin, DetailView):
     model = ScientificTimeline
     template_name = "scientific_timelines/timeline_detail.html"
 
@@ -41,17 +39,13 @@ class TimelineCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class TimelineUpdateView(
-    LoginRequiredMixin, OwnerRequiredMixin, UpdateView
-):
+class TimelineUpdateView(LoginRequiredMixin, OwnerRequiredMixin, UpdateView):
     model = ScientificTimeline
     fields = TIMELINE_FIELD_ORDER
     template_name = "scientific_timelines/timeline_edit.html"
 
 
-class TimelineDeleteView(
-    LoginRequiredMixin, OwnerRequiredMixin, DeleteView
-):
+class TimelineDeleteView(LoginRequiredMixin, OwnerRequiredMixin, DeleteView):
     model = ScientificTimeline
     template_name = "scientific_timelines/timeline_delete.html"
     success_url = reverse_lazy("timelines:user-timelines")
@@ -60,6 +54,7 @@ class TimelineDeleteView(
 class TimelineOwnerMixim(object):
     """Check scientific timeline found with scientific_timeline_id is owned
     by logged in user."""
+
     def dispatch(self, request, *args, **kwargs):
         scientific_timeline = ScientificTimeline.objects.get(
             pk=self.kwargs["scientific_timeline_id"]
@@ -125,8 +120,8 @@ class EventValidateMixim(object):
 
 def get_timeline_from_scientific_timeline(view):
     scientific_timeline = ScientificTimeline.objects.get(
-            pk=view.kwargs["scientific_timeline_id"]
-        )
+        pk=view.kwargs["scientific_timeline_id"]
+    )
     return scientific_timeline.timeline_ptr.pk
 
 
@@ -144,11 +139,11 @@ class EventCreateView(
     def get_form_class(self):
         modelform = super().get_form_class()
         timeline_id = get_timeline_from_scientific_timeline(self)
-        modelform.base_fields['tags'].limit_choices_to = {
-            'timeline': timeline_id
+        modelform.base_fields["tags"].limit_choices_to = {
+            "timeline": timeline_id
         }
-        modelform.base_fields['event_area'].limit_choices_to = {
-            'timeline': timeline_id
+        modelform.base_fields["event_area"].limit_choices_to = {
+            "timeline": timeline_id
         }
         return modelform
 
@@ -168,11 +163,11 @@ class EventUpdateView(
     def get_form_class(self):
         modelform = super().get_form_class()
         timeline_id = get_timeline_from_scientific_timeline(self)
-        modelform.base_fields['tags'].limit_choices_to = {
-            'timeline': timeline_id
+        modelform.base_fields["tags"].limit_choices_to = {
+            "timeline": timeline_id
         }
-        modelform.base_fields['event_area'].limit_choices_to = {
-            'timeline': timeline_id
+        modelform.base_fields["event_area"].limit_choices_to = {
+            "timeline": timeline_id
         }
         return modelform
 
@@ -295,9 +290,7 @@ class EventAreaDeleteView(
     template_name = "scientific_timelines/event_area_delete.html"
 
 
-class TimelineView(
-    LoginRequiredMixin, OwnerRequiredMixin, DetailView
-):
+class TimelineView(LoginRequiredMixin, OwnerRequiredMixin, DetailView):
     model = ScientificTimeline
     template_name = "scientific_timelines/timeline.html"
 
@@ -310,7 +303,5 @@ def pdf_view(request, scientific_timeline_id):
     timeline_pdf = PDFScientificTimeline(scientific_timeline)
 
     return FileResponse(
-        timeline_pdf.buffer,
-        as_attachment=True,
-        filename="timeline.pdf"
+        timeline_pdf.buffer, as_attachment=True, filename="timeline.pdf"
     )
