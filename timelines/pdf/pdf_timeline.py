@@ -17,11 +17,15 @@ from timelines.models import Event, EventArea, Timeline
 from timelines.pdf.inside import Inside
 from timelines.pdf.pdf_event import PDFEvent
 from timelines.pdf.pdf_joining_lines import PDFJoiningLines
+from timelines.pdf.layout import DEFAULT_COMPONENT_BORDER
+from timelines.pdf.landscape_layout import LandscapeLayout
+from timelines.pdf.portrait_layout import PortraitLayout
 from timelines.pdf.pdf_scale import PDFScale
 from timelines.pdf.pdf_start_end_event import PDFStartEndEvent
-from timelines.pdf.pdf_timeline_layout import PDFTimelineLayout
+from timelines.pdf.pdf_tag_key import PDFTagKey
 from timelines.pdf.scale_description import ScaleDescription
 
+from .area import Area
 from .pdf_event_area import PDFEventArea
 
 
@@ -68,7 +72,11 @@ class PDFTimeline(ABC):
             timeline: An instance of a sub-class of Timeline.
         """
         self.timeline = timeline
-        self.layout = PDFTimelineLayout(timeline)
+
+        if timeline.page_orientation == "L":
+            self.layout = LandscapeLayout(timeline)
+        else:
+            self.layout = PortraitLayout(timeline)
 
         # create initial canvas
         self.buffer = io.BytesIO()
@@ -92,6 +100,21 @@ class PDFTimeline(ABC):
             self.scale_description, self.canvas, self.basic_text_style
         )
 
+        # init tag key
+        display_tags = timeline.tag_set.filter(display=True)
+        if len(display_tags) > 0:
+            self.tag_key = PDFTagKey(
+                display_tags,
+                self.canvas,
+                self.basic_text_style,
+                self.basic_text_style,
+                self.layout.drawable_area.width,
+                DEFAULT_COMPONENT_BORDER,
+                self.layout.tag_key_column_count(),
+            )
+        else:
+            self.tag_key = Area(0, 0, 0, 0)
+
         # init title & description
         self.title_paragraph = self.__create_paragraph(
             str(timeline.title), self.title_style
@@ -106,8 +129,11 @@ class PDFTimeline(ABC):
             self.description_paragraph.height,
             self.scale.width,
             self.scale.height,
+            self.tag_key.height,
         )
         self.scale.move(self.layout.scale_area.x, self.layout.scale_area.y)
+        self.tag_key.x = self.layout.tag_key_area.x
+        self.tag_key.y = self.layout.tag_key_area.y
 
         # add events to event areas
         overlap = self.__add_events()
@@ -194,8 +220,9 @@ class PDFTimeline(ABC):
                 self._get_event_start_to_end_time(event),
                 str(event.title),
                 str(event.description),
-                str(self.timeline.page_orientation),
+                event.event_ptr.tag_string(True),
                 self.canvas,
+                self.basic_text_style,
                 self.basic_text_style,
                 self.basic_text_style,
                 self.basic_text_style,
@@ -209,8 +236,10 @@ class PDFTimeline(ABC):
                 self._get_event_start_time(event),
                 str(event.title),
                 str(event.description),
+                event.event_ptr.tag_string(True),
                 str(self.timeline.page_orientation),
                 self.canvas,
+                self.basic_text_style,
                 self.basic_text_style,
                 self.basic_text_style,
                 self.basic_text_style,
@@ -328,6 +357,9 @@ class PDFTimeline(ABC):
                 pdf_event.draw()
 
             self.canvas.restoreState()
+
+        if isinstance(self.tag_key, PDFTagKey):
+            self.tag_key.draw()
 
     def __create_title_style(self) -> ParagraphStyle:
         """Create a paragraph style for the timeline's title."""

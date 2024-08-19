@@ -33,6 +33,7 @@ class PDFEvent(Area):
         title_paragraph: A Paragraph displaying the title of the Event.
         description_paragraph: A Paragraph displaying the description of the
         Event.
+        tags_paragraph: A Paragraph displaying the tags linked to the Event.
         border_size: A float storing the gap between the Paragraphs and their
         bounding box.
         canvas: A Canvas to draw the Event on.
@@ -43,11 +44,13 @@ class PDFEvent(Area):
         time: str,
         title: str,
         description: str,
+        tags: str,
         orientation: str,
         canvas: Canvas,
         time_style: ParagraphStyle,
         title_style: ParagraphStyle,
         description_style: ParagraphStyle,
+        tags_style: ParagraphStyle,
         border_size: float,
         max_width: float = 0,
         max_height: float = 0,
@@ -62,12 +65,14 @@ class PDFEvent(Area):
             time: A String describing when the event occurred.
             title: A String holding the event's title.
             description: A String describing the event in detail.
+            tags: A String describing all the tags linked to this event.
             orientation: A String holding if the event is to be drawn is from
             a landscape or portrait timeline.
             canvas: A Canvas to draw the PDFEvent on.
             time_style: A ParagraphStyle for the time.
             title_paragraph: A ParagraphStyle for the title.
             description_style: A ParagraphStyle for the description.
+            tags_style: A ParagraphStyle for the tags.
             border_size: A float storing the gap between the Paragraphs and
             their bounding box.
             max_width: A float storing the maximum width the PDFEvent can be
@@ -92,6 +97,8 @@ class PDFEvent(Area):
         self.description_paragraph: Paragraph = Paragraph(
             description, description_style
         )
+        self.tags_paragraph: Paragraph = Paragraph(tags, tags_style)
+
         self.border_size = border_size
         self.canvas = canvas
 
@@ -107,6 +114,9 @@ class PDFEvent(Area):
         description_width = stringWidth(
             description, description_style.fontName, description_style.fontSize
         )
+        tags_width = stringWidth(
+            tags, tags_style.fontName, tags_style.fontSize
+        )
 
         self.min_width = 0.0
         self.sized_to_ratio = False
@@ -121,6 +131,7 @@ class PDFEvent(Area):
                 time_width,
                 title_width,
                 description_width,
+                tags_width,
                 WIDTH_HEIGHT_RATIO,
                 max_height,
             )
@@ -129,6 +140,7 @@ class PDFEvent(Area):
                 time_width,
                 title_width,
                 description_width,
+                tags_width,
                 WIDTH_HEIGHT_RATIO,
                 max_width,
             )
@@ -147,8 +159,14 @@ class PDFEvent(Area):
             description_width,
             description_height,
         ) = self.description_paragraph.wrap(width, 0)
-        max_width = max(max(time_width, title_width), description_width)
-        total_height = time_height + title_height + description_height
+        tags_width, tags_height = self.tags_paragraph.wrap(width, 0)
+
+        max_width = max(
+            max(time_width, title_width), max(description_width, tags_width)
+        )
+        total_height = (
+            time_height + title_height + description_height + tags_height
+        )
 
         return max_width, total_height
 
@@ -157,13 +175,16 @@ class PDFEvent(Area):
         time_width: float,
         title_width: float,
         description_width: float,
+        tags_width: float,
         target_ratio: float,
         max_height: float,
     ):
         """Calculates the best width and height for a landscape PDFEvent given
         the constraints of a target ratio for width/height and the maximum
         height available to draw it in."""
-        init_width = max(max(time_width, title_width), description_width)
+        init_width = max(
+            max(time_width, title_width), max(description_width, tags_width)
+        )
         min_width = time_width
 
         width, height = self._get_dimensions(init_width)
@@ -192,13 +213,16 @@ class PDFEvent(Area):
         time_width: float,
         title_width: float,
         description_width: float,
+        tags_width: float,
         target_ratio: float,
         max_width: float,
     ):
         """Calculates the best width and height for a portrait PDFEvent given
         the constraints of a target ratio for width/height and the maximum
         width available to draw it in."""
-        largest_width = max(max(time_width, title_width), description_width)
+        largest_width = max(
+            max(time_width, title_width), max(description_width, tags_width)
+        )
         internal_max_width = max_width - (2 * self.border_size)
         init_width = min(largest_width, internal_max_width)
         min_width = min(time_width, internal_max_width)
@@ -255,6 +279,16 @@ class PDFEvent(Area):
             - self.time_paragraph.height
             - self.title_paragraph.height
             - self.description_paragraph.height,
+        )
+        self.tags_paragraph.drawOn(
+            self.canvas,
+            self.x + self.border_size,
+            self.y
+            + self.height
+            - self.time_paragraph.height
+            - self.title_paragraph.height
+            - self.description_paragraph.height
+            - self.tags_paragraph.height,
         )
 
 

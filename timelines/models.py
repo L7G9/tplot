@@ -69,6 +69,8 @@ class EventArea(models.Model):
 class Tag(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
     name = models.CharField(max_length=25)
+    description = models.CharField(max_length=1000, blank=True)
+    display = models.BooleanField(default=True)
 
     class Meta:
         ordering = ["name"]
@@ -98,3 +100,20 @@ class Event(models.Model):
 
     def get_owner(self):
         return self.timeline.user
+
+    def tag_string(self, display_only):
+        if display_only:
+            tags = self.tags.filter(display=True)
+        else:
+            tags = self.tags.all()
+
+        if tags.count() > 0:
+            tag_string = "Tags("
+            for tag in tags:
+                if tag == tags.last():
+                    tag_string += f"{tag.name})"
+                else:
+                    tag_string += f"{tag.name}, "
+            return tag_string
+        else:
+            return ""

@@ -198,7 +198,7 @@ class TagCreateView(
     CreateView,
 ):
     model = Tag
-    fields = ["name"]
+    fields = ["name", "description", "display"]
     template_name = "historical_timelines/tag_add.html"
 
 
@@ -211,7 +211,7 @@ class TagUpdateView(
     UpdateView,
 ):
     model = Tag
-    fields = ["name"]
+    fields = ["name", "description", "display"]
     template_name = "historical_timelines/tag_edit.html"
 
 

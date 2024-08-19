@@ -25,6 +25,7 @@ VERY_LARGE_STRING = (
     "large amount of text - large amount of text -"
     "large amount of text - large amount of text"
 )
+TAG_STRING = ("Tags=(Tag Name 0, Tag Name 1, Tag Name 2)")
 
 
 class PDFEventTest(TestCase):
@@ -56,8 +57,10 @@ class PDFEventTest(TestCase):
             "12 Years 5 Months",
             "small",
             "",
+            "",
             "L",
             canvas,
+            paragraph_style,
             paragraph_style,
             paragraph_style,
             paragraph_style,
@@ -78,8 +81,10 @@ class PDFEventTest(TestCase):
             "12 Years 5 Months",
             LARGE_STRING,
             LARGE_STRING,
+            "Tags(Tag Name 0, Tag Name 1, Tag Name 2)",
             "L",
             canvas,
+            paragraph_style,
             paragraph_style,
             paragraph_style,
             paragraph_style,
@@ -100,8 +105,10 @@ class PDFEventTest(TestCase):
             "12 Years 5 Months",
             LARGE_STRING,
             LARGE_STRING,
+            "Tags(Tag Name 0, Tag Name 1, Tag Name 2)",
             "L",
             canvas,
+            paragraph_style,
             paragraph_style,
             paragraph_style,
             paragraph_style,
@@ -122,8 +129,10 @@ class PDFEventTest(TestCase):
             "12 Years 5 Months",
             "small",
             "",
+            "",
             "P",
             canvas,
+            paragraph_style,
             paragraph_style,
             paragraph_style,
             paragraph_style,
@@ -144,8 +153,10 @@ class PDFEventTest(TestCase):
             "12 Years 5 Months",
             LARGE_STRING,
             LARGE_STRING,
+            "Tags(Tag Name 0, Tag Name 1, Tag Name 2)",
             "P",
             canvas,
+            paragraph_style,
             paragraph_style,
             paragraph_style,
             paragraph_style,
@@ -166,8 +177,10 @@ class PDFEventTest(TestCase):
             "12 Years 5 Months",
             LARGE_STRING,
             VERY_LARGE_STRING,
+            "Tags(Tag Name 0, Tag Name 1, Tag Name 2)",
             "P",
             canvas,
+            paragraph_style,
             paragraph_style,
             paragraph_style,
             paragraph_style,

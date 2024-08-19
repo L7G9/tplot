@@ -220,7 +220,7 @@ class TagCreateView(
     CreateView,
 ):
     model = Tag
-    fields = ["name"]
+    fields = ["name", "description", "display"]
     template_name = "date_time_timelines/tag_add_form.html"
 
 
@@ -233,7 +233,7 @@ class TagUpdateView(
     UpdateView,
 ):
     model = Tag
-    fields = ["name"]
+    fields = ["name", "description", "display"]
     template_name = "date_time_timelines/tag_edit_form.html"
 
 

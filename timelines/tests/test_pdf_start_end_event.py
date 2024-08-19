@@ -40,8 +40,10 @@ class PDFStartEndEventTest(TestCase):
             "12 Years 5 Months",
             "event title",
             "event description",
+            "Tags(Tag Name 0, Tag Name 1, Tag Name 2)",
             "L",
             canvas,
+            paragraph_style,
             paragraph_style,
             paragraph_style,
             paragraph_style,
@@ -66,8 +68,10 @@ class PDFStartEndEventTest(TestCase):
                 "long event description long event description"
                 "long event description long event description"
             ),
+            "Tags(Tag Name 0, Tag Name 1, Tag Name 2)",
             "L",
             canvas,
+            paragraph_style,
             paragraph_style,
             paragraph_style,
             paragraph_style,
@@ -87,8 +91,10 @@ class PDFStartEndEventTest(TestCase):
             "12 Years 5 Months",
             "event title",
             "event description",
+            "Tags(Tag Name 0, Tag Name 1, Tag Name 2)",
             "P",
             canvas,
+            paragraph_style,
             paragraph_style,
             paragraph_style,
             paragraph_style,
@@ -115,8 +121,10 @@ class PDFStartEndEventTest(TestCase):
                 "long event description long event description"
                 "long event description long event description"
             ),
+            "Tags(Tag Name 0, Tag Name 1, Tag Name 2)",
             "P",
             canvas,
+            paragraph_style,
             paragraph_style,
             paragraph_style,
             paragraph_style,

@@ -35,11 +35,13 @@ class PDFStartEndEvent(PDFEvent):
         time: str,
         title: str,
         description: str,
+        tags: str,
         orientation: str,
         canvas: Canvas,
         time_style: ParagraphStyle,
         title_style: ParagraphStyle,
         description_style: ParagraphStyle,
+        tags_style: ParagraphStyle,
         border_size: float,
         fixed_size: float,
         max_width: float = 0,
@@ -84,6 +86,7 @@ class PDFStartEndEvent(PDFEvent):
         self.description_paragraph: Paragraph = Paragraph(
             description, description_style
         )
+        self.tags_paragraph: Paragraph = Paragraph(tags, tags_style)
         self.border_size = border_size
         self.canvas = canvas
 
@@ -99,6 +102,9 @@ class PDFStartEndEvent(PDFEvent):
         description_width = stringWidth(
             description, description_style.fontName, description_style.fontSize
         )
+        tags_width = stringWidth(
+            tags, tags_style.fontName, tags_style.fontSize
+        )
 
         if orientation == "L":
             _, self.height = self.__landscape_init(
@@ -108,7 +114,7 @@ class PDFStartEndEvent(PDFEvent):
         elif orientation == "P":
             max_width -= 2 * self.border_size
             largest_width = max(
-                max(time_width, title_width), description_width
+                time_width, title_width, description_width, tags_width
             )
             init_width = min(largest_width, max_width)
             min_width = min(time_width, max_width)
