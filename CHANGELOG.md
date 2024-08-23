@@ -1,3 +1,9 @@
+## 0.13.1 (2024-08-23)
+
+### Fix
+
+- **PDFTimeline**: missing orientation argument passed to PDFEvent in __create_pdf_event
+
 ## 0.13.0 (2024-08-23)
 
 ### Feat
