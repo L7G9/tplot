@@ -1,3 +1,9 @@
+## 0.13.0 (2024-08-23)
+
+### Feat
+
+- **Tag**: added description and display fields
+
 ## 0.12.0 (2024-07-25)
 
 ### Feat
