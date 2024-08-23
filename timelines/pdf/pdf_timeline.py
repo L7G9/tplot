@@ -221,7 +221,7 @@ class PDFTimeline(ABC):
                 str(event.title),
                 str(event.description),
                 event.event_ptr.tag_string(True),
-                str(self.timeline.page_orientation),str(self.timeline.page_orientation),
+                str(self.timeline.page_orientation),
                 self.canvas,
                 self.basic_text_style,
                 self.basic_text_style,
