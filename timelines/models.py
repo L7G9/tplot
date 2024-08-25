@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 from django.db import models
 
 
@@ -53,7 +54,9 @@ class EventArea(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
     name = models.CharField(max_length=25)
     page_position = models.PositiveSmallIntegerField(default=0)
-    weight = models.PositiveSmallIntegerField(default=1)
+    weight = models.PositiveSmallIntegerField(
+        default=1, validators=[MinValueValidator(1)],
+    )
 
     class Meta:
         ordering = ["name"]
