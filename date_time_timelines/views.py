@@ -16,6 +16,7 @@ from timelines.ai_assist.request_text import role_text
 from timelines.forms import AIRequestForm, AIResultsForm, NEW_CHOICE
 from timelines.mixins import OwnerRequiredMixin
 from timelines.models import EventArea, Tag
+from timelines.pdf.get_filename import get_filename
 from timelines.view_errors import event_area_position_error
 
 from .ai_assist.request_text import date_time_request_text
@@ -330,7 +331,7 @@ def pdf_view(request, date_time_timeline_id):
     return FileResponse(
         timeline_pdf.buffer,
         as_attachment=True,
-        filename="timeline.pdf"
+        filename=get_filename(timeline.title),
     )
 
 

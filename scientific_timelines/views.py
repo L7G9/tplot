@@ -8,6 +8,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from timelines.mixins import OwnerRequiredMixin
 from timelines.view_errors import event_area_position_error
 from timelines.models import Tag, EventArea
+from timelines.pdf.get_filename import get_filename
 
 from .models import ScientificEvent, ScientificTimeline
 from .pdf.pdf_scientific_timeline import PDFScientificTimeline
@@ -303,5 +304,7 @@ def pdf_view(request, scientific_timeline_id):
     timeline_pdf = PDFScientificTimeline(scientific_timeline)
 
     return FileResponse(
-        timeline_pdf.buffer, as_attachment=True, filename="timeline.pdf"
+        timeline_pdf.buffer,
+        as_attachment=True,
+        filename=get_filename(scientific_timeline.title),
     )

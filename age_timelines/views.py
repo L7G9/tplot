@@ -16,7 +16,9 @@ from timelines.ai_assist.event_choice import get_event_choices
 from timelines.forms import AIRequestForm, AIResultsForm, NEW_CHOICE
 from timelines.mixins import OwnerRequiredMixin
 from timelines.models import Tag, EventArea
+from timelines.pdf.get_filename import get_filename
 from timelines.view_errors import event_area_position_error
+
 
 from .ai_assist.request_text import age_request_text
 from .models import AgeEvent, AgeTimeline
@@ -323,7 +325,9 @@ def pdf_view(request, age_timeline_id):
     timeline_pdf = PDFAgeTimeline(age_timeline)
 
     return FileResponse(
-        timeline_pdf.buffer, as_attachment=True, filename="timeline.pdf"
+        timeline_pdf.buffer,
+        as_attachment=True,
+        filename=get_filename(age_timeline.title),
     )
 
 
