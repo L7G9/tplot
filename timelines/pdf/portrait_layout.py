@@ -67,13 +67,17 @@ class PortraitLayout(Layout):
         self.event_and_scale_area = self._event_and_scale_area()
 
         event_areas = self.timeline.eventarea_set.all()
-        total_weight = self._total_event_area_weight(event_areas)
-        width_per_weight = self._size_per_weight(
-            self.event_and_scale_area.width,
-            scale_width,
-            event_areas.count(),
-            total_weight,
-        )
+        if event_areas.count() > 0:
+            total_weight = self._total_event_area_weight(event_areas)
+            width_per_weight = self._size_per_weight(
+                self.event_and_scale_area.width,
+                scale_width,
+                event_areas.count(),
+                total_weight,
+            )
+        else:
+            width_per_weight = 0
+
         self._event_and_scale_layout(
             width_per_weight, scale_width, scale_height
         )
