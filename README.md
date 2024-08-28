@@ -1,4 +1,3 @@
-Updates to keyboard shortcuts … On Thursday 1 August 2024, Drive keyboard shortcuts will be updated to give you first-letter navigation.Learn more
 ---
 # T-Plot
 
@@ -22,29 +21,33 @@ The current release up and running [here](https://tplot.lukegregorydev.co.uk).
   - Timeline Types
     - Date and Time using events ordered by calendar and clock time units including years, months, weeks, days, hours, minutes and seconds
     - Age using events ordered by age in years and months
+	- Historical using years BC to AD
+	- Scientific using thousands, millions and billions of years in the past and future
   - Timeline Views
-    - Web based timeline
-    - PDF timeline
+    - Web based timeline showing events in order
+    - PDF timeline showing events in order positioned to time scale
       - Set timeline scale
       - Control PDF layout
-  - User Guide
-    - Getting started guides for common tasks
-    - Reference guides explaining all TPlot's objects, values and settings
   - AI Assist
     - Request ChatGPT find potential events you add to your timeline
     - Review the results and select which events to add
+  - User Guide
+    - Getting started guides for common tasks
+    - Reference guides explaining all TPlot's objects, values and settings
   - High availability using AWS EC2 instances in an Auto Scaling Group with a Load Balancer
 
 ## Project Road Map
-  - Timeline Types
-    - Years BC to AD
-    - Thousands/Millions/Billions of years in the past and future
-  - Ways to view timelines
-    - Web based representation
-    - Slide show
-  - Use AWS S3 to allow users to store images with their timelines
+  - Bulk event operations
+    - Delete
+	- Set event area
+    - Assign tags
+  - Slide show view
+  - Image Support
   - Sharing and collaboration
-  - Register with Google, GitHub etc
+  - Improved registration
+    - Password reset
+	- Validate account using email
+    - Sign up with Google, GitHub etc
 
 ---
 ## CI/CD
