@@ -127,7 +127,7 @@ class PDFEvent(Area):
         self.position_on_scale = 0.0
 
         if orientation == "L":
-            self.width, self.height = self.__landscape_init(
+            self.text_width, self.height = self.__landscape_init(
                 time_width,
                 title_width,
                 description_width,
@@ -136,7 +136,7 @@ class PDFEvent(Area):
                 max_height,
             )
         elif orientation == "P":
-            self.width, self.height = self.__portrait_init(
+            self.text_width, self.height = self.__portrait_init(
                 time_width,
                 title_width,
                 description_width,
@@ -145,10 +145,11 @@ class PDFEvent(Area):
                 max_width,
             )
 
-        max_text_width = self.width - (2 * self.border_size)
-        self.time_paragraph.wrapOn(self.canvas, max_text_width, 0)
-        self.title_paragraph.wrapOn(self.canvas, max_text_width, 0)
-        self.description_paragraph.wrapOn(self.canvas, max_text_width, 0)
+        self.width = self.text_width + (2 * self.border_size)
+        self.time_paragraph.wrapOn(self.canvas, self.text_width, 0)
+        self.title_paragraph.wrapOn(self.canvas, self.text_width, 0)
+        self.description_paragraph.wrapOn(self.canvas, self.text_width, 0)
+        self.tags_paragraph.wrapOn(self.canvas, self.text_width, 0)
 
     def _get_dimensions(self, width: float):
         """Calculates the total width and height needed to display the time,
@@ -179,11 +180,11 @@ class PDFEvent(Area):
         target_ratio: float,
         max_height: float,
     ):
-        """Calculates the best width and height for a landscape PDFEvent given
-        the constraints of a target ratio for width/height and the maximum
-        height available to draw it in."""
+        """Calculates the best width and height for the text of a landscape
+        PDFEvent given the constraints of a target ratio for width/height and
+        the maximum height available to draw it in."""
         init_width = max(
-            max(time_width, title_width), max(description_width, tags_width)
+            time_width, title_width, description_width, tags_width
         )
         min_width = time_width
 
@@ -206,7 +207,7 @@ class PDFEvent(Area):
         self.sized_to_min_width = (width < min_width)
         self.sized_to_max_height = (height > max_height)
 
-        return best_width + (2 * self.border_size), best_height
+        return best_width, best_height
 
     def __portrait_init(
         self,
@@ -217,9 +218,9 @@ class PDFEvent(Area):
         target_ratio: float,
         max_width: float,
     ):
-        """Calculates the best width and height for a portrait PDFEvent given
-        the constraints of a target ratio for width/height and the maximum
-        width available to draw it in."""
+        """Calculates the best width and height for the text of a portrait
+        PDFEvent given the constraints of a target ratio for width/height and
+        the maximum width available to draw it in."""
         largest_width = max(
             max(time_width, title_width), max(description_width, tags_width)
         )
@@ -245,7 +246,7 @@ class PDFEvent(Area):
         self.sized_to_min_width = (width < min_width)
         self.sized_to_max_width = (width == internal_max_width)
 
-        return best_width + (2 * self.border_size), best_height
+        return best_width, best_height
 
     def draw(self):
         """Draw PDFEvent on it's canvas."""
