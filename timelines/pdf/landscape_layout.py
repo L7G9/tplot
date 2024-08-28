@@ -100,7 +100,10 @@ class LandscapeLayout(Layout):
         scale_position_calculated = False
         next_y = self.event_and_scale_area.y
 
-        for timeline_event_area in self.timeline.eventarea_set.all():
+        event_areas = (
+            self.timeline.eventarea_set.all().order_by('page_position')
+        )
+        for timeline_event_area in event_areas:
             scale_position_reached = (
                 self.timeline.page_scale_position
                 <= timeline_event_area.page_position
