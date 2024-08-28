@@ -1,3 +1,17 @@
+## 0.13.2 (2024-08-29)
+
+### Fix
+
+- improve tag key layout so the number of columns are calculated from the width of the page
+- **ScientificScaleDescription**: update __scale_unit_as_scientific_year inline with changes to scale units in model
+- **Area**: remove equals to from overlap methods
+- **PDFEvent**: fix bug where text spill out of event box on pdf
+- **LandscapeLayout-&-PortraitLayout**: fix bug where event areas are not being displayed in page position on pdf
+- **pdf_view-for-all-timeline-types**: use timeline title to make filename of pdf
+- **LandscapeLayout-and-PortraitLayout**: deal with situation where timeline has no event areas
+- **EventArea**: add min value of 1 for event area weight
+- **ScientificTimeline**: improve range of scale units
+
 ## 0.13.1 (2024-08-23)
 
 ### Fix
