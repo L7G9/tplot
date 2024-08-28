@@ -133,7 +133,7 @@ class Area():
         Returns:
             A bool which is True when this Area overlaps argument Area.
         """
-        return self.x <= area.x and self.right() >= area.x
+        return self.x < area.x and self.right() > area.x
 
     def bottom_overlap(self, area: "Area") -> bool:
         """Test if this Area overlaps the bottom edge of argument Area.
@@ -146,7 +146,7 @@ class Area():
         Returns:
             A bool which is True when this Area overlaps argument Area.
         """
-        return self.y <= area.y and self.top() >= area.y
+        return self.y < area.y and self.top() > area.y
 
     def right_overlap(self, area: "Area") -> bool:
         """Test if this Area overlaps the right edge of argument Area.
@@ -159,7 +159,7 @@ class Area():
         Returns:
             A bool which is True when this Area overlaps argument Area.
         """
-        return self.x <= area.right() and self.right() >= area.right()
+        return self.x < area.right() and self.right() > area.right()
 
     def top_overlap(self, area: "Area") -> bool:
         """Test if this Area overlaps the top edge of argument Area.
@@ -172,7 +172,7 @@ class Area():
         Returns:
             A bool which is True when this Area overlaps argument Area.
         """
-        return self.y <= area.top() and self.top() >= area.top()
+        return self.y < area.top() and self.top() > area.top()
 
     def horizontal_overlap(self, area: "Area") -> bool:
         """Test if this Area horizontally overlaps any part of argument Area.
