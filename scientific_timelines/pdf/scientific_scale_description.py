@@ -30,9 +30,9 @@ class ScientificScaleDescription(ScaleDescription):
         self.scale_length: int = self.__scale_length()
 
     def __scale_unit_as_scientific_year(self, scale_unit) -> ScientificYear:
-        if scale_unit <= 1000:
+        if scale_unit <= 50000:
             return ScientificYear(scale_unit / 1000, 1000)
-        elif scale_unit <= 1000000:
+        elif scale_unit <= 50000000:
             return ScientificYear(scale_unit / 1000000, 1000000)
         else:
             return ScientificYear(scale_unit / 1000000000, 1000000000)
