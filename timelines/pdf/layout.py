@@ -150,16 +150,6 @@ class Layout(ABC):
             area_size - scale_size - (event_area_count * self.component_border)
         ) / total_weight
 
-    def tag_key_column_count(self):
-        if self.page_area.width <= A5_SHORT:
-            return 1
-        elif self.page_area.width <= A5_LONG:
-            return 2
-        elif self.page_area.width <= A4_LONG:
-            return 3
-        else:
-            return 4
-
     @abstractmethod
     def expand_event_overlap(self, max_overlap):
         """Updates areas in layout to take into account extra space required

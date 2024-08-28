@@ -22,7 +22,7 @@ from timelines.pdf.landscape_layout import LandscapeLayout
 from timelines.pdf.portrait_layout import PortraitLayout
 from timelines.pdf.pdf_scale import PDFScale
 from timelines.pdf.pdf_start_end_event import PDFStartEndEvent
-from timelines.pdf.pdf_tag_key import PDFTagKey
+from timelines.pdf.pdf_tag_key import PDFTagKey, TAG_KEY_COLUMN_WIDTH
 from timelines.pdf.scale_description import ScaleDescription
 
 from .area import Area
@@ -102,15 +102,21 @@ class PDFTimeline(ABC):
 
         # init tag key
         display_tags = timeline.tag_set.filter(display=True)
+        if timeline.page_orientation == "L":
+            tag_key_width = self.scale.width
+        else:
+            tag_key_width = self.layout.drawable_area.width
+
+        column_count = int(tag_key_width / TAG_KEY_COLUMN_WIDTH)
         if len(display_tags) > 0:
             self.tag_key = PDFTagKey(
                 display_tags,
                 self.canvas,
                 self.basic_text_style,
                 self.basic_text_style,
-                self.layout.drawable_area.width,
+                tag_key_width,
                 DEFAULT_COMPONENT_BORDER,
-                self.layout.tag_key_column_count(),
+                column_count,
             )
         else:
             self.tag_key = Area(0, 0, 0, 0)

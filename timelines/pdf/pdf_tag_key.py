@@ -1,7 +1,11 @@
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
+from reportlab.lib.units import mm
 from .area import Area
+
+
+TAG_KEY_COLUMN_WIDTH = 70 * mm
 
 
 class PDFParagraph(Area):
