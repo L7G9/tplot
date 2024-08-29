@@ -5,7 +5,7 @@
 {% block breadcrumbs %}
 <li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
 <li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
-<li class="breadcrumb-item"><a href="{% url 'scientific_timelines:timeline-detail' view.kwargs.pk %}">Scientific Timeline</a></li>
+<li class="breadcrumb-item"><a href="{% url 'scientific_timelines:timeline-detail' view.kwargs.pk %}">{{object}}</a></li>
 <li class="breadcrumb-item active">Delete</li>
 {% endblock %}
 

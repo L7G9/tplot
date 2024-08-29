@@ -75,6 +75,15 @@ class SuccessMixim(object):
         )
 
 
+class HistoricalTimelineContextMixim:
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["historical_timeline"] = HistoricalTimeline.objects.get(
+            pk=self.kwargs["historical_timeline_id"]
+        )
+        return context
+
+
 EVENT_FIELD_ORDER = [
     "start_bc_ad",
     "start_year",
@@ -126,6 +135,7 @@ def get_timeline_from_historical_timeline(view):
 class EventCreateView(
     LoginRequiredMixin,
     TimelineOwnerMixim,
+    HistoricalTimelineContextMixim,
     EventValidateMixim,
     SuccessMixim,
     CreateView,
@@ -194,6 +204,7 @@ class TagValidateMixim(object):
 class TagCreateView(
     LoginRequiredMixin,
     TimelineOwnerMixim,
+    HistoricalTimelineContextMixim,
     TagValidateMixim,
     SuccessMixim,
     CreateView,
@@ -255,6 +266,7 @@ class EventAreaValidateMixim(object):
 class EventAreaCreateView(
     LoginRequiredMixin,
     TimelineOwnerMixim,
+    HistoricalTimelineContextMixim,
     EventAreaValidateMixim,
     SuccessMixim,
     CreateView,

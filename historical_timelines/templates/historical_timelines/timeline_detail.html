@@ -7,7 +7,7 @@
 {% block breadcrumbs %}
     <li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
     <li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
-    <li class="breadcrumb-item active">Historical Timeline</li>
+    <li class="breadcrumb-item active">{{object}}</li>
 {% endblock %}
 
 {% block side_menu_timeline_options %}

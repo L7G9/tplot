@@ -74,6 +74,15 @@ class SuccessMixim(object):
         )
 
 
+class ScientificTimelineContextMixim:
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["scientific_timeline"] = ScientificTimeline.objects.get(
+            pk=self.kwargs["scientific_timeline_id"]
+        )
+        return context
+
+
 EVENT_FIELD_ORDER = [
     "start_year_fraction",
     "start_multiplier",
@@ -129,6 +138,7 @@ def get_timeline_from_scientific_timeline(view):
 class EventCreateView(
     LoginRequiredMixin,
     TimelineOwnerMixim,
+    ScientificTimelineContextMixim,
     EventValidateMixim,
     SuccessMixim,
     CreateView,
@@ -197,6 +207,7 @@ class TagValidateMixim(object):
 class TagCreateView(
     LoginRequiredMixin,
     TimelineOwnerMixim,
+    ScientificTimelineContextMixim,
     TagValidateMixim,
     SuccessMixim,
     CreateView,
@@ -258,6 +269,7 @@ class EventAreaValidateMixim(object):
 class EventAreaCreateView(
     LoginRequiredMixin,
     TimelineOwnerMixim,
+    ScientificTimelineContextMixim,
     EventAreaValidateMixim,
     SuccessMixim,
     CreateView,

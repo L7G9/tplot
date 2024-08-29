@@ -98,6 +98,15 @@ class SuccessMixim(object):
         )
 
 
+class AgeTimelineContextMixim:
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["date_time_timeline"] = DateTimeTimeline.objects.get(
+            pk=self.kwargs["date_time_timeline_id"]
+        )
+        return context
+
+
 DATE_TIME_EVENT_FIELD_ORDER = [
     "start_date_time",
     "has_end",
@@ -149,6 +158,7 @@ class DateTimeEventCreateView(
     LoginRequiredMixin,
     DateTimeTimelineOwnerMixim,
     DateTimeEventValidateMixim,
+    AgeTimelineContextMixim,
     SuccessMixim,
     CreateView,
 ):
@@ -216,6 +226,7 @@ class TagValidateMixim(object):
 class TagCreateView(
     LoginRequiredMixin,
     DateTimeTimelineOwnerMixim,
+    AgeTimelineContextMixim,
     TagValidateMixim,
     SuccessMixim,
     CreateView,
@@ -278,6 +289,7 @@ class EventAreaValidateMixim(object):
 class EventAreaCreateView(
     LoginRequiredMixin,
     DateTimeTimelineOwnerMixim,
+    AgeTimelineContextMixim,
     EventAreaValidateMixim,
     SuccessMixim,
     CreateView,
@@ -346,10 +358,18 @@ class AIRequestView(
     def get(self, request, *args, **kwargs):
         form = self.form_class()
 
+        date_time_timeline = DateTimeTimeline.objects.get(
+            pk=self.kwargs["date_time_timeline_id"]
+        )
+
         return render(
             request,
             self.template_name,
-            {"form": form, "view": self}
+            {
+                "form": form,
+                "view": self,
+                "date_time_timeline": date_time_timeline
+            }
         )
 
     def form_valid(self, form):
@@ -400,6 +420,9 @@ class AIResultView(
         context = self.get_context_data()
         context['form'] = form
         context['view'] = self
+        context["date_time_timeline"] = DateTimeTimeline.objects.get(
+            pk=self.kwargs["date_time_timeline_id"]
+        )
 
         return render(
             request,

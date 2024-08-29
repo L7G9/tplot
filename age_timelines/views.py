@@ -94,6 +94,15 @@ class SuccessMixim(object):
         )
 
 
+class AgeTimelineContextMixim:
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["age_timeline"] = AgeTimeline.objects.get(
+            pk=self.kwargs["age_timeline_id"]
+        )
+        return context
+
+
 AGE_EVENT_FIELD_ORDER = [
     "start_year",
     "start_month",
@@ -146,6 +155,7 @@ def get_timeline_from_age_timeline(view):
 class AgeEventCreateView(
     LoginRequiredMixin,
     AgeTimelineOwnerMixim,
+    AgeTimelineContextMixim,
     AgeEventValidateMixim,
     SuccessMixim,
     CreateView,
@@ -163,6 +173,7 @@ class AgeEventCreateView(
         modelform.base_fields["event_area"].limit_choices_to = {
             "timeline": timeline_id
         }
+
         return modelform
 
 
@@ -214,6 +225,7 @@ class TagValidateMixim(object):
 class TagCreateView(
     LoginRequiredMixin,
     AgeTimelineOwnerMixim,
+    AgeTimelineContextMixim,
     TagValidateMixim,
     SuccessMixim,
     CreateView,
@@ -276,6 +288,7 @@ class EventAreaValidateMixim(object):
 class EventAreaCreateView(
     LoginRequiredMixin,
     AgeTimelineOwnerMixim,
+    AgeTimelineContextMixim,
     EventAreaValidateMixim,
     SuccessMixim,
     CreateView,
@@ -331,15 +344,29 @@ def pdf_view(request, age_timeline_id):
     )
 
 
-class AIRequestView(LoginRequiredMixin, AgeTimelineOwnerMixim, FormView):
+class AIRequestView(
+    LoginRequiredMixin,
+    AgeTimelineOwnerMixim,
+    FormView
+):
     form_class = AIRequestForm
     template_name = "age_timelines/ai_request.html"
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
 
+        age_timeline = AgeTimeline.objects.get(
+            pk=self.kwargs["age_timeline_id"]
+        )
+
         return render(
-            request, self.template_name, {"form": form, "view": self}
+            request,
+            self.template_name,
+            {
+                "form": form,
+                "view": self,
+                "age_timeline": age_timeline,
+            }
         )
 
     def form_valid(self, form):
@@ -365,7 +392,10 @@ class AIRequestView(LoginRequiredMixin, AgeTimelineOwnerMixim, FormView):
 
 
 class AIResultView(
-    LoginRequiredMixin, AgeTimelineOwnerMixim, SuccessMixim, FormView
+    LoginRequiredMixin,
+    AgeTimelineOwnerMixim,
+    SuccessMixim,
+    FormView
 ):
     form_class = AIResultsForm
     template_name = "age_timelines/ai_result.html"
@@ -386,6 +416,9 @@ class AIResultView(
         context = self.get_context_data()
         context["form"] = form
         context["view"] = self
+        context["age_timeline"] = AgeTimeline.objects.get(
+            pk=self.kwargs["age_timeline_id"]
+        )
 
         return render(
             request,

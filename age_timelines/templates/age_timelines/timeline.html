@@ -7,7 +7,7 @@
 {% block breadcrumbs %}
     <li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
     <li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
-    <li class="breadcrumb-item"><a href="{% url 'age_timelines:age-timeline-detail' view.kwargs.pk %}">Age Timeline</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'age_timelines:age-timeline-detail' view.kwargs.pk %}">{{object.title}}</a></li>
 	<li class="breadcrumb-item active">Timeline View</li>
 {% endblock breadcrumbs %}
 

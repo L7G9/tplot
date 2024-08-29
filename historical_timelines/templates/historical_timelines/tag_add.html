@@ -3,6 +3,6 @@
 {% block breadcrumbs %}
 <li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
 <li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
-<li class="breadcrumb-item"><a href="{% url 'historical_timelines:timeline-detail' view.kwargs.historical_timeline_id %}">Historical Timeline</a></li>
+<li class="breadcrumb-item"><a href="{% url 'historical_timelines:timeline-detail' view.kwargs.historical_timeline_id %}">{{historical_timeline}}</a></li>
 <li class="breadcrumb-item active">Add Tag</li>
 {% endblock %}
