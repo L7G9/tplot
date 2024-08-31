@@ -1,3 +1,9 @@
+## 0.13.3 (2024-08-31)
+
+### Fix
+
+- update to templates to use timeline title in breadcrumbs
+
 ## 0.13.2 (2024-08-29)
 
 ### Fix
