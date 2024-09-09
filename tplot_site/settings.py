@@ -71,8 +71,8 @@ MIDDLEWARE = [
 
 CSRF_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = not DEBUG
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True
-
 ROOT_URLCONF = "tplot_site.urls"
 
 TEMPLATES = [
@@ -178,3 +178,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+import django_heroku
+django_heroku.settings(locals())
