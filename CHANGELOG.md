@@ -1,3 +1,9 @@
+## 0.13.4 (2024-09-13)
+
+### Fix
+
+- **register_request-&-login_request**: not give feedback when not successful
+
 ## 0.13.3 (2024-08-31)
 
 ### Fix
