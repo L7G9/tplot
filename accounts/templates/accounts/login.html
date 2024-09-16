@@ -21,7 +21,8 @@
                 {% endfor %}
                 <button type="submit" class="btn btn-primary">Login</button>
             </form>
-            <p>Don't have an account? <a href="{% url 'accounts:register' %}">Register</a>.</p>
+            <p>Don't have an account? Register <a href="{% url 'accounts:register' %}">here</a>.</p>
+            <p>Forgotten your password? Reset <a href="{% url 'accounts:password_reset' %}">here</a>.</p>
         </div>
     </div>
 {% endblock %}

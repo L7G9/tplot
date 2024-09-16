@@ -2,7 +2,12 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.views import (
-    PasswordChangeView, PasswordChangeDoneView
+    PasswordChangeView,
+    PasswordChangeDoneView,
+    PasswordResetView,
+    PasswordResetDoneView,
+    PasswordResetConfirmView,
+    PasswordResetCompleteView,
 )
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -110,3 +115,21 @@ class ChangePasswordView(PasswordChangeView):
 
 class ChangePasswordDoneView(PasswordChangeDoneView):
     template_name = "accounts/change_password_done.html"
+
+
+class ResetPasswordView(PasswordResetView):
+    template_name = "accounts/reset_password.html"
+    success_url = reverse_lazy("accounts:reset-password-done")
+
+
+class ResetPasswordDoneView(PasswordResetDoneView):
+    template_name = "accounts/reset_password_done.html"
+
+
+class ResetPasswordConfirmView(PasswordResetConfirmView):
+    template_name = "accounts/reset_password_confirm.html"
+    success_url = reverse_lazy("accounts:reset-password-complete")
+
+
+class ResetPasswordCompleteView(PasswordResetCompleteView):
+    template_name = "accounts/reset_password_complete.html"
