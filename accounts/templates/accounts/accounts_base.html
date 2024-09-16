@@ -1,0 +1,21 @@
+{% extends "user_guide/user_guide_base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Title{% endblock %}
+
+{% block heading %}Heading{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+<li class="breadcrumb-item active">{% block active_breadcrumb %}Active Breadcrumb{% endblock active_breadcrumb %}</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+    <div class="card mb-4">
+        <div class="card-body">
+            {% block content_card %}
+            {% endblock content_card %}
+        </div>
+    </div>
+{% endblock content %}

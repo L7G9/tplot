@@ -1,0 +1,12 @@
+{% extends "accounts/accounts_base.html" %}
+
+{% block title %}Activate Success{% endblock %}
+
+{% block heading %}Activate Success{% endblock %}
+
+{% block active_breadcrumb %}Activate Success{% endblock active_breadcrumb %}
+
+{% block content_card %}
+<p>Thank you for activating your with TPlot account.</p>
+<p>You can now <a href="{% url 'accounts:login' %}">login</a> to your account.</p>
+{% endblock content_card %}
