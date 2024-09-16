@@ -1,11 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, get_user_model
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.views import (
+    PasswordChangeView, PasswordChangeDoneView
+)
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
+from django.urls import reverse_lazy
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
@@ -97,3 +100,13 @@ def login_request(request):
 def logout_request(request):
     logout(request)
     return redirect("accounts:login")
+
+
+class ChangePasswordView(PasswordChangeView):
+    form_class = PasswordChangeForm
+    template_name = "accounts/change_password.html"
+    success_url = reverse_lazy("accounts:change-password-done")
+
+
+class ChangePasswordDoneView(PasswordChangeDoneView):
+    template_name = "accounts/change_password_done.html"
