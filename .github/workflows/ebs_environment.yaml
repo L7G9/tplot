@@ -17,6 +17,8 @@ env:
   EB_DB_USER: ${{ secrets.EB_DB_USER }}
   EB_DB_PASSWORD: ${{ secrets.EB_DB_PASSWORD }}
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
+  EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
 
 jobs:
   environment_status:
@@ -60,7 +62,7 @@ jobs:
         --instance_type "t2.micro" \
         --min-instances 1 \
         --max-instances 2 \
-        --envvars OPENAI_API_KEY=$EB_DB_PASSWORD
+        --envvars OPENAI_API_KEY=$OPENAI_API_KEY, EMAIL_HOST_USER=$EMAIL_HOST_USER, EMAIL_HOST_PASSWORD=$EMAIL_HOST_PASSWORD
 
 
   setup_https:
