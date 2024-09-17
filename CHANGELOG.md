@@ -1,3 +1,15 @@
+## 0.14.0 (2024-09-17)
+
+### Feat
+
+- added password reset
+- change password added
+- implemented email activation for registration
+
+### Refactor
+
+- improvements to accounts app
+
 ## 0.13.4 (2024-09-13)
 
 ### Fix
