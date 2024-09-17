@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-import accounts.views
+import user_guide.views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -27,5 +27,5 @@ urlpatterns = [
     path("timelines/historical/", include("historical_timelines.urls")),
     path("timelines/scientific/", include("scientific_timelines.urls")),
     path("user_guide/", include("user_guide.urls")),
-    path("", accounts.views.login_request),
+    path("", user_guide.views.home),
 ]

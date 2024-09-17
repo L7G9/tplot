@@ -37,7 +37,7 @@
                         <li><a class="dropdown-item" href="{% url 'accounts:register' %}">Register</a></li>
                         {% endif %}
                         {% if user.is_authenticated %}
-                        <li><a class="dropdown-item" href="{% url 'accounts:change-password' %}">Change Password</a></li>
+                        <li><a class="dropdown-item" href="{% url 'accounts:password-change' %}">Change Password</a></li>
                         <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a></li>
                         {% endif %}
                     </ul>

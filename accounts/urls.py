@@ -6,6 +6,7 @@ from . import views
 
 app_name = "accounts"
 
+
 urlpatterns = [
     path(
         "register/",
@@ -13,85 +14,69 @@ urlpatterns = [
         name="register",
     ),
     path(
-        "activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/",
+        "activate/<uidb64>/<token>",
         views.activate_request,
         name="activate",
     ),
     path(
         "login/",
-        views.login_request,
+        auth_views.LoginView.as_view(
+            template_name="accounts/login.html",
+            next_page="timelines:user-timelines",
+        ),
         name="login"
     ),
     path(
         "logout/",
-        views.logout_request,
+        auth_views.LogoutView.as_view(
+            next_page="accounts:login",
+        ),
         name="logout"
     ),
     path(
-        "change_password/",
-        views.ChangePasswordView.as_view(),
-        name="change-password",
+        "password_change/",
+        auth_views.PasswordChangeView.as_view(
+            template_name="accounts/password_change.html",
+            success_url=reverse_lazy("accounts:password-change-done")
+        ),
+        name="password-change",
     ),
     path(
-        "change_password_done/",
-        views.ChangePasswordDoneView.as_view(),
-        name="change-password-done",
+        "password_change_done/",
+        auth_views.PasswordChangeDoneView.as_view(
+            template_name="accounts/password_change_done.html",
+        ),
+        name="password-change-done",
     ),
-
     path(
-        'password_reset/',
+        "password_reset/",
         auth_views.PasswordResetView.as_view(
             template_name="accounts/password_reset.html",
             email_template_name="accounts/password_reset_email.html",
-            success_url=reverse_lazy("accounts:password_reset_done")
+            success_url=reverse_lazy("accounts:password-reset-done")
         ),
-        name='password_reset'
+        name="password_reset"
     ),
     path(
-        'password_reset_sent/',
+        "password_reset_sent/",
         auth_views.PasswordResetDoneView.as_view(
             template_name="accounts/password_reset_sent.html"
         ),
-        name='password_reset_done'
+        name="password-reset-done"
     ),
     path(
-        'reset/<uidb64>/<token>',
+        "reset/<uidb64>/<token>",
         auth_views.PasswordResetConfirmView.as_view(
             template_name="accounts/password_reset_confirm.html",
-            success_url=reverse_lazy("accounts:password_reset_complete")
+            success_url=reverse_lazy("accounts:password-reset-complete")
         ),
-        name='password_reset_confirm'
+        name='password-reset-confirm'
     ),
     path(
-        'password_reset_complete/',
+        "password_reset_complete/",
         auth_views.PasswordResetCompleteView.as_view(
             template_name="accounts/password_reset_complete.html"
         ),
-        name='password_reset_complete'
+        name="password-reset-complete"
     )
-]
-
-
-temp = [
-    path(
-        "reset_password/",
-        views.ResetPasswordView.as_view(),
-        name="reset-password",
-    ),
-    path(
-        "reset_password_done/",
-        views.ResetPasswordDoneView.as_view(),
-        name="reset-password-done",
-    ),
-
-    path(
-        "reset_password_confirm/",
-        views.ResetPasswordConfirmView.as_view(),
-        name="reset-password-confirm",
-    ),
-    path(
-        "reset_password_complete/",
-        views.ResetPasswordCompleteView.as_view(),
-        name="reset-password-complete",
-    ),
 ]

@@ -1,19 +1,8 @@
-from django.contrib import messages
-from django.contrib.auth import login, authenticate, logout, get_user_model
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
-from django.contrib.auth.views import (
-    PasswordChangeView,
-    PasswordChangeDoneView,
-    PasswordResetView,
-    PasswordResetDoneView,
-    PasswordResetConfirmView,
-    PasswordResetCompleteView,
-)
+from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.template.loader import render_to_string
-from django.urls import reverse_lazy
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
@@ -32,7 +21,7 @@ def register_request(request):
             current_site = get_current_site(request)
             mail_subject = "TPlot Activation link"
             message = render_to_string(
-                "accounts/acc_active_email.html",
+                "accounts/activate_email.html",
                 {
                     'user': user,
                     'domain': current_site.domain,
@@ -79,57 +68,3 @@ def activate_request(request, uidb64, token):
                 request=request,
                 template_name="accounts/activate_failure.html",
             )
-
-
-def login_request(request):
-    if request.method == "POST":
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get("username")
-            password = form.cleaned_data.get("password")
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect("timelines:user-timelines")
-        else:
-            messages.error(request, "Invalid username or password.")
-
-    form = AuthenticationForm()
-    return render(
-        request=request,
-        template_name="accounts/login.html",
-        context={"login_form": form},
-    )
-
-
-def logout_request(request):
-    logout(request)
-    return redirect("accounts:login")
-
-
-class ChangePasswordView(PasswordChangeView):
-    form_class = PasswordChangeForm
-    template_name = "accounts/change_password.html"
-    success_url = reverse_lazy("accounts:change-password-done")
-
-
-class ChangePasswordDoneView(PasswordChangeDoneView):
-    template_name = "accounts/change_password_done.html"
-
-
-class ResetPasswordView(PasswordResetView):
-    template_name = "accounts/reset_password.html"
-    success_url = reverse_lazy("accounts:reset-password-done")
-
-
-class ResetPasswordDoneView(PasswordResetDoneView):
-    template_name = "accounts/reset_password_done.html"
-
-
-class ResetPasswordConfirmView(PasswordResetConfirmView):
-    template_name = "accounts/reset_password_confirm.html"
-    success_url = reverse_lazy("accounts:reset-password-complete")
-
-
-class ResetPasswordCompleteView(PasswordResetCompleteView):
-    template_name = "accounts/reset_password_complete.html"
