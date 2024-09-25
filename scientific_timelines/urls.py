@@ -79,6 +79,32 @@ urlpatterns = [
         views.EventAreaDeleteView.as_view(),
         name="event-area-delete",
     ),
+
+    # ex: 1/collaborators/
+    path(
+        "<int:pk>/collaborators/",
+        views.CollaboratorsView.as_view(),
+        name="collaborators",
+    ),
+    # ex: 1/collaborator/add/
+    path(
+        "<int:scientific_timeline_id>/collaborator/add/",
+        views.CollaboratorCreateView.as_view(),
+        name="collaborator-add",
+    ),
+    # ex: 1/collaborator/1/update/
+    path(
+        "<int:scientific_timeline_id>/collaborator/<int:pk>/update/",
+        views.CollaboratorUpdateView.as_view(),
+        name="collaborator-update",
+    ),
+    # ex: 1/collaborator/1/delete/
+    path(
+        "<int:scientific_timeline_id>/collaborator/<int:pk>/delete/",
+        views.CollaboratorDeleteView.as_view(),
+        name="collaborator-delete",
+    ),
+
     # ex: 1/timeline/
     path(
         "<int:pk>/timeline/",

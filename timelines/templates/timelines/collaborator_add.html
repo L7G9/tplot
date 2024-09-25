@@ -1,0 +1,15 @@
+{% extends "timelines/form_base.html"  %}
+
+{% block title %}TPlot - New Collaborator{% endblock %}
+
+{% block heading %}New Collaborator{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+{% block timeline_breadcrumb %}{% endblock timeline_breadcrumb %}
+{% block collaborators_breadcrumb %}{% endblock collaborators_breadcrumb %}
+<li class="breadcrumb-item active">New Collaborator</li>
+{% endblock breadcrumbs %}
+
+{% block button_name %}Add{% endblock %}

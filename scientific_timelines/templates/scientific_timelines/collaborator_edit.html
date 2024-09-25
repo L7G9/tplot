@@ -1,0 +1,13 @@
+{% extends "timelines/collaborator_edit.html"  %}
+
+{% block timeline_breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'scientific_timelines:timeline-detail' view.kwargs.scientific_timeline_id %}">{{scientific_timeline}}</a></li>
+{% endblock timeline_breadcrumb %}
+
+{% block collaborators_breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'scientific_timelines:collaborators' view.kwargs.scientific_timeline_id %}">Collaborators</a></li>
+{% endblock collaborators_breadcrumb %}
+
+{% block side_menu_delete_option %}
+<li class="nav-item"><a class="nav-link" href="{% url 'scientific_timelines:collaborator-delete' view.kwargs.scientific_timeline_id collaborator.id %}">Delete</a></li>
+{% endblock side_menu_delete_option %}

@@ -7,7 +7,9 @@
     </div>
     <div class="card-body">
         <form method="post" class="post-form">{% csrf_token %}
-            <p>Are you sure you want to delete {% block description %}{{ object }}{% endblock %}?</p>
+            {% block confirmation_message %}
+            <p>Are you sure you want to delete {% block description %}{{ object }}{% endblock description %}?</p>
+            {% endblock confirmation_message %}
             <button type="submit" class="btn btn-primary">{% block button_name %}Confirm{% endblock %}</button>
         </form>
     </div>

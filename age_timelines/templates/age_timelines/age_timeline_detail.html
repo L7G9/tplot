@@ -1,4 +1,3 @@
-Updates to keyboard shortcuts … On Thursday 1 August 2024, Drive keyboard shortcuts will be updated to give you first-letter navigation.Learn more
 {% extends "timelines/timeline_detail.html" %}
 
 {% block title %}TPlot - Age Timeline Detail{% endblock %}
@@ -12,18 +11,33 @@ Updates to keyboard shortcuts … On Thursday 1 August 2024, Drive keyboard shor
 {% endblock %}
 
 {% block side_menu_timeline_options %}
-    <div class="sb-sidenav-menu-heading">Options</div>
-    <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:age-timeline-update' view.kwargs.pk %}">Timeline Settings</a></li>
-    <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:age-event-add' view.kwargs.pk %}">New Event</a></li>
-    <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:event-area-add' view.kwargs.pk %}">New Event Area</a></li>
-    <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:tag-add' view.kwargs.pk %}">New Tag</a></li>
-    <div class="sb-sidenav-menu-heading">Views</div>
-    <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:timeline' view.kwargs.pk %}">Timeline</a></li>
-    <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:age-timeline-pdf' view.kwargs.pk %}">PDF</a></li>
-    <div class="sb-sidenav-menu-heading">Tools</div>
-    <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:ai-request' view.kwargs.pk %}">AI Request</a></li>
+    {% if user_role >= 2 %}
+        <div class="sb-sidenav-menu-heading">Options</div>
+        <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:age-event-add' view.kwargs.pk %}">New Event</a></li>
+    {% endif %}
 
-{% endblock %}
+    {% if user_role >= 3 %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:event-area-add' view.kwargs.pk %}">New Event Area</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:tag-add' view.kwargs.pk %}">New Tag</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:age-timeline-update' view.kwargs.pk %}">Timeline Settings</a></li>
+    {% endif %}
+
+    {% if user_role >= 4 %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:collaborators' view.kwargs.pk %}">Collaborators</a></li>
+    {% endif %}
+
+    {% if user_role >= 1 %}
+        <div class="sb-sidenav-menu-heading">Views</div>
+        <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:timeline' view.kwargs.pk %}">Timeline</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:age-timeline-pdf' view.kwargs.pk %}">PDF</a></li>
+    {% endif %}
+
+    {% if user_role >= 4 %}
+        <div class="sb-sidenav-menu-heading">Tools</div>
+        <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:ai-request' view.kwargs.pk %}">AI Request</a></li>
+    {% endif %}
+
+{% endblock side_menu_timeline_options %}
 
 {% block event_table_head_unit %}Age{% endblock %}
 
@@ -31,22 +45,38 @@ Updates to keyboard shortcuts … On Thursday 1 August 2024, Drive keyboard shor
 
 {% block events %}
 {% for age_event in object.ageevent_set.all %}
-    <tr>
-        <td><a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-event-update' view.kwargs.pk age_event.id %}">{{ age_event.age_description }}</a></td>
-        <td><a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-event-update' view.kwargs.pk age_event.id %}">{{ age_event.title }}</a></td>
-        <td><a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-event-update' view.kwargs.pk age_event.id %}">{{ age_event.event_ptr.event_area }}</a></td>
-    </tr>
+    {% if user_role >= 2 %}
+        <tr>
+            <td><a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-event-update' view.kwargs.pk age_event.id %}">{{ age_event.age_description }}</a></td>
+            <td><a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-event-update' view.kwargs.pk age_event.id %}">{{ age_event.title }}</a></td>
+            <td><a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-event-update' view.kwargs.pk age_event.id %}">{{ age_event.event_ptr.event_area }}</a></td>
+        </tr>
+    {% else %}
+        <tr>
+            <td>{{ age_event.age_description }}</td>
+            <td>{{ age_event.title }}</td>
+            <td>{{ age_event.event_ptr.event_area }}</td>
+        </tr>
+    {% endif %}
 {% endfor %}
 {% endblock %}
 
 {% block tag_list %}
 {% for tag in object.tag_set.all %}
-    <a class="list-group-item list-group-item-action" href="{% url 'age_timelines:tag-update' view.kwargs.pk tag.id %}">{{ tag }}</a>
+    {% if user_role >= 3 %}
+        <a class="list-group-item list-group-item-action" href="{% url 'age_timelines:tag-update' view.kwargs.pk tag.id %}">{{ tag }}</a>
+    {% else %}
+        <p>{{ tag }}</p>
+    {% endif %}
 {% endfor %}
 {% endblock %}
 
 {% block area_list %}
 {% for area in object.eventarea_set.all %}
-    <a class="list-group-item list-group-item-action" href="{% url 'age_timelines:event-area-update' view.kwargs.pk area.id %}">{{ area }}</a>
+    {% if user_role >= 3 %}
+        <a class="list-group-item list-group-item-action" href="{% url 'age_timelines:event-area-update' view.kwargs.pk area.id %}">{{ area }}</a>
+    {% else %}
+        <p>{{ area }}</p>
+    {% endif %}
 {% endfor %}
 {% endblock %}

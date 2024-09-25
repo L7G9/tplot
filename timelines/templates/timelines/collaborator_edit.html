@@ -1,0 +1,22 @@
+{% extends "timelines/form_base.html"  %}
+
+{% block title %}TPlot - Edit Collaborator{% endblock %}
+
+{% block heading %}Edit Collaborator{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+{% block timeline_breadcrumb %}{% endblock timeline_breadcrumb %}
+{% block collaborators_breadcrumb %}{% endblock collaborators_breadcrumb %}
+<li class="breadcrumb-item active">{{ object.user.username }}</li>
+{% endblock breadcrumbs %}
+
+{% block side_menu_timeline_options %}
+<div class="sb-sidenav-menu-heading">Options</div>
+{% block side_menu_delete_option %}
+<li class="nav-item"><a class="nav-link" href="#">Delete</a></li>
+{% endblock side_menu_delete_option %}
+{% endblock side_menu_timeline_options %}
+
+{% block button_name %}Update{% endblock %}

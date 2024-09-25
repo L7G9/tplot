@@ -1,0 +1,9 @@
+{% extends "timelines/collaborator_delete.html"  %}
+
+{% block timeline_breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'age_timelines:age-timeline-detail' view.kwargs.age_timeline_id %}">{{age_timeline}}</a></li>
+{% endblock timeline_breadcrumb %}
+
+{% block collaborators_breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'age_timelines:collaborators' view.kwargs.age_timeline_id %}">Collaborators</a></li>
+{% endblock collaborators_breadcrumb %}

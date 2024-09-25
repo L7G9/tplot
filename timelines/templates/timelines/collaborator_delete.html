@@ -1,0 +1,19 @@
+{% extends "timelines/confirm_delete.html" %}
+
+{% block title %}TPlot - Delete Collaborator{% endblock %}
+
+{% block heading %}Delete Collaborator{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+<li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+{% block timeline_breadcrumb %}{% endblock timeline_breadcrumb %}
+{% block collaborators_breadcrumb %}{% endblock collaborators_breadcrumb %}
+<li class="breadcrumb-item active">{{ object.user.username }}</li>
+{% endblock breadcrumbs %}
+
+{% block description %}{{ object.user.username }}{% endblock %}
+
+{% block confirmation_message %}
+<p>Are you sure you want to remove {{ object.user.username }} as a collaborator?</p>
+{% endblock confirmation_message %}

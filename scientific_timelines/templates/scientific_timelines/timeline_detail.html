@@ -11,14 +11,26 @@
 {% endblock %}
 
 {% block side_menu_timeline_options %}
+{% if user_role >= 2 %}
     <div class="sb-sidenav-menu-heading">Options</div>
-    <li class="nav-item"><a class="nav-link" href="{% url 'scientific_timelines:timeline-update' view.kwargs.pk %}">Timeline Settings</a></li>
     <li class="nav-item"><a class="nav-link" href="{% url 'scientific_timelines:event-add' view.kwargs.pk %}">New Event</a></li>
+{% endif %}
+
+{% if user_role >= 3 %}
     <li class="nav-item"><a class="nav-link" href="{% url 'scientific_timelines:event-area-add' view.kwargs.pk %}">New Event Area</a></li>
     <li class="nav-item"><a class="nav-link" href="{% url 'scientific_timelines:tag-add' view.kwargs.pk %}">New Tag</a></li>
-    <div class="sb-sidenav-menu-heading">View</div>
+    <li class="nav-item"><a class="nav-link" href="{% url 'scientific_timelines:timeline-update' view.kwargs.pk %}">Timeline Settings</a></li>
+{% endif %}
+
+{% if user_role >= 4 %}
+    <li class="nav-item"><a class="nav-link" href="{% url 'scientific_timelines:collaborators' view.kwargs.pk %}">Collaborators</a></li>
+{% endif %}
+
+{% if user_role >= 1 %}
+    <div class="sb-sidenav-menu-heading">Views</div>
     <li class="nav-item"><a class="nav-link" href="{% url 'scientific_timelines:timeline' view.kwargs.pk %}">Timeline</a></li>
     <li class="nav-item"><a class="nav-link" href="{% url 'scientific_timelines:timeline-pdf' view.kwargs.pk %}">PDF</a></li>
+{% endif %}
 {% endblock %}
 
 {% block event_table_head_unit %}Years{% endblock %}
@@ -27,22 +39,38 @@
 
 {% block events %}
 {% for scientific_event in object.scientificevent_set.all %}
-    <tr>
-        <td><a class="list-group-item list-group-item-action" href="{% url 'scientific_timelines:event-update' view.kwargs.pk scientific_event.id %}">{{ scientific_event.time_unit_description }}</a></td>
-        <td><a class="list-group-item list-group-item-action" href="{% url 'scientific_timelines:event-update' view.kwargs.pk scientific_event.id %}">{{ scientific_event.title }}</a></td>
-        <td><a class="list-group-item list-group-item-action" href="{% url 'scientific_timelines:event-update' view.kwargs.pk scientific_event.id %}">{{ scientific_event.event_ptr.event_area }}</a></td>
-    </tr>
+    {% if user_role >= 2 %}
+        <tr>
+            <td><a class="list-group-item list-group-item-action" href="{% url 'scientific_timelines:event-update' view.kwargs.pk scientific_event.id %}">{{ scientific_event.time_unit_description }}</a></td>
+            <td><a class="list-group-item list-group-item-action" href="{% url 'scientific_timelines:event-update' view.kwargs.pk scientific_event.id %}">{{ scientific_event.title }}</a></td>
+            <td><a class="list-group-item list-group-item-action" href="{% url 'scientific_timelines:event-update' view.kwargs.pk scientific_event.id %}">{{ scientific_event.event_ptr.event_area }}</a></td>
+        </tr>
+    {% else %}
+        <tr>
+            <td>{{ scientific_event.age_description }}</td>
+            <td>{{ scientific_event.title }}</td>
+            <td>{{ scientific_event.event_ptr.event_area }}</td>
+        </tr>
+    {% endif %}
 {% endfor %}
 {% endblock %}
 
 {% block tag_list %}
 {% for tag in object.tag_set.all %}
-    <a class="list-group-item list-group-item-action" href="{% url 'scientific_timelines:tag-update' view.kwargs.pk tag.id %}">{{ tag }}</a>
+    {% if user_role >= 3 %}
+        <a class="list-group-item list-group-item-action" href="{% url 'scientific_timelines:tag-update' view.kwargs.pk tag.id %}">{{ tag }}</a>
+    {% else %}
+        <p>{{ tag }}</p>
+    {% endif %}
 {% endfor %}
 {% endblock %}
 
 {% block area_list %}
 {% for area in object.eventarea_set.all %}
+    {% if user_role >= 3 %}
     <a class="list-group-item list-group-item-action" href="{% url 'scientific_timelines:event-area-update' view.kwargs.pk area.id %}">{{ area }}</a>
+    {% else %}
+        <p>{{ area }}</p>
+    {% endif %}
 {% endfor %}
 {% endblock %}

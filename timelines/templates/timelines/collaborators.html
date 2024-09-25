@@ -1,0 +1,48 @@
+{% extends "user_guide/user_guide_base.html" %}
+
+{% block title %}TPlot - Collaborators{% endblock %}
+
+{% block heading %}Collaborators{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+    {% block timeline_breadcrumb %}{% endblock timeline_breadcrumb %}
+    <li class="breadcrumb-item active">Collaborators</li>
+{% endblock breadcrumbs%}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <p class="h3">Collaborators</p>
+    </div>
+    <div class="card-body">
+        <div class="list-group">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>User</th>
+                        <th>Role</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {% block collaborators %}
+                    {% for collaborator in object.collaborator_set.all %}
+                    <tr>
+                        <td><a class="list-group-item list-group-item-action" href="#">{{ collaborator.user.username }}</a></td>
+                        <td><a class="list-group-item list-group-item-action" href="#">{{ collaborator.role_string }}</a></td>
+                    </tr>
+                    {% endfor %}
+                    {% endblock collaborators %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

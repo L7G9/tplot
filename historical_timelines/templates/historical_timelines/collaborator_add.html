@@ -1,0 +1,9 @@
+{% extends "timelines/collaborator_add.html"  %}
+
+{% block timeline_breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'historical_timelines:timeline-detail' view.kwargs.historical_timeline_id %}">{{historical_timeline}}</a></li>
+{% endblock timeline_breadcrumb %}
+
+{% block collaborators_breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'historical_timelines:collaborators' view.kwargs.historical_timeline_id %}">Collaborators</a></li>
+{% endblock collaborators_breadcrumb %}

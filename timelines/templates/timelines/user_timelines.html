@@ -35,6 +35,9 @@
                 {% for age_timeline in age_timeline_list %}
                     <a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-timeline-detail' age_timeline.id %}">{{ age_timeline.title }}</a>
                 {% endfor %}
+                {% for age_timeline in age_timeline_collaboration_list %}
+                <a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-timeline-detail' age_timeline.id %}">{{ age_timeline.title }} owned by {{ age_timeline.user }}</a>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -47,6 +50,9 @@
             <div class="list-group">
                 {% for date_time_timeline in date_time_timeline_list %}
                     <a class="list-group-item list-group-item-action" href="{% url 'date_time_timelines:date-time-timeline-detail' date_time_timeline.id %}">{{ date_time_timeline.title }}</a>
+                {% endfor %}
+                {% for date_time_timeline in date_time_collaboration_timeline_list %}
+                    <a class="list-group-item list-group-item-action" href="{% url 'date_time_timelines:date-time-timeline-detail' date_time_timeline.id %}">{{ date_time_timeline.title }} owned by {{ date_time_timeline.user }}</a>
                 {% endfor %}
             </div>
         </div>
@@ -61,6 +67,9 @@
                 {% for historical_timeline in historical_timeline_list %}
                     <a class="list-group-item list-group-item-action" href="{% url 'historical_timelines:timeline-detail' historical_timeline.id %}">{{ historical_timeline.title }}</a>
                 {% endfor %}
+                {% for historical_timeline in historical_collaboration_timeline_list %}
+                    <a class="list-group-item list-group-item-action" href="{% url 'historical_timelines:timeline-detail' historical_timeline.id %}">{{ historical_timeline.title }} owned by {{ historical_timeline.user }}</a>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -73,6 +82,9 @@
             <div class="list-group">
                 {% for scientific_timeline in scientific_timeline_list %}
                     <a class="list-group-item list-group-item-action" href="{% url 'scientific_timelines:timeline-detail' scientific_timeline.id %}">{{ scientific_timeline.title }}</a>
+                {% endfor %}
+                {% for scientific_timeline in scientific_collaboration_timeline_list %}
+                    <a class="list-group-item list-group-item-action" href="{% url 'scientific_timelines:timeline-detail' scientific_timeline.id %}">{{ scientific_timeline.title }} owned by {{ scientific_timeline.user }}</a>
                 {% endfor %}
             </div>
         </div>

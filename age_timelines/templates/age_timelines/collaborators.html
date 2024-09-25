@@ -1,0 +1,19 @@
+{% extends "timelines/collaborators.html" %}
+
+{% block timeline_breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'age_timelines:age-timeline-detail' view.kwargs.pk %}">{{ object.title }}</a></li>
+{% endblock timeline_breadcrumb %}
+
+{% block side_menu_timeline_options %}
+    <div class="sb-sidenav-menu-heading">Options</div>
+    <li class="nav-item"><a class="nav-link" href="{% url 'age_timelines:collaborator-add' view.kwargs.pk %}">New Collaborator</a></li>
+{% endblock %}
+
+{% block collaborators %}
+{% for collaborator in object.collaborator_set.all %}
+<tr>
+    <td><a class="list-group-item list-group-item-action" href="{% url 'age_timelines:collaborator-update' view.kwargs.pk collaborator.id %}">{{ collaborator.user.username }}</a></td>
+    <td><a class="list-group-item list-group-item-action" href="{% url 'age_timelines:collaborator-update' view.kwargs.pk collaborator.id %}">{{ collaborator.role_string }}</a></td>
+</tr>
+{% endfor %}
+{% endblock collaborators %}

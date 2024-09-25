@@ -10,8 +10,10 @@
 {% endblock %}
 
 {% block side_menu_timeline_options %}
-<div class="sb-sidenav-menu-heading">Options</div>
-<li class="nav-item"><a class="nav-link" href="{% url 'historical_timelines:timeline-delete' view.kwargs.pk %}">Delete</a></li>
+{% if user_role >= 4 %}
+    <div class="sb-sidenav-menu-heading">Options</div>
+    <li class="nav-item"><a class="nav-link" href="{% url 'historical_timelines:timeline-delete' view.kwargs.pk %}">Delete</a></li>
+{% endif %}
 {% endblock %}
 
 {% block heading %}Historical Timeline Settings{% endblock %}

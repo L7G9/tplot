@@ -2,20 +2,32 @@ from datetime import datetime
 import json
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.http import FileResponse, HttpResponseForbidden
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils import timezone
-from django.views.generic.edit import FormView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import (
+    CreateView, DeleteView, FormView, UpdateView,
+)
 
 from timelines.ai_assist.chat_gpt_request import chat_gpt_request
 from timelines.ai_assist.event_choice import get_event_choices
 from timelines.ai_assist.request_text import role_text
-from timelines.forms import AIRequestForm, AIResultsForm, NEW_CHOICE
-from timelines.mixins import OwnerRequiredMixin
-from timelines.models import EventArea, Tag
+from timelines.forms import (
+    NewCollaboratorForm, AIRequestForm, AIResultsForm, NEW_CHOICE
+)
+from timelines.mixins import RolePermissionMixin, RoleContextMixin
+from timelines.models import (
+    Tag,
+    EventArea,
+    Collaborator,
+    ROLE_VIEWER,
+    ROLE_EVENT_EDITOR,
+    ROLE_TIMELINE_EDITOR,
+    ROLE_OWNER
+)
 from timelines.pdf.get_filename import get_filename
 from timelines.view_errors import event_area_position_error
 
@@ -38,16 +50,18 @@ DATE_TIME_TIMELINE_FIELD_ORDER = [
 
 
 class DateTimeTimelineDetailView(
-    LoginRequiredMixin, OwnerRequiredMixin, DetailView
+    LoginRequiredMixin, RolePermissionMixin, DetailView
 ):
     model = DateTimeTimeline
     template_name = "date_time_timelines/timeline_detail.html"
-    paginate_by = 10
+    required_role = ROLE_VIEWER
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["now"] = timezone.now()
-
+        timeline = self.get_object().get_timeline()
+        user_role = timeline.get_role(self.request.user)
+        context["user_role"] = user_role
         return context
 
 
@@ -62,31 +76,36 @@ class DateTimeTimelineCreateView(LoginRequiredMixin, CreateView):
 
 
 class DateTimeTimelineUpdateView(
-    LoginRequiredMixin, OwnerRequiredMixin, UpdateView
+    LoginRequiredMixin, RolePermissionMixin, RoleContextMixin, UpdateView
 ):
     model = DateTimeTimeline
     fields = DATE_TIME_TIMELINE_FIELD_ORDER
     template_name = "date_time_timelines/timeline_edit_form.html"
+    required_role = ROLE_TIMELINE_EDITOR
 
 
 class DateTimeTimelineDeleteView(
-    LoginRequiredMixin, OwnerRequiredMixin, DeleteView
+    LoginRequiredMixin, RolePermissionMixin, DeleteView
 ):
     model = DateTimeTimeline
     template_name = "date_time_timelines/timeline_confirm_delete.html"
     success_url = reverse_lazy("timelines:user-timelines")
+    required_role = ROLE_OWNER
 
 
-# check date time timeline found with date_time_timeline_id is owned by logged
-# in user
-class DateTimeTimelineOwnerMixim(object):
+class DateTimeTimelineRoleMixin(object):
     def dispatch(self, request, *args, **kwargs):
         timeline = DateTimeTimeline.objects.get(
             pk=self.kwargs["date_time_timeline_id"]
         )
-        if timeline.get_owner() != request.user:
+        user_role = (
+            timeline.get_role(self.request.user)
+        )
+        if user_role < self.required_role:
             return HttpResponseForbidden()
-        return super().dispatch(request, *args, **kwargs)
+        return super(DateTimeTimelineRoleMixin, self).dispatch(
+            request, *args, **kwargs
+        )
 
 
 # return date time timeline detail
@@ -98,7 +117,7 @@ class SuccessMixim(object):
         )
 
 
-class AgeTimelineContextMixim:
+class DateTimeTimelineContextMixim:
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["date_time_timeline"] = DateTimeTimeline.objects.get(
@@ -151,24 +170,25 @@ def get_timeline_from_date_time_timeline(view):
     timeline = DateTimeTimeline.objects.get(
             pk=view.kwargs["date_time_timeline_id"]
         )
-    return timeline.timeline_ptr.pk
+    return timeline.timeline_ptr
 
 
 class DateTimeEventCreateView(
     LoginRequiredMixin,
-    DateTimeTimelineOwnerMixim,
+    DateTimeTimelineRoleMixin,
+    DateTimeTimelineContextMixim,
     DateTimeEventValidateMixim,
-    AgeTimelineContextMixim,
     SuccessMixim,
     CreateView,
 ):
     model = DateTimeEvent
     fields = DATE_TIME_EVENT_FIELD_ORDER
     template_name = "date_time_timelines/event_add_form.html"
+    required_role = ROLE_EVENT_EDITOR
 
     def get_form_class(self):
         modelform = super().get_form_class()
-        timeline_id = get_timeline_from_date_time_timeline(self)
+        timeline_id = get_timeline_from_date_time_timeline(self).pk
         modelform.base_fields['tags'].limit_choices_to = {
             'timeline': timeline_id
         }
@@ -180,8 +200,8 @@ class DateTimeEventCreateView(
 
 class DateTimeEventUpdateView(
     LoginRequiredMixin,
-    DateTimeTimelineOwnerMixim,
-    OwnerRequiredMixin,
+    RolePermissionMixin,
+    DateTimeTimelineRoleMixin,
     DateTimeEventValidateMixim,
     SuccessMixim,
     UpdateView,
@@ -189,10 +209,11 @@ class DateTimeEventUpdateView(
     model = DateTimeEvent
     fields = DATE_TIME_EVENT_FIELD_ORDER
     template_name = "date_time_timelines/event_edit_form.html"
+    required_role = ROLE_EVENT_EDITOR
 
     def get_form_class(self):
         modelform = super().get_form_class()
-        timeline_id = get_timeline_from_date_time_timeline(self)
+        timeline_id = get_timeline_from_date_time_timeline(self).pk
         modelform.base_fields['tags'].limit_choices_to = {
             'timeline': timeline_id
         }
@@ -204,29 +225,29 @@ class DateTimeEventUpdateView(
 
 class DateTimeEventDeleteView(
     LoginRequiredMixin,
-    DateTimeTimelineOwnerMixim,
-    OwnerRequiredMixin,
+    RolePermissionMixin,
+    DateTimeTimelineRoleMixin,
     SuccessMixim,
     DeleteView,
 ):
     model = DateTimeEvent
     template_name = "date_time_timelines/event_confirm_delete.html"
+    required_role = ROLE_EVENT_EDITOR
 
 
 class TagValidateMixim(object):
     def form_valid(self, form):
-        timeline = DateTimeTimeline.objects.get(
-            pk=self.kwargs["date_time_timeline_id"]
+        form.instance.timeline_id = (
+            get_timeline_from_date_time_timeline(self).pk
         )
-        form.instance.timeline_id = timeline.timeline_ptr.pk
 
         return super().form_valid(form)
 
 
 class TagCreateView(
     LoginRequiredMixin,
-    DateTimeTimelineOwnerMixim,
-    AgeTimelineContextMixim,
+    DateTimeTimelineRoleMixin,
+    DateTimeTimelineContextMixim,
     TagValidateMixim,
     SuccessMixim,
     CreateView,
@@ -234,12 +255,13 @@ class TagCreateView(
     model = Tag
     fields = ["name", "description", "display"]
     template_name = "date_time_timelines/tag_add_form.html"
+    required_role = ROLE_TIMELINE_EDITOR
 
 
 class TagUpdateView(
     LoginRequiredMixin,
-    DateTimeTimelineOwnerMixim,
-    OwnerRequiredMixin,
+    RolePermissionMixin,
+    DateTimeTimelineRoleMixin,
     TagValidateMixim,
     SuccessMixim,
     UpdateView,
@@ -247,25 +269,25 @@ class TagUpdateView(
     model = Tag
     fields = ["name", "description", "display"]
     template_name = "date_time_timelines/tag_edit_form.html"
+    required_role = ROLE_EVENT_EDITOR
 
 
 class TagDeleteView(
     LoginRequiredMixin,
-    DateTimeTimelineOwnerMixim,
-    OwnerRequiredMixin,
+    RolePermissionMixin,
+    DateTimeTimelineRoleMixin,
     SuccessMixim,
     DeleteView,
 ):
     model = Tag
     template_name = "date_time_timelines/tag_confirm_delete.html"
+    required_role = ROLE_EVENT_EDITOR
 
 
 class EventAreaValidateMixim(object):
     def form_valid(self, form):
-        timeline = DateTimeTimeline.objects.get(
-            pk=self.kwargs["date_time_timeline_id"]
-        )
-        form.instance.timeline_id = timeline.timeline_ptr.pk
+        timeline_ptr = get_timeline_from_date_time_timeline(self)
+        form.instance.timeline_id = timeline_ptr.pk
 
         # TODO: find a more elegant solution
         area_id = None
@@ -274,7 +296,7 @@ class EventAreaValidateMixim(object):
 
         position_error = event_area_position_error(
             form,
-            timeline.timeline_ptr,
+            timeline_ptr,
             area_id,
         )
         if position_error is not None:
@@ -288,8 +310,8 @@ class EventAreaValidateMixim(object):
 
 class EventAreaCreateView(
     LoginRequiredMixin,
-    DateTimeTimelineOwnerMixim,
-    AgeTimelineContextMixim,
+    DateTimeTimelineRoleMixin,
+    DateTimeTimelineContextMixim,
     EventAreaValidateMixim,
     SuccessMixim,
     CreateView,
@@ -297,12 +319,13 @@ class EventAreaCreateView(
     model = EventArea
     fields = ["name", "page_position", "weight"]
     template_name = "date_time_timelines/event_area_add_form.html"
+    required_role = ROLE_EVENT_EDITOR
 
 
 class EventAreaUpdateView(
     LoginRequiredMixin,
-    DateTimeTimelineOwnerMixim,
-    OwnerRequiredMixin,
+    RolePermissionMixin,
+    DateTimeTimelineRoleMixin,
     EventAreaValidateMixim,
     SuccessMixim,
     UpdateView,
@@ -310,24 +333,126 @@ class EventAreaUpdateView(
     model = EventArea
     fields = ["name", "page_position", "weight"]
     template_name = "date_time_timelines/event_area_edit_form.html"
+    required_role = ROLE_TIMELINE_EDITOR
 
 
 class EventAreaDeleteView(
     LoginRequiredMixin,
-    DateTimeTimelineOwnerMixim,
-    OwnerRequiredMixin,
+    RolePermissionMixin,
+    DateTimeTimelineRoleMixin,
     SuccessMixim,
     DeleteView,
 ):
     model = EventArea
     template_name = "date_time_timelines/event_area_confirm_delete.html"
+    required_role = ROLE_TIMELINE_EDITOR
+
+
+class CollaboratorsView(
+    LoginRequiredMixin,
+    RolePermissionMixin,
+    DetailView,
+):
+    model = DateTimeTimeline
+    template_name = "date_time_timelines/collaborators.html"
+    required_role = ROLE_OWNER
+
+
+class CollaboratorSuccessMixin(object):
+    def get_success_url(self) -> str:
+        return reverse_lazy(
+            "date_time_timelines:collaborators",
+            kwargs={"pk": self.kwargs["date_time_timeline_id"]},
+        )
+
+
+class CollaboratorCreateView(
+    LoginRequiredMixin,
+    DateTimeTimelineRoleMixin,
+    DateTimeTimelineContextMixim,
+    CollaboratorSuccessMixin,
+    FormView,
+):
+    form_class = NewCollaboratorForm
+    template_name = "date_time_timelines/collaborator_add.html"
+    required_role = ROLE_OWNER
+
+    def form_valid(self, form):
+        timeline = get_timeline_from_date_time_timeline(self)
+
+        user_name = form.cleaned_data.get("user_name")
+
+        try:
+            user = User.objects.get(username=user_name)
+        except User.DoesNotExist:
+            form.add_error("user_name", "User not found.")
+            return self.form_invalid(form)
+
+        try:
+            collaborator = Collaborator.objects.get(
+                timeline=timeline, user=user
+            )
+        except Collaborator.DoesNotExist:
+            collaborator = None
+
+        if collaborator is not None:
+            form.add_error(
+                "user_name",
+                "User already collaborating on this timeline."
+            )
+            return self.form_invalid(form)
+        else:
+            if user == self.request.user:
+                form.add_error(
+                    "user_name",
+                    "Cannot add yourself as a collaborator."
+                )
+                return self.form_invalid(form)
+
+            role = form.cleaned_data.get("role_choice")
+
+            Collaborator.objects.create(
+                timeline=timeline,
+                user=user,
+                role=role,
+            )
+
+            return super().form_valid(form)
+
+
+class CollaboratorUpdateView(
+    LoginRequiredMixin,
+    RolePermissionMixin,
+    DateTimeTimelineRoleMixin,
+    DateTimeTimelineContextMixim,
+    CollaboratorSuccessMixin,
+    UpdateView,
+):
+    model = Collaborator
+    fields = ["role"]
+    template_name = "date_time_timelines/collaborator_edit.html"
+    required_role = ROLE_OWNER
+
+
+class CollaboratorDeleteView(
+    LoginRequiredMixin,
+    RolePermissionMixin,
+    DateTimeTimelineRoleMixin,
+    DateTimeTimelineContextMixim,
+    CollaboratorSuccessMixin,
+    DeleteView,
+):
+    model = Collaborator
+    template_name = "date_time_timelines/collaborator_delete.html"
+    required_role = ROLE_OWNER
 
 
 class TimelineView(
-    LoginRequiredMixin, OwnerRequiredMixin, DetailView
+    LoginRequiredMixin, RolePermissionMixin, DetailView
 ):
     model = DateTimeTimeline
     template_name = "date_time_timelines/timeline.html"
+    required_role = ROLE_VIEWER
 
 
 def pdf_view(request, date_time_timeline_id):
@@ -335,7 +460,8 @@ def pdf_view(request, date_time_timeline_id):
         id=date_time_timeline_id
     )
 
-    if timeline.get_owner() != request.user:
+    user_role = timeline.get_role(request.user)
+    if user_role < ROLE_VIEWER:
         return HttpResponseForbidden()
 
     timeline_pdf = PDFDateTimeTimeline(timeline)
@@ -349,11 +475,12 @@ def pdf_view(request, date_time_timeline_id):
 
 class AIRequestView(
     LoginRequiredMixin,
-    DateTimeTimelineOwnerMixim,
+    DateTimeTimelineRoleMixin,
     FormView
 ):
     form_class = AIRequestForm
     template_name = "date_time_timelines/ai_request.html"
+    required_role = ROLE_OWNER
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
@@ -396,16 +523,17 @@ class AIRequestView(
 
 class AIResultView(
     LoginRequiredMixin,
-    DateTimeTimelineOwnerMixim,
+    DateTimeTimelineRoleMixin,
     SuccessMixim,
     FormView
 ):
     form_class = AIResultsForm
     template_name = "date_time_timelines/ai_result.html"
+    required_role = ROLE_OWNER
 
     def get_form_kwargs(self):
         kwargs = super(AIResultView, self).get_form_kwargs()
-        kwargs['timeline_id'] = get_timeline_from_date_time_timeline(self)
+        kwargs['timeline_id'] = get_timeline_from_date_time_timeline(self).pk
         kwargs['events'] = get_event_choices(self.request.session['ai_result'])
 
         return kwargs

@@ -1,14 +1,25 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.http import FileResponse, HttpResponseForbidden
 from django.urls import reverse_lazy
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import (
+    CreateView, DeleteView, FormView, UpdateView,
+)
 
-
-from timelines.mixins import OwnerRequiredMixin
+from timelines.forms import NewCollaboratorForm
 from timelines.view_errors import event_area_position_error
 from timelines.pdf.get_filename import get_filename
-from timelines.models import Tag, EventArea
+from timelines.mixins import RolePermissionMixin, RoleContextMixin
+from timelines.models import (
+    Tag,
+    EventArea,
+    Collaborator,
+    ROLE_VIEWER,
+    ROLE_EVENT_EDITOR,
+    ROLE_TIMELINE_EDITOR,
+    ROLE_OWNER
+)
 
 from .models import HistoricalEvent, HistoricalTimeline
 from .pdf.pdf_historical_timeline import PDFHistoricalTimeline
@@ -25,9 +36,15 @@ TIMELINE_FIELD_ORDER = [
 ]
 
 
-class TimelineDetailView(LoginRequiredMixin, OwnerRequiredMixin, DetailView):
+class TimelineDetailView(
+    LoginRequiredMixin,
+    RolePermissionMixin,
+    RoleContextMixin,
+    DetailView
+):
     model = HistoricalTimeline
     template_name = "historical_timelines/timeline_detail.html"
+    required_role = ROLE_VIEWER
 
 
 class TimelineCreateView(LoginRequiredMixin, CreateView):
@@ -40,32 +57,44 @@ class TimelineCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class TimelineUpdateView(LoginRequiredMixin, OwnerRequiredMixin, UpdateView):
+class TimelineUpdateView(
+    LoginRequiredMixin,
+    RolePermissionMixin,
+    RoleContextMixin,
+    UpdateView
+):
     model = HistoricalTimeline
     fields = TIMELINE_FIELD_ORDER
     template_name = "historical_timelines/timeline_edit.html"
+    required_role = ROLE_TIMELINE_EDITOR
 
 
-class TimelineDeleteView(LoginRequiredMixin, OwnerRequiredMixin, DeleteView):
+class TimelineDeleteView(
+    LoginRequiredMixin,
+    RolePermissionMixin,
+    RoleContextMixin,
+    DeleteView
+):
     model = HistoricalTimeline
     template_name = "historical_timelines/timeline_delete.html"
     success_url = reverse_lazy("timelines:user-timelines")
+    required_role = ROLE_OWNER
 
 
-class TimelineOwnerMixim(object):
-    """Check historical timeline found with historical_timeline_id is owned by
-    logged in user."""
-
+class TimelineRoleMixin(object):
     def dispatch(self, request, *args, **kwargs):
-        historical_timeline = HistoricalTimeline.objects.get(
+        timeline = HistoricalTimeline.objects.get(
             pk=self.kwargs["historical_timeline_id"]
         )
-        if historical_timeline.get_owner() != request.user:
+        user_role = timeline.get_role(self.request.user)
+        if user_role < self.required_role:
             return HttpResponseForbidden()
-        return super().dispatch(request, *args, **kwargs)
+        return super(TimelineRoleMixin, self).dispatch(
+            request, *args, **kwargs
+        )
 
 
-class SuccessMixim(object):
+class SuccessMixin(object):
     """Return historical timeline detail."""
 
     def get_success_url(self) -> str:
@@ -75,7 +104,7 @@ class SuccessMixim(object):
         )
 
 
-class HistoricalTimelineContextMixim:
+class HistoricalTimelineContextMixin:
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["historical_timeline"] = HistoricalTimeline.objects.get(
@@ -97,7 +126,7 @@ EVENT_FIELD_ORDER = [
 ]
 
 
-class EventValidateMixim(object):
+class EventValidateMixin(object):
     def form_valid(self, form):
         form.instance.historical_timeline = HistoricalTimeline.objects.get(
             pk=self.kwargs["historical_timeline_id"]
@@ -129,24 +158,25 @@ def get_timeline_from_historical_timeline(view):
     historical_timeline = HistoricalTimeline.objects.get(
         pk=view.kwargs["historical_timeline_id"]
     )
-    return historical_timeline.timeline_ptr.pk
+    return historical_timeline.timeline_ptr
 
 
 class EventCreateView(
     LoginRequiredMixin,
-    TimelineOwnerMixim,
-    HistoricalTimelineContextMixim,
-    EventValidateMixim,
-    SuccessMixim,
+    TimelineRoleMixin,
+    HistoricalTimelineContextMixin,
+    EventValidateMixin,
+    SuccessMixin,
     CreateView,
 ):
     model = HistoricalEvent
     fields = EVENT_FIELD_ORDER
     template_name = "historical_timelines/event_add.html"
+    required_role = ROLE_EVENT_EDITOR
 
     def get_form_class(self):
         modelform = super().get_form_class()
-        timeline_id = get_timeline_from_historical_timeline(self)
+        timeline_id = get_timeline_from_historical_timeline(self).pk
         modelform.base_fields["tags"].limit_choices_to = {
             "timeline": timeline_id
         }
@@ -158,19 +188,20 @@ class EventCreateView(
 
 class EventUpdateView(
     LoginRequiredMixin,
-    TimelineOwnerMixim,
-    OwnerRequiredMixin,
-    EventValidateMixim,
-    SuccessMixim,
+    RolePermissionMixin,
+    TimelineRoleMixin,
+    EventValidateMixin,
+    SuccessMixin,
     UpdateView,
 ):
     model = HistoricalEvent
     fields = EVENT_FIELD_ORDER
     template_name = "historical_timelines/event_edit.html"
+    required_role = ROLE_EVENT_EDITOR
 
     def get_form_class(self):
         modelform = super().get_form_class()
-        timeline_id = get_timeline_from_historical_timeline(self)
+        timeline_id = get_timeline_from_historical_timeline(self).pk
         modelform.base_fields["tags"].limit_choices_to = {
             "timeline": timeline_id
         }
@@ -182,68 +213,69 @@ class EventUpdateView(
 
 class EventDeleteView(
     LoginRequiredMixin,
-    TimelineOwnerMixim,
-    OwnerRequiredMixin,
-    SuccessMixim,
+    RolePermissionMixin,
+    TimelineRoleMixin,
+    SuccessMixin,
     DeleteView,
 ):
     model = HistoricalEvent
     template_name = "historical_timelines/event_delete.html"
+    required_role = ROLE_EVENT_EDITOR
 
 
-class TagValidateMixim(object):
+class TagValidateMixin(object):
     def form_valid(self, form):
-        historical_timeline = HistoricalTimeline.objects.get(
-            pk=self.kwargs["historical_timeline_id"]
+        form.instance.timeline_id = (
+            get_timeline_from_historical_timeline(self).pk
         )
-        form.instance.timeline_id = historical_timeline.timeline_ptr.pk
 
         return super().form_valid(form)
 
 
 class TagCreateView(
     LoginRequiredMixin,
-    TimelineOwnerMixim,
-    HistoricalTimelineContextMixim,
-    TagValidateMixim,
-    SuccessMixim,
+    TimelineRoleMixin,
+    HistoricalTimelineContextMixin,
+    TagValidateMixin,
+    SuccessMixin,
     CreateView,
 ):
     model = Tag
     fields = ["name", "description", "display"]
     template_name = "historical_timelines/tag_add.html"
+    required_role = ROLE_TIMELINE_EDITOR
 
 
 class TagUpdateView(
     LoginRequiredMixin,
-    TimelineOwnerMixim,
-    OwnerRequiredMixin,
-    TagValidateMixim,
-    SuccessMixim,
+    RolePermissionMixin,
+    TimelineRoleMixin,
+    TagValidateMixin,
+    SuccessMixin,
     UpdateView,
 ):
     model = Tag
     fields = ["name", "description", "display"]
     template_name = "historical_timelines/tag_edit.html"
+    required_role = ROLE_TIMELINE_EDITOR
 
 
 class TagDeleteView(
     LoginRequiredMixin,
-    TimelineOwnerMixim,
-    OwnerRequiredMixin,
-    SuccessMixim,
+    RolePermissionMixin,
+    TimelineRoleMixin,
+    SuccessMixin,
     DeleteView,
 ):
     model = Tag
     template_name = "historical_timelines/tag_delete.html"
+    required_role = ROLE_TIMELINE_EDITOR
 
 
-class EventAreaValidateMixim(object):
+class EventAreaValidateMixin(object):
     def form_valid(self, form):
-        historical_timeline = HistoricalTimeline.objects.get(
-            pk=self.kwargs["historical_timeline_id"]
-        )
-        form.instance.timeline_id = historical_timeline.timeline_ptr.pk
+        timeline_ptr = get_timeline_from_historical_timeline(self)
+        form.instance.timeline_id = timeline_ptr.pk
 
         area_id = None
         if "pk" in self.kwargs:
@@ -251,7 +283,7 @@ class EventAreaValidateMixim(object):
 
         position_error = event_area_position_error(
             form,
-            historical_timeline.timeline_ptr,
+            timeline_ptr,
             area_id,
         )
         if position_error is not None:
@@ -265,50 +297,157 @@ class EventAreaValidateMixim(object):
 
 class EventAreaCreateView(
     LoginRequiredMixin,
-    TimelineOwnerMixim,
-    HistoricalTimelineContextMixim,
-    EventAreaValidateMixim,
-    SuccessMixim,
+    TimelineRoleMixin,
+    HistoricalTimelineContextMixin,
+    EventAreaValidateMixin,
+    SuccessMixin,
     CreateView,
 ):
     model = EventArea
     fields = ["name", "page_position", "weight"]
     template_name = "historical_timelines/event_area_add.html"
+    required_role = ROLE_TIMELINE_EDITOR
 
 
 class EventAreaUpdateView(
     LoginRequiredMixin,
-    TimelineOwnerMixim,
-    OwnerRequiredMixin,
-    EventAreaValidateMixim,
-    SuccessMixim,
+    RolePermissionMixin,
+    TimelineRoleMixin,
+    EventAreaValidateMixin,
+    SuccessMixin,
     UpdateView,
 ):
     model = EventArea
     fields = ["name", "page_position", "weight"]
     template_name = "historical_timelines/event_area_edit.html"
+    required_role = ROLE_TIMELINE_EDITOR
 
 
 class EventAreaDeleteView(
     LoginRequiredMixin,
-    TimelineOwnerMixim,
-    OwnerRequiredMixin,
-    SuccessMixim,
+    RolePermissionMixin,
+    TimelineRoleMixin,
+    SuccessMixin,
     DeleteView,
 ):
     model = EventArea
     template_name = "historical_timelines/event_area_delete.html"
+    required_role = ROLE_TIMELINE_EDITOR
 
 
-class TimelineView(LoginRequiredMixin, OwnerRequiredMixin, DetailView):
+class CollaboratorsView(
+    LoginRequiredMixin,
+    RolePermissionMixin,
+    DetailView,
+):
+    model = HistoricalTimeline
+    template_name = "historical_timelines/collaborators.html"
+    required_role = ROLE_OWNER
+
+
+class CollaboratorSuccessMixin(object):
+    def get_success_url(self) -> str:
+        return reverse_lazy(
+            "historical_timelines:collaborators",
+            kwargs={"pk": self.kwargs["historical_timeline_id"]},
+        )
+
+
+class CollaboratorCreateView(
+    LoginRequiredMixin,
+    TimelineRoleMixin,
+    HistoricalTimelineContextMixin,
+    CollaboratorSuccessMixin,
+    FormView,
+):
+    form_class = NewCollaboratorForm
+    template_name = "historical_timelines/collaborator_add.html"
+    required_role = ROLE_OWNER
+
+    def form_valid(self, form):
+        timeline = get_timeline_from_historical_timeline(self)
+
+        user_name = form.cleaned_data.get("user_name")
+
+        try:
+            user = User.objects.get(username=user_name)
+        except User.DoesNotExist:
+            form.add_error("user_name", "User not found.")
+            return self.form_invalid(form)
+
+        try:
+            collaborator = Collaborator.objects.get(
+                timeline=timeline, user=user
+            )
+        except Collaborator.DoesNotExist:
+            collaborator = None
+
+        if collaborator is not None:
+            form.add_error(
+                "user_name",
+                "User already collaborating on this timeline."
+            )
+            return self.form_invalid(form)
+        else:
+            if user == self.request.user:
+                form.add_error(
+                    "user_name",
+                    "Cannot add yourself as a collaborator."
+                )
+                return self.form_invalid(form)
+
+            role = form.cleaned_data.get("role_choice")
+
+            Collaborator.objects.create(
+                timeline=timeline,
+                user=user,
+                role=role,
+            )
+
+            return super().form_valid(form)
+
+
+class CollaboratorUpdateView(
+    LoginRequiredMixin,
+    RolePermissionMixin,
+    TimelineRoleMixin,
+    HistoricalTimelineContextMixin,
+    CollaboratorSuccessMixin,
+    UpdateView,
+):
+    model = Collaborator
+    fields = ["role"]
+    template_name = "historical_timelines/collaborator_edit.html"
+    required_role = ROLE_OWNER
+
+
+class CollaboratorDeleteView(
+    LoginRequiredMixin,
+    RolePermissionMixin,
+    TimelineRoleMixin,
+    HistoricalTimelineContextMixin,
+    CollaboratorSuccessMixin,
+    DeleteView,
+):
+    model = Collaborator
+    template_name = "historical_timelines/collaborator_delete.html"
+    required_role = ROLE_OWNER
+
+
+class TimelineView(LoginRequiredMixin, RolePermissionMixin, DetailView):
     model = HistoricalTimeline
     template_name = "historical_timelines/timeline.html"
+    required_role = ROLE_VIEWER
 
 
 def pdf_view(request, historical_timeline_id):
     historical_timeline: HistoricalTimeline = HistoricalTimeline.objects.get(
         id=historical_timeline_id
     )
+
+    user_role = historical_timeline.get_role(request.user)
+    if user_role < ROLE_VIEWER:
+        return HttpResponseForbidden()
 
     timeline_pdf = PDFHistoricalTimeline(historical_timeline)
 

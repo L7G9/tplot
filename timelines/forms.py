@@ -2,7 +2,34 @@ from django import forms
 from django.core.validators import MinValueValidator
 
 from .models import EventArea
+from timelines.models import ROLE_VIEWER, ROLES
 from timelines.ai_assist.request_text import StartEndOption
+
+
+class NewCollaboratorForm(forms.Form):
+    user_name = forms.CharField(
+        label="Username",
+        help_text="Username of collaborator to work on this timeline with.",
+        max_length=100,
+    )
+
+    role_choice = forms.ChoiceField(
+        widget=forms.RadioSelect,
+        label="Role",
+        help_text="Choose role of collaborator.",
+        choices=ROLES,
+        initial=ROLE_VIEWER,
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        user_name = cleaned_data.get("user_name")
+
+        if len(user_name) == 0:
+            msg = "Enter username of collaborator for this timeline."
+            self.add_error("user_name", msg)
+
 
 AI_CHOICE = "1"
 USER_CHOICE = "2"

@@ -49,6 +49,23 @@ class Timeline(models.Model):
     def get_owner(self):
         return self.user
 
+    def get_timeline(self):
+        return self
+
+    def get_role(self, user):
+        if user is None:
+            return ROLE_NONE
+        elif user == self.user:
+            return ROLE_OWNER
+        else:
+            collaborators = self.collaborator_set.filter(
+                user=user
+            )
+            if len(collaborators) != 0:
+                return collaborators[0].role
+            else:
+                return ROLE_NONE
+
 
 class EventArea(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
@@ -68,6 +85,9 @@ class EventArea(models.Model):
     def get_owner(self):
         return self.timeline.user
 
+    def get_timeline(self):
+        return self.timeline
+
 
 class Tag(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
@@ -83,6 +103,9 @@ class Tag(models.Model):
 
     def get_owner(self):
         return self.timeline.user
+
+    def get_timeline(self):
+        return self.timeline
 
 
 class Event(models.Model):
@@ -104,6 +127,9 @@ class Event(models.Model):
     def get_owner(self):
         return self.timeline.user
 
+    def get_timeline(self):
+        return self.timeline
+
     def tag_string(self, display_only):
         if display_only:
             tags = self.tags.filter(display=True)
@@ -120,3 +146,42 @@ class Event(models.Model):
             return tag_string
         else:
             return ""
+
+
+ROLE_NONE = 0
+ROLE_VIEWER = 1
+ROLE_EVENT_EDITOR = 2
+ROLE_TIMELINE_EDITOR = 3
+ROLE_OWNER = 4
+ROLE_DESCRIPTIONS = [
+    "None",
+    "Viewer",
+    "Event Editor",
+    "Timeline Editor",
+    "Owner",
+]
+ROLES = [
+    (ROLE_VIEWER, ROLE_DESCRIPTIONS[ROLE_VIEWER]),
+    (ROLE_EVENT_EDITOR, ROLE_DESCRIPTIONS[ROLE_EVENT_EDITOR]),
+    (ROLE_TIMELINE_EDITOR, ROLE_DESCRIPTIONS[ROLE_TIMELINE_EDITOR]),
+]
+
+
+class Collaborator(models.Model):
+    timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    role = models.PositiveSmallIntegerField(
+        choices=ROLES, default=ROLE_VIEWER
+    )
+
+    class Meta:
+        unique_together = ["timeline", "user"]
+
+    def get_owner(self):
+        return self.timeline.user
+
+    def get_timeline(self):
+        return self.timeline
+
+    def role_string(self):
+        return ROLE_DESCRIPTIONS[self.role]
