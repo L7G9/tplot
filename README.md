@@ -1,7 +1,7 @@
 ---
 # T-Plot
 
-![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white) ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white) ![Githun Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white) ![AWS](https://img.shields.io/badge/Amazon_AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white) ![Postgres](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white) ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white) ![Githun Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white) ![AWS](https://img.shields.io/badge/Amazon_AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white) ![Postgres](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white) ![ChatGPT](https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
 [![CICD](https://github.com/L7G9/tplot/actions/workflows/main.yaml/badge.svg)](https://github.com/L7G9/tplot/actions/workflows/main.yaml) [![](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
 
 Timeline web app
@@ -11,43 +11,43 @@ T-Plot is a web app which can be used to create timelines as a list of events, t
 The user sets the scale and layout settings they want, and the app automatically handles the correct positioning of the events on PDF.
 Created to demonstrate the use of the web framework Django, it features a fully functional CI/CD pipeline that deploys it on AWS Elastic Beanstalk.
 
-The current release up and running [here](https://tplot.lukegregorydev.co.uk).
+The current release up and running [here](https://tplot-541cb069b748.herokuapp.com/user_guide/home.html).
 
 ---
 ## Implemented Features
-  - User registration, login and logout
+  - User registration, login, logout & password reset
   - Create, read, update and delete timeline information in a Postgres database running on AWS RDS
-  - Permissions to ensure users can only view their own database records
   - Timeline Types
     - Date and Time using events ordered by calendar and clock time units including years, months, weeks, days, hours, minutes and seconds
     - Age using events ordered by age in years and months
 	- Historical using years BC to AD
 	- Scientific using thousands, millions and billions of years in the past and future
-  - Timeline Views
+  - Graphical Timeline Representations
     - Web based timeline showing events in order
     - PDF timeline showing events in order positioned to time scale
-      - Set timeline scale
-      - Control PDF layout
   - AI Assist
     - Request ChatGPT find potential events you add to your timeline
     - Review the results and select which events to add
+  - Collaboration
+    - Allow other users to view and work on a timeline by assigning them a role
+      - Timeline Viewer: View graphical timeline representations and information in timeline
+      - Event Editor: Add, edit and delete timeline events
+      - Timeline Editor: Edit timelines setting
   - User Guide
     - Getting started guides for common tasks
     - Reference guides explaining all TPlot's objects, values and settings
-  - High availability using AWS EC2 instances in an Auto Scaling Group with a Load Balancer
 
 ## Project Road Map
+  - Improved timeline view
+  - Image Support
   - Bulk event operations
     - Delete
 	- Set event area
     - Assign tags
+  - Copy timeline
   - Slide show view
-  - Image Support
-  - Sharing and collaboration
-  - Improved registration
-    - Password reset
-	- Validate account using email
-    - Sign up with Google, GitHub etc
+  - Sign up with Google, GitHub etc
+  - User subscriptions
 
 ---
 ## CI/CD
