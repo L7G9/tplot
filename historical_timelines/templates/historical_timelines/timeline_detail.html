@@ -28,7 +28,8 @@
 
 {% if user_role >= 1 %}
     <div class="sb-sidenav-menu-heading">View</div>
-    <li class="nav-item"><a class="nav-link" href="{% url 'historical_timelines:timeline' view.kwargs.pk %}">Timeline</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'historical_timelines:landscape_timeline' view.kwargs.pk %}">Landscape</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'historical_timelines:portrait_timeline' view.kwargs.pk %}">Portrait</a></li>
     <li class="nav-item"><a class="nav-link" href="{% url 'historical_timelines:timeline-pdf' view.kwargs.pk %}">PDF</a></li>
 {% endif %}
 

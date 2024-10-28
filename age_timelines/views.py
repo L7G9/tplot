@@ -31,10 +31,10 @@ from timelines.models import (
 from timelines.pdf.get_filename import get_filename
 from timelines.view_errors import event_area_position_error
 
-
 from .ai_assist.request_text import age_request_text
 from .models import AgeEvent, AgeTimeline
 from .pdf.pdf_age_timeline import PDFAgeTimeline
+from .view_data.age_timeline_data import AgeTimelineData
 
 
 AGE_TIMELINE_FIELD_ORDER = [
@@ -447,12 +447,38 @@ class CollaboratorDeleteView(
     required_role = ROLE_OWNER
 
 
-class TimelineView(
+class LandscapeTimelineView(
     LoginRequiredMixin, RolePermissionMixin, DetailView
 ):
     model = AgeTimeline
-    template_name = "age_timelines/timeline.html"
+    template_name = "age_timelines/landscape_timeline.html"
     required_role = ROLE_VIEWER
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        timeline = self.get_object().get_timeline()
+        user_role = timeline.get_role(self.request.user)
+        context["user_role"] = user_role
+        context["timeline"] = AgeTimelineData(self.get_object())
+
+        return context
+
+
+class PortraitTimelineView(
+    LoginRequiredMixin, RolePermissionMixin, DetailView
+):
+    model = AgeTimeline
+    template_name = "age_timelines/portrait_timeline.html"
+    required_role = ROLE_VIEWER
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        timeline = self.get_object().get_timeline()
+        user_role = timeline.get_role(self.request.user)
+        context["user_role"] = user_role
+        context["timeline"] = AgeTimelineData(self.get_object())
+
+        return context
 
 
 def pdf_view(request, age_timeline_id):

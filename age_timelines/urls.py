@@ -107,11 +107,17 @@ urlpatterns = [
         name="collaborator-delete",
     ),
 
-    # ex: 1/timeline/
+    # ex: 1/timeline/landscape/
     path(
-        "<int:pk>/timeline/",
-        views.TimelineView.as_view(),
-        name="timeline",
+        "<int:pk>/view/landscape/",
+        views.LandscapeTimelineView.as_view(),
+        name="landscape_timeline",
+    ),
+    # ex: 1/timeline/portrait/
+    path(
+        "<int:pk>/view/portrait/",
+        views.PortraitTimelineView.as_view(),
+        name="portrait_timeline",
     ),
     # ex: 1/pdf/
     path(

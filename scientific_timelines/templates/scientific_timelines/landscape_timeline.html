@@ -1,0 +1,5 @@
+{% extends "timelines/landscape_timeline.html" %}
+
+{% block timeline_breadcrumb %}
+	<li class="breadcrumb-item"><a href="{% url 'scientific_timelines:timeline-detail' view.kwargs.pk %}">{{object.title}}</a></li>
+{% endblock timeline_breadcrumb %}

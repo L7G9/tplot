@@ -137,7 +137,7 @@ class Event(models.Model):
             tags = self.tags.all()
 
         if tags.count() > 0:
-            tag_string = "Tags("
+            tag_string = "("
             for tag in tags:
                 if tag == tags.last():
                     tag_string += f"{tag.name})"

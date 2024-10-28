@@ -102,13 +102,19 @@ class PDFTimeline(ABC):
 
         # init tag key
         display_tags = timeline.tag_set.filter(display=True)
-        if timeline.page_orientation == "L":
-            tag_key_width = self.scale.width
-        else:
-            tag_key_width = self.layout.drawable_area.width
-
-        column_count = int(tag_key_width / TAG_KEY_COLUMN_WIDTH)
         if len(display_tags) > 0:
+            if timeline.page_orientation == "L":
+                tag_key_width = max(
+                    self.scale.width,
+                    self.layout.drawable_area.width
+                )
+            else:
+                tag_key_width = self.layout.drawable_area.width
+
+            column_count = int(tag_key_width / TAG_KEY_COLUMN_WIDTH)
+            if column_count < 1:
+                column_count = 1
+
             self.tag_key = PDFTagKey(
                 display_tags,
                 self.canvas,

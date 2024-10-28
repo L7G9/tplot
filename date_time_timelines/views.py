@@ -34,6 +34,7 @@ from timelines.view_errors import event_area_position_error
 from .ai_assist.request_text import date_time_request_text
 from .models import DateTimeEvent, DateTimeTimeline
 from .pdf.pdf_date_time_timeline import PDFDateTimeTimeline
+from .view_data.date_time_timeline_data import DateTimeTimelineData
 
 
 DATE_TIME_TIMELINE_FIELD_ORDER = [
@@ -445,6 +446,40 @@ class CollaboratorDeleteView(
     model = Collaborator
     template_name = "date_time_timelines/collaborator_delete.html"
     required_role = ROLE_OWNER
+
+
+class LandscapeTimelineView(
+    LoginRequiredMixin, RolePermissionMixin, DetailView
+):
+    model = DateTimeTimeline
+    template_name = "date_time_timelines/landscape_timeline.html"
+    required_role = ROLE_VIEWER
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        timeline = self.get_object().get_timeline()
+        user_role = timeline.get_role(self.request.user)
+        context["user_role"] = user_role
+        context["timeline"] = DateTimeTimelineData(self.get_object())
+
+        return context
+
+
+class PortraitTimelineView(
+    LoginRequiredMixin, RolePermissionMixin, DetailView
+):
+    model = DateTimeTimeline
+    template_name = "date_time_timelines/portrait_timeline.html"
+    required_role = ROLE_VIEWER
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        timeline = self.get_object().get_timeline()
+        user_role = timeline.get_role(self.request.user)
+        context["user_role"] = user_role
+        context["timeline"] = DateTimeTimelineData(self.get_object())
+
+        return context
 
 
 class TimelineView(

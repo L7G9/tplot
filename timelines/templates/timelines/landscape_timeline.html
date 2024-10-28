@@ -1,0 +1,381 @@
+{% extends "user_guide/user_guide_base.html" %}
+
+{% block head_additional %}
+{% load static %}
+<link href="{% static 'css/web_view.css' %}" rel="stylesheet" />
+<style>
+    .title_para {
+        position: relative;
+        margin: 0px;
+    }
+
+    .description_para {
+        position: relative;
+        margin: 0px;
+    }
+
+    .event_scale_area {
+        position: relative;
+        margin: 5px;
+    }
+
+    .event_area {
+        position: relative;
+        margin: 5px 0px 5px 0px;
+    }
+
+    .event_box {
+        position: absolute;
+        box-sizing: border-box;
+        padding: 2px;
+        border: 2px solid black;
+        margin: 0px;
+        background-color: White;
+        z-index: 1;
+    }
+
+    .event_para {
+        margin: 0px;
+    }
+
+    .scale_area {
+        position: relative;
+        margin: 5px 0px 5px 0px;
+    }
+
+    .scale_line {
+        position: absolute;
+        height: 2px;
+        background-color: black;
+    }
+
+    .scale_unit_line {
+        position: absolute;
+        height: 9px;
+        width: 2px;
+        background-color: black;
+    }
+
+    .scale_unit {
+        position: absolute;
+        top: 9px;
+        text-align: center;
+    }
+
+    .event_to_scale_line {
+        position: absolute;
+        width: 2px;
+        background-color: black;
+        z-index: 0;
+    }
+
+    .tag_key_area {
+        position: relative;
+        margin: 5px;
+    }
+
+    .tag_key_heading {
+        margin: 0px;
+    }
+
+    .tag_box {
+        margin: 5px;
+        display: inline-block;
+    }
+
+    .tag_title {
+        margin: 0px;
+    }
+
+    .tag_description {
+        margin: 0px;
+    }
+
+    </style>
+
+    <script type="text/javascript">
+
+        class Box {
+            constructor(left, top, width, height) {
+                this.left = left;
+                this.top = top;
+                this.width = width;
+                this.height = height;
+            }
+
+            toString() {
+                return "Box(l="+this.left+" , t="+this.top+", w="+this.width+", h="+this.height+")";
+            }
+
+            right() {
+                return this.left + this.width;
+            }
+
+            bottom() {
+                return this.top + this.height;
+            }
+
+            horizontal_overlap(box) {
+                return (
+                    (
+                        ((this.left <= box.left) && (this.right() > box.left))
+                        || ((this.left < box.right()) && (this.right() >= box.right()))
+                        || ((this.left <= box.left) && (this.right() >= box.right()))
+                        || ((this.left >= box.left) && (this.right() <= box.right()))
+                    )
+                );
+            }
+
+            vertical_overlap(box) {
+                return (
+                    (
+                        ((this.top <= box.top) && (this.bottom() >= box.top))
+                        || ((this.top <= box.bottom()) && (this.bottom() >= box.bottom()))
+                        || ((this.top <= top.top) && (this.bottom() >= box.bottom()))
+                        || ((this.top >= box.top) && (this.bottom() <= box.bottom()))
+                    )
+                );
+            }
+
+            overlaps(box) {
+                return (this.horizontal_overlap(box) && this.vertical_overlap(box));
+            }
+
+            move_under(box, gap) {
+                this.top = box.top + box.height + gap;
+            }
+        }
+
+        class BoxMap {
+            constructor(gap) {
+                this.gap = gap;
+                this.boxes = [];
+                this.width = 0;
+                this.height = 0;
+            }
+
+            place(box) {
+
+                var boxIndex;
+                for (boxIndex = 0; boxIndex < this.boxes.length; ++boxIndex) {
+                    var placed_box = this.boxes[boxIndex]
+                    if (box.overlaps(placed_box)) {
+                        box.move_under(placed_box, this.gap);
+                    }
+                }
+
+                this.boxes.push(box);
+
+                if (box.right() > this.width) {
+                    this.width = box.right();
+                }
+                if (box.bottom() > this.height) {
+                    this.height = box.bottom();
+                }
+            }
+        }
+
+    function placeEvents() {
+            var eventScaleDiv = document.getElementById('eventScaleDiv');
+            var eventAreaDivs = eventScaleDiv.getElementsByClassName('event_area');
+            var eventAreaIndex, eventAreaDiv;
+
+            for (eventAreaIndex = 0; eventAreaIndex < eventAreaDivs.length; ++eventAreaIndex) {
+                var eventAreaDiv = eventAreaDivs[eventAreaIndex]
+
+                var boxMap = new BoxMap(5);
+
+                var eventDivs = eventAreaDiv.getElementsByClassName('event_box');
+                var eventIndex, eventDiv;
+                for (eventIndex = 0; eventIndex < eventDivs.length; ++eventIndex) {
+                    var eventDiv = eventDivs[eventIndex];
+                    var eventBox = new Box(
+                        eventDiv.offsetLeft,
+                        eventDiv.offsetTop,
+                        eventDiv.offsetWidth,
+                        eventDiv.offsetHeight
+                    );
+                    boxMap.place(eventBox);
+                    eventDiv.style.top = eventBox.top + "px";
+                }
+
+                eventAreaDiv.style.width = boxMap.width + 5 + "px";
+                eventAreaDiv.style.height = boxMap.height + "px";
+            }
+        }
+
+
+
+        function setScaleAreaHeight() {
+            var scaleDiv = document.getElementById('scaleDiv');
+
+            var max_height = 0;
+            var left_unit_overlap = 0;
+            var right_unit_overlap = 0;
+
+            var unitParas = scaleDiv.getElementsByClassName('scale_unit');
+            var unitParaIndex, unitPara;
+            for (unitParaIndex = 0; unitParaIndex < unitParas.length; ++unitParaIndex) {
+                var unitPara = unitParas[unitParaIndex]
+
+                var para_bottom = unitPara.offsetTop + unitPara.offsetHeight;
+                if (para_bottom > max_height) {
+                    max_height = para_bottom;
+                }
+
+                unitPara.style.left = (unitPara.offsetLeft - (unitPara.offsetWidth / 2)) + "px";
+
+                if (unitParaIndex == 0) {
+                    left_unit_overlap = unitPara.offsetWidth / 2;
+                }
+
+                if (unitParaIndex == (unitParas.length - 1)) {
+                    right_unit_overlap = unitPara.offsetWidth / 2;
+                }
+            }
+            scaleDiv.style.height = max_height + "px";
+
+            document.getElementById('eventScaleDiv').style.marginLeft = left_unit_overlap+"px";
+        }
+
+        function connectEventsToScale() {
+            var eventScaleDiv = document.getElementById('eventScaleDiv');
+
+            var scaleDiv = document.getElementById('scaleDiv');
+
+            var eventAreaDivs = eventScaleDiv.getElementsByClassName('event_area');
+            var eventAreaIndex, eventAreaDiv;
+            for (eventAreaIndex = 0; eventAreaIndex < eventAreaDivs.length; ++eventAreaIndex) {
+                var eventAreaDiv = eventAreaDivs[eventAreaIndex]
+
+                var eventDivs = eventAreaDiv.getElementsByClassName('event_box');
+                var eventToScaleLines = eventAreaDiv.getElementsByClassName('event_to_scale_line');
+                var eventIndex;
+
+                if (eventAreaDiv.offsetTop < scaleDiv.offsetTop) {
+                    var eventAreaToScaleDistance = scaleDiv.offsetTop - eventAreaDiv.offsetTop;
+
+                    for (eventIndex = 0; eventIndex < eventToScaleLines.length; ++eventIndex) {
+                        var eventDiv = eventDivs[eventIndex];
+                        var eventToScaleLine = eventToScaleLines[eventIndex];
+
+                        var line_height = eventAreaToScaleDistance - eventDiv.offsetTop;
+                        eventToScaleLine.style.top = eventDiv.offsetTop + "px";
+                        eventToScaleLine.style.height = line_height + "px";
+                    }
+                }
+                else {
+                    var lineTop = (scaleDiv.offsetTop + scaleDiv.offsetHeight) - eventAreaDiv.offsetTop;
+
+                    for (eventIndex = 0; eventIndex < eventToScaleLines.length; ++eventIndex) {
+                        var eventDiv = eventDivs[eventIndex];
+                        var eventToScaleLine = eventToScaleLines[eventIndex];
+
+                        var lineHeight = eventDiv.offsetTop - lineTop;
+                        eventToScaleLine.style.top = lineTop + "px";
+                        eventToScaleLine.style.height = lineHeight + "px";
+
+                    }
+                }
+            }
+        }
+
+        function onStart() {
+            placeEvents();
+            setScaleAreaHeight();
+            connectEventsToScale();
+        }
+
+        window.onload = onStart;
+
+    </script>
+{% endblock head_additional %}
+
+{% block title %}Landscape View{% endblock title%}
+
+{% block heading %}Landscape View{% endblock heading %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'user_guide:introduction' %}">TPlot</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'timelines:user-timelines' %}">Timelines</a></li>
+	{% block timeline_breadcrumb %}{% endblock timeline_breadcrumb %}
+	<li class="breadcrumb-item active">Landscape View</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+
+    <div class="card-header">
+        <p class="title_para h2">{{ timeline.title }}</p>
+    </div>
+
+    {% if timeline.has_description %}
+        <p class="description_para">{{ timeline.description }}</p>
+    {% endif %}
+
+    <div id="eventScaleDiv" class="event_scale_area" >
+        {% for event_area in timeline.event_areas_before_scale %}
+            <div class="event_area" style="width:{{ timeline.initial_event_area_width }}mm;">
+                {% for event in event_area.events %}
+                    {% if event.has_end %}
+                        <div class="event_box" style="left:{{ event.position }}mm; width:{{ event.size }}mm;">
+                            <p class="event_para h6">{{ event.heading }}</p>
+                            <p class="event_para">{{ event.description }}</p>
+                            <p class="event_para">{{ event.tag_string }}</p>
+                        </div>
+                    {% else %}
+                        <div class="event_box" style="left:{{ event.position }}mm; max-width:{{ timeline.start_only_event_max_size }}mm;">
+                            <p class="event_para h6">{{ event.heading }}</p>
+                            <p class="event_para">{{ event.description }}</p>
+                            <p class="event_para">{{ event.tag_string }}</p>
+                        </div>
+                    {% endif %}
+                    <div class="event_to_scale_line" style="left:{{ event.position }}mm;"></div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <div id="scaleDiv" class="scale_area" style="height:50mm;">
+            <div class="scale_line" style="width:{{ timeline.scale_length }}mm;"></div>
+            {% for scale_unit in timeline.scale_units %}
+                <div class="scale_unit_line" style="left:{{ scale_unit.position }}mm;"></div>
+                <p class="scale_unit" style="left:{{ scale_unit.position }}mm; max-width:{{ timeline.scale_unit_max_size }}mm;">{{ scale_unit.unit_string }}</p>
+            {% endfor %}
+        </div>
+
+        {% for event_area in timeline.event_areas_after_scale %}
+            <div class="event_area" style="width:{{ timeline.initial_event_area_width }}mm;">
+                {% for event in event_area.events %}
+                    {% if event.has_end %}
+                        <div class="event_box" style="left:{{ event.position }}mm; width:{{ event.size }}mm;">
+                            <p class="event_para h6">{{ event.heading }}</p>
+                            <p class="event_para">{{ event.description }}</p>
+                            <p class="event_para">{{ event.tag_string }}</p>
+                        </div>
+                    {% else %}
+                        <div class="event_box" style="left:{{ event.position }}mm; max-width:{{ timeline.start_only_event_max_size }}mm;">
+                            <p class="event_para h6">{{ event.heading }}</p>
+                            <p class="event_para">{{ event.description }}</p>
+                            <p class="event_para">{{ event.tag_string }}</p>
+                        </div>
+                    {% endif %}
+                    <div class="event_to_scale_line" style="left:{{ event.position }}mm;"></div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if timeline.has_tags %}
+        <div class="tag_box">
+            <div class="tag_key_heading">
+                <p class="title_para h5">Tag Key</p>
+            </div>
+            {% for tag in timeline.tags %}
+            <div class="tag_box">
+                <p class="tag_title h6">{{ tag.name }}</p>
+                <p class="tag_description">{{ tag.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+{% endblock content %}

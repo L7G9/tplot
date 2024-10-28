@@ -1,0 +1,5 @@
+{% extends "timelines/portrait_timeline.html" %}
+
+{% block timeline_breadcrumb %}
+	<li class="breadcrumb-item"><a href="{% url 'date_time_timelines:date-time-timeline-detail' view.kwargs.pk %}">{{object.title}}</a></li>
+{% endblock timeline_breadcrumb %}

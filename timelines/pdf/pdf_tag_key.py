@@ -129,8 +129,13 @@ class PDFTagKey(Area):
                 rows.append([])
 
             # create tag paragraph
+            if tag.description != "":
+                tag_string = f"{tag.name} : {tag.description}"
+            else:
+                tag_string = tag.name
+
             tag_paragraph = PDFParagraph(
-                f"{tag.name} : {tag.description}",
+                tag_string,
                 canvas,
                 tag_style,
                 max_tag_paragraph_width

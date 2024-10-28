@@ -23,6 +23,7 @@ from timelines.view_errors import event_area_position_error
 
 from .models import ScientificEvent, ScientificTimeline
 from .pdf.pdf_scientific_timeline import PDFScientificTimeline
+from .view_data.scientific_timeline_data import ScientificTimelineData
 
 
 TIMELINE_FIELD_ORDER = [
@@ -434,9 +435,38 @@ class CollaboratorDeleteView(
     required_role = ROLE_OWNER
 
 
-class TimelineView(LoginRequiredMixin, RolePermissionMixin, DetailView):
+class LandscapeTimelineView(
+    LoginRequiredMixin, RolePermissionMixin, DetailView
+):
     model = ScientificTimeline
-    template_name = "scientific_timelines/timeline.html"
+    template_name = "scientific_timelines/landscape_timeline.html"
+    required_role = ROLE_VIEWER
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        timeline = self.get_object().get_timeline()
+        user_role = timeline.get_role(self.request.user)
+        context["user_role"] = user_role
+        context["timeline"] = ScientificTimelineData(self.get_object())
+
+        return context
+
+
+class PortraitTimelineView(
+    LoginRequiredMixin, RolePermissionMixin, DetailView
+):
+    model = ScientificTimeline
+    template_name = "scientific_timelines/portrait_timeline.html"
+    required_role = ROLE_VIEWER
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        timeline = self.get_object().get_timeline()
+        user_role = timeline.get_role(self.request.user)
+        context["user_role"] = user_role
+        context["timeline"] = ScientificTimelineData(self.get_object())
+
+        return context
 
 
 def pdf_view(request, scientific_timeline_id):

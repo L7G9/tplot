@@ -31,7 +31,8 @@ Updates to keyboard shortcuts … On Thursday 1 August 2024, Drive keyboard shor
 
 {% if user_role >= 1 %}
 <div class="sb-sidenav-menu-heading">Views</div>
-<li class="nav-item"><a class="nav-link" href="{% url 'date_time_timelines:timeline' view.kwargs.pk %}">Timeline</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'date_time_timelines:landscape_timeline' view.kwargs.pk %}">Landscape</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'date_time_timelines:portrait_timeline' view.kwargs.pk %}">Portrait</a></li>
 <li class="nav-item"><a class="nav-link" href="{% url 'date_time_timelines:date-time-timeline-pdf' view.kwargs.pk %}">PDF</a></li>
 {% endif %}
 

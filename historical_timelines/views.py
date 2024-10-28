@@ -23,6 +23,7 @@ from timelines.models import (
 
 from .models import HistoricalEvent, HistoricalTimeline
 from .pdf.pdf_historical_timeline import PDFHistoricalTimeline
+from .view_data.historical_view_data import HistoricalTimelineData
 
 
 TIMELINE_FIELD_ORDER = [
@@ -432,6 +433,40 @@ class CollaboratorDeleteView(
     model = Collaborator
     template_name = "historical_timelines/collaborator_delete.html"
     required_role = ROLE_OWNER
+
+
+class LandscapeTimelineView(
+    LoginRequiredMixin, RolePermissionMixin, DetailView
+):
+    model = HistoricalTimeline
+    template_name = "historical_timelines/landscape_timeline.html"
+    required_role = ROLE_VIEWER
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        timeline = self.get_object().get_timeline()
+        user_role = timeline.get_role(self.request.user)
+        context["user_role"] = user_role
+        context["timeline"] = HistoricalTimelineData(self.get_object())
+
+        return context
+
+
+class PortraitTimelineView(
+    LoginRequiredMixin, RolePermissionMixin, DetailView
+):
+    model = HistoricalTimeline
+    template_name = "historical_timelines/portrait_timeline.html"
+    required_role = ROLE_VIEWER
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        timeline = self.get_object().get_timeline()
+        user_role = timeline.get_role(self.request.user)
+        context["user_role"] = user_role
+        context["timeline"] = HistoricalTimelineData(self.get_object())
+
+        return context
 
 
 class TimelineView(LoginRequiredMixin, RolePermissionMixin, DetailView):
