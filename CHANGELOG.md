@@ -1,3 +1,9 @@
+## 0.16.0 (2024-11-08)
+
+### Feat
+
+- improved html timeline view
+
 ## 0.15.1 (2024-10-07)
 
 ### Fix
