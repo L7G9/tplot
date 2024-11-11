@@ -1,3 +1,9 @@
+## 0.16.1 (2024-11-11)
+
+### Fix
+
+- **age_event_add_form.html**: added missing breadcrumb for current timeline
+
 ## 0.16.0 (2024-11-08)
 
 ### Feat
