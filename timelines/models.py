@@ -28,9 +28,15 @@ class Timeline(models.Model):
         choices=SCALE_UNIT_LENGTHS, default=5
     )
 
+    # pdf specific display layout
+    PDF_PAGE_SIZES = [("3", "A3"), ("4", "A4"), ("5", "A5")]
+    pdf_page_size = models.CharField(
+        max_length=1,
+        choices=PDF_PAGE_SIZES,
+        default="4"
+    )
+
     # display layout
-    PAGE_SIZES = [("3", "A3"), ("4", "A4"), ("5", "A5")]
-    page_size = models.CharField(max_length=1, choices=PAGE_SIZES, default="4")
     PAGE_ORIENTATIONS = [
         ("L", "Landscape"),
         ("P", "Portrait"),

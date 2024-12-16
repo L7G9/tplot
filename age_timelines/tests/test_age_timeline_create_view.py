@@ -22,7 +22,7 @@ class AgeTimelineCreateViewTest(TestCase):
             "description": "Description",
             "scale_unit": 5,
             "scale_unit_length": 5,
-            "page_size": "4",
+            "pdf_page_size": "4",
             "page_orientation": "L",
             "page_scale_position": 0,
         }

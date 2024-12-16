@@ -24,7 +24,7 @@ class WeeksScaleDescriptionTest(TestCase):
             description="Test Timeline Description",
             scale_unit=WEEK_1,
             scale_unit_length=7,
-            page_size="4",
+            pdf_page_size="4",
             page_orientation="L",
             page_scale_position=0,
         )
@@ -62,7 +62,7 @@ class WeeksScaleDescriptionTest(TestCase):
             description="Test Timeline Description",
             scale_unit=WEEK_1,
             scale_unit_length=7,
-            page_size="4",
+            pdf_page_size="4",
             page_orientation="L",
             page_scale_position=0,
         )

@@ -27,13 +27,13 @@ class PortraitLayout(Layout):
             event_border
         )
 
-    def _initial_page_area(self, page_size) -> Area:
+    def _initial_page_area(self, pdf_page_size) -> Area:
         """Calculate an initial area of the PDF which can be used to measure
         text on."""
-        if self.timeline.page_size == "3":
+        if self.timeline.pdf_page_size == "3":
             width = A3_SHORT
             height = A3_LONG
-        elif self.timeline.page_size == "4":
+        elif self.timeline.pdf_page_size == "4":
             width = A4_SHORT
             height = A4_LONG
         else:
@@ -53,7 +53,7 @@ class PortraitLayout(Layout):
         """Calculate size and position all the graphical components making up
         the pdf timeline."""
         self.page_area = self._page_area(
-            self.timeline.page_size,
+            self.timeline.pdf_page_size,
             title_height,
             description_height,
             scale_height,
@@ -84,7 +84,7 @@ class PortraitLayout(Layout):
 
     def _page_area(
         self,
-        page_size,
+        pdf_page_size,
         title_height,
         description_height,
         scale_height,
@@ -102,9 +102,9 @@ class PortraitLayout(Layout):
         # TODO - handle case when description  missing / has zero height
         # TODO - handle case when  tag key missing / has zero height
         # TODO - use something better then "3" etc
-        if page_size == "3":
+        if pdf_page_size == "3":
             width = A3_SHORT
-        elif page_size == "4":
+        elif pdf_page_size == "4":
             width = A4_SHORT
         else:
             width = A5_SHORT

@@ -26,7 +26,7 @@ class TestPDFScale(TestCase):
             description="Test Age Timeline Description",
             scale_unit=5,
             scale_unit_length=5,
-            page_size="4",
+            pdf_page_size="4",
             page_orientation="L",
             page_scale_position=1,
         )
@@ -59,7 +59,7 @@ class TestPDFScale(TestCase):
             description="Test Age Timeline Description",
             scale_unit=1,
             scale_unit_length=10,
-            page_size="4",
+            pdf_page_size="4",
             page_orientation="P",
             page_scale_position=1,
         )

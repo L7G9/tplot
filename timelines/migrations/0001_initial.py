@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=100)),
                 ('description', models.CharField(blank=True, max_length=1000)),
                 ('scale_unit_length', models.PositiveSmallIntegerField(choices=[(1, '1cm'), (2, '2cm'), (3, '3cm'), (4, '4cm'), (5, '5cm'), (6, '6cm'), (7, '7cm'), (8, '8cm'), (9, '9cm'), (10, '10cm'), (12, '12cm'), (15, '15cm'), (20, '20cm'), (25, '25cm'), (30, '30cm')], default=5)),
-                ('page_size', models.CharField(choices=[('3', 'A3'), ('4', 'A4'), ('5', 'A5')], default='4', max_length=1)),
+                ('pdf_page_size', models.CharField(choices=[('3', 'A3'), ('4', 'A4'), ('5', 'A5')], default='4', max_length=1)),
                 ('page_orientation', models.CharField(choices=[('L', 'Landscape'), ('P', 'Portrait')], default='L', max_length=1)),
                 ('page_scale_position', models.PositiveSmallIntegerField(default=0)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),

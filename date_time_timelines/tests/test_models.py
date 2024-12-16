@@ -22,7 +22,7 @@ class DateTimeTimelineTest(TestCase):
             description="Test Date & Time Timeline Description",
             scale_unit=WEEK_1,
             scale_unit_length=1,
-            page_size="4",
+            pdf_page_size="4",
             page_orientation="L",
             page_scale_position=0,
         )
@@ -33,7 +33,7 @@ class DateTimeTimelineTest(TestCase):
             description="Test Date & Time Timeline Description",
             scale_unit=MONTH_3,
             scale_unit_length=1,
-            page_size="4",
+            pdf_page_size="4",
             page_orientation="L",
             page_scale_position=0,
         )
@@ -44,7 +44,7 @@ class DateTimeTimelineTest(TestCase):
             description="Test Date & Time Timeline Description",
             scale_unit=YEAR_100,
             scale_unit_length=1,
-            page_size="4",
+            pdf_page_size="4",
             page_orientation="L",
             page_scale_position=0,
         )

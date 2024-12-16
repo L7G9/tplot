@@ -43,10 +43,10 @@ DATE_TIME_TIMELINE_FIELD_ORDER = [
     "scale_unit",
     "scale_unit_length",
     "scale_display_format",
-    "page_size",
     "page_orientation",
     "page_scale_position",
     "event_display_format",
+    "pdf_page_size",
 ]
 
 

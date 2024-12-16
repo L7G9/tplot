@@ -28,7 +28,7 @@ class YearsScaleDescriptionTest(TestCase):
             description="Test Timeline Description",
             scale_unit=YEAR_10,
             scale_unit_length=10,
-            page_size="4",
+            pdf_page_size="4",
             page_orientation="L",
             page_scale_position=0,
         )
@@ -50,7 +50,7 @@ class YearsScaleDescriptionTest(TestCase):
             description="Test Timeline Description",
             scale_unit=YEAR_10,
             scale_unit_length=10,
-            page_size="4",
+            pdf_page_size="4",
             page_orientation="L",
             page_scale_position=0,
         )

@@ -64,7 +64,7 @@ class PDFTimelineLayoutPortraitTest(TestCase):
             description="Test Age Timeline Description",
             scale_unit=5,
             scale_unit_length=5,
-            page_size="3",
+            pdf_page_size="3",
             page_orientation="P",
             page_scale_position=1,
         )

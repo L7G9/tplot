@@ -15,7 +15,7 @@ class TimelineModel(TestCase):
             title="Test Timeline Title",
             description="Test Timeline Description",
             scale_unit_length=1,
-            page_size="4",
+            pdf_page_size="4",
             page_orientation="L",
             page_scale_position=0,
         )
@@ -48,17 +48,17 @@ class TimelineModel(TestCase):
 
     def test_page_size_max_length(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        max_length = timeline._meta.get_field("page_size").max_length
+        max_length = timeline._meta.get_field("pdf_page_size").max_length
         self.assertEqual(max_length, 1)
 
     def test_page_size_choices(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        choices = timeline._meta.get_field("page_size").choices
+        choices = timeline._meta.get_field("pdf_page_size").choices
         self.assertEqual(choices, Timeline.PAGE_SIZES)
 
     def test_page_size_default(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        default = timeline._meta.get_field("page_size").default
+        default = timeline._meta.get_field("pdf_page_size").default
         self.assertEqual(default, "4")
 
     def test_page_orientation_max_length(self):
@@ -103,7 +103,7 @@ class EventModel(TestCase):
             title="Test Timeline Title",
             description="Test Timeline Description",
             scale_unit_length=1,
-            page_size="4",
+            pdf_page_size="4",
             page_orientation="L",
             page_scale_position=0,
         )
@@ -170,7 +170,7 @@ class EventAreaModel(TestCase):
             title="Test Timeline Title",
             description="Test Timeline Description",
             scale_unit_length=1,
-            page_size="4",
+            pdf_page_size="4",
             page_orientation="L",
             page_scale_position=0,
         )
@@ -231,7 +231,7 @@ class TagModel(TestCase):
             title="Test Timeline Title",
             description="Test Timeline Description",
             scale_unit_length=1,
-            page_size="4",
+            pdf_page_size="4",
             page_orientation="L",
             page_scale_position=0,
         )

@@ -37,7 +37,7 @@ class Layout(ABC):
         self.component_border = component_border
         self.event_border = event_border
 
-        self.page_area = self._initial_page_area(self.timeline.page_size)
+        self.page_area = self._initial_page_area(self.timeline.pdf_page_size)
         self.drawable_area: Area = self._drawable_area(self.page_area)
         self.title_area: Area = Area(0, 0, 0, 0)
         self.description_area: Area = Area(0, 0, 0, 0)
@@ -47,7 +47,7 @@ class Layout(ABC):
         self.tag_key_area = Area(0, 0, 0, 0)
 
     @abstractmethod
-    def _initial_page_area(self, page_size) -> Area:
+    def _initial_page_area(self, pdf_page_size) -> Area:
         """Calculate an initial area of the PDF which can be used to measure
         text on."""
         raise NotImplementedError("Subclasses should implement this method")
@@ -75,7 +75,7 @@ class Layout(ABC):
         raise NotImplementedError("Subclasses should implement this method")
 
     @abstractmethod
-    def _page_area(self, page_size, scale_width):
+    def _page_area(self, pdf_page_size, scale_width):
         """Calculate area of the whole PDF."""
         raise NotImplementedError("Subclasses should implement this method")
 

@@ -31,9 +31,10 @@ TIMELINE_FIELD_ORDER = [
     "description",
     "scale_unit",
     "scale_unit_length",
-    "page_size",
+    "pdf_page_size",
     "page_orientation",
     "page_scale_position",
+    "pdf_page_size",
 ]
 
 

@@ -27,13 +27,13 @@ class LandscapeLayout(Layout):
             event_border
         )
 
-    def _initial_page_area(self, page_size) -> Area:
+    def _initial_page_area(self, pdf_page_size) -> Area:
         """Calculate an initial area of the PDF which can be used to measure
         text on."""
-        if page_size == "3":
+        if pdf_page_size == "3":
             width = A3_LONG
             height = A3_SHORT
-        elif page_size == "4":
+        elif pdf_page_size == "4":
             width = A4_LONG
             height = A4_SHORT
         else:
@@ -52,7 +52,10 @@ class LandscapeLayout(Layout):
     ):
         """Calculate size and position all the graphical components making up
         the pdf timeline."""
-        self.page_area = self._page_area(self.timeline.page_size, scale_width)
+        self.page_area = self._page_area(
+            self.timeline.pdf_page_size,
+            scale_width
+        )
         self.drawable_area = self._drawable_area(self.page_area)
 
         self.title_area = self._title_area(title_height)
@@ -76,14 +79,14 @@ class LandscapeLayout(Layout):
             height_per_weight, scale_width, scale_height
         )
 
-    def _page_area(self, page_size, scale_width):
+    def _page_area(self, pdf_page_size, scale_width):
         """Calculate area of the whole PDF."""
         page_width = scale_width + (2 * self.page_border)
         # TODO - use something better then "3"
-        if page_size == "3":
+        if pdf_page_size == "3":
             height = A3_SHORT
             width = max(A3_LONG, page_width)
-        elif page_size == "4":
+        elif pdf_page_size == "4":
             height = A4_SHORT
             width = max(A4_LONG, page_width)
         else:

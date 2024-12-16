@@ -21,7 +21,7 @@ class ScientificTimelineScaleDescriptionTest(TestCase):
             description="Test Scientific Timeline Description",
             scale_unit=1000,
             scale_unit_length=10,
-            page_size="4",
+            pdf_page_size="4",
             page_orientation="L",
             page_scale_position=0,
         )
@@ -53,7 +53,7 @@ class ScientificTimelineScaleDescriptionTest(TestCase):
             description="Test Scientific Timeline Description",
             scale_unit=1000,
             scale_unit_length=10,
-            page_size="4",
+            pdf_page_size="4",
             page_orientation="L",
             page_scale_position=0,
         )
