@@ -46,7 +46,7 @@ class PDFScaleLine(Area):
         self.canvas: Canvas = canvas
         self.drawing: Union[Drawing, None] = None
 
-        scale_line_length = scale_description.get_scale_length() * mm
+        scale_line_length = scale_description.get_scale_unit_length() * mm
         unit_line_count = scale_description.get_scale_units() + 1
         unit_line_gap = scale_line_length / scale_description.get_scale_units()
 

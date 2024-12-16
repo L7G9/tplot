@@ -23,7 +23,7 @@ class HistoricalScaleDescription(ScaleDescription):
             self.end = HistoricalYear(-10)
 
         self.scale_units: int = self.__scale_units()
-        self.scale_length: int = self.__scale_length()
+        self.scale_unit_length: int = self.__scale_unit_length()
 
     def __oldest_historical_year(self) -> HistoricalYear:
         """Finds the oldest historical year in historical_timeline."""
@@ -53,15 +53,15 @@ class HistoricalScaleDescription(ScaleDescription):
 
         return scale_units
 
-    def __scale_length(self) -> int:
+    def __scale_unit_length(self) -> int:
         """Calculate length of timeline scale in mm."""
-        return self.scale_units * self.timeline.scale_length * MM_PER_CM
+        return self.scale_units * self.timeline.scale_unit_length * MM_PER_CM
 
     def get_scale_units(self) -> int:
         return self.scale_units
 
-    def get_scale_length(self) -> int:
-        return self.scale_length
+    def get_scale_unit_length(self) -> int:
+        return self.scale_unit_length
 
     def get_scale_label(self, scale_index: int) -> str:
         """Get label to got on timeline string."""
@@ -75,7 +75,9 @@ class HistoricalScaleDescription(ScaleDescription):
         years_from_start: int = time_unit.year - self.start.year
         scale_units_from_start: float = years_from_start / self.scale_unit
         distance_from_start: float = (
-            scale_units_from_start * self.timeline.scale_length * MM_PER_CM
+            scale_units_from_start
+            * self.timeline.scale_unit_length
+            * MM_PER_CM
         )
 
         return distance_from_start

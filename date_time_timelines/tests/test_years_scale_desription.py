@@ -27,7 +27,7 @@ class YearsScaleDescriptionTest(TestCase):
             title="Test Timeline Title",
             description="Test Timeline Description",
             scale_unit=YEAR_10,
-            scale_length=10,
+            scale_unit_length=10,
             page_size="4",
             page_orientation="L",
             page_scale_position=0,
@@ -49,7 +49,7 @@ class YearsScaleDescriptionTest(TestCase):
             title="Test Timeline Title",
             description="Test Timeline Description",
             scale_unit=YEAR_10,
-            scale_length=10,
+            scale_unit_length=10,
             page_size="4",
             page_orientation="L",
             page_scale_position=0,
@@ -76,8 +76,8 @@ class YearsScaleDescriptionTest(TestCase):
         result = self.scale_description_no_events.get_scale_units()
         self.assertEqual(result, 1)
 
-    def test_get_scale_length(self):
-        result = self.scale_description.get_scale_length()
+    def test_get_scale_unit_length(self):
+        result = self.scale_description.get_scale_unit_length()
         self.assertEqual(result, 400)
 
     def test_get_scale_label(self):

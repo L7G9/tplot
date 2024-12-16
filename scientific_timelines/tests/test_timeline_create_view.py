@@ -19,7 +19,7 @@ class ScientificTimelineCreateViewTest(TestCase):
             "title": "New Test Scientific Timeline",
             "description": "Description",
             "scale_unit": 1000,
-            "scale_length": 5,
+            "scale_unit_length": 5,
             "page_size": "4",
             "page_orientation": "L",
             "page_scale_position": 0,

@@ -23,7 +23,7 @@ class SecondsScaleDescriptionTest(TestCase):
             title="Test Timeline Title",
             description="Test Timeline Description",
             scale_unit=600,
-            scale_length=1,
+            scale_unit_length=1,
             page_size="4",
             page_orientation="L",
             page_scale_position=0,
@@ -64,7 +64,7 @@ class SecondsScaleDescriptionTest(TestCase):
             title="Test Timeline Title",
             description="Test Timeline Description",
             scale_unit=600,
-            scale_length=1,
+            scale_unit_length=1,
             page_size="4",
             page_orientation="L",
             page_scale_position=0,
@@ -97,8 +97,8 @@ class SecondsScaleDescriptionTest(TestCase):
         result = self.scale_description_no_events.get_scale_units()
         self.assertEqual(result, 1)
 
-    def test_get_scale_length(self):
-        result = self.scale_description.get_scale_length()
+    def test_get_scale_unit_length(self):
+        result = self.scale_description.get_scale_unit_length()
         self.assertEqual(result, 140)
 
     def test_get_scale_label(self):

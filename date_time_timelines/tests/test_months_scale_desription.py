@@ -27,7 +27,7 @@ class MonthsScaleDescriptionTest(TestCase):
             title="Test Timeline Title",
             description="Test Timeline Description",
             scale_unit=MONTH_6,
-            scale_length=6,
+            scale_unit_length=6,
             page_size="4",
             page_orientation="L",
             page_scale_position=0,
@@ -57,7 +57,7 @@ class MonthsScaleDescriptionTest(TestCase):
             title="Test Timeline Title",
             description="Test Timeline Description",
             scale_unit=MONTH_6,
-            scale_length=6,
+            scale_unit_length=6,
             page_size="4",
             page_orientation="L",
             page_scale_position=0,
@@ -86,8 +86,8 @@ class MonthsScaleDescriptionTest(TestCase):
         result = self.scale_description_no_events.get_scale_units()
         self.assertEqual(result, 1)
 
-    def test_get_scale_length(self):
-        result = self.scale_description.get_scale_length()
+    def test_get_scale_unit_length(self):
+        result = self.scale_description.get_scale_unit_length()
         self.assertEqual(result, 240)
 
     def test_get_scale_label(self):

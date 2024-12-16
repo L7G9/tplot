@@ -41,7 +41,7 @@ DATE_TIME_TIMELINE_FIELD_ORDER = [
     "title",
     "description",
     "scale_unit",
-    "scale_length",
+    "scale_unit_length",
     "scale_display_format",
     "page_size",
     "page_orientation",

@@ -67,11 +67,11 @@ class TimelineData(ABC):
             )
         )
         self.initial_event_area_width = (
-            scale_description.scale_length + START_ONLY_EVENT_MAX_SIZE
+            scale_description.scale_unit_length + START_ONLY_EVENT_MAX_SIZE
         )
         self.start_only_event_max_size = START_ONLY_EVENT_MAX_SIZE
 
-        self.scale_length = scale_description.scale_length
+        self.scale_unit_length = scale_description.scale_unit_length
         self.scale_units = self.get_scale_units(scale_description)
         self.scale_unit_max_size = timeline.scale_unit * MM_PER_CM
 
@@ -157,7 +157,7 @@ class TimelineData(ABC):
         for unit_index in range(scale_description.get_scale_units() + 1):
             pos = (
                 unit_index
-                * scale_description.timeline.scale_length
+                * scale_description.timeline.scale_unit_length
                 * MM_PER_CM
             )
             scale_unit = ScaleUnitData(

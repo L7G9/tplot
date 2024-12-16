@@ -14,7 +14,7 @@ class TimelineModel(TestCase):
             user=user,
             title="Test Timeline Title",
             description="Test Timeline Description",
-            scale_length=1,
+            scale_unit_length=1,
             page_size="4",
             page_orientation="L",
             page_scale_position=0,
@@ -38,12 +38,12 @@ class TimelineModel(TestCase):
 
     def test_scale_choices(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        choices = timeline._meta.get_field("scale_length").choices
-        self.assertEqual(choices, Timeline.SCALE_LENGTHS)
+        choices = timeline._meta.get_field("scale_unit_length").choices
+        self.assertEqual(choices, Timeline.SCALE_UNIT_LENGTHS)
 
     def test_scale_default(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
-        default = timeline._meta.get_field("scale_length").default
+        default = timeline._meta.get_field("scale_unit_length").default
         self.assertEqual(default, 5)
 
     def test_page_size_max_length(self):
@@ -102,7 +102,7 @@ class EventModel(TestCase):
             user=user,
             title="Test Timeline Title",
             description="Test Timeline Description",
-            scale_length=1,
+            scale_unit_length=1,
             page_size="4",
             page_orientation="L",
             page_scale_position=0,
@@ -169,7 +169,7 @@ class EventAreaModel(TestCase):
             user=user,
             title="Test Timeline Title",
             description="Test Timeline Description",
-            scale_length=1,
+            scale_unit_length=1,
             page_size="4",
             page_orientation="L",
             page_scale_position=0,
@@ -230,7 +230,7 @@ class TagModel(TestCase):
             user=user,
             title="Test Timeline Title",
             description="Test Timeline Description",
-            scale_length=1,
+            scale_unit_length=1,
             page_size="4",
             page_orientation="L",
             page_scale_position=0,

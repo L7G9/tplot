@@ -20,7 +20,7 @@ class ScientificTimelineScaleDescriptionTest(TestCase):
             title="Test Scientific Timeline Title",
             description="Test Scientific Timeline Description",
             scale_unit=1000,
-            scale_length=10,
+            scale_unit_length=10,
             page_size="4",
             page_orientation="L",
             page_scale_position=0,
@@ -52,7 +52,7 @@ class ScientificTimelineScaleDescriptionTest(TestCase):
             title="Test Scientific Timeline Title",
             description="Test Scientific Timeline Description",
             scale_unit=1000,
-            scale_length=10,
+            scale_unit_length=10,
             page_size="4",
             page_orientation="L",
             page_scale_position=0,
@@ -79,9 +79,9 @@ class ScientificTimelineScaleDescriptionTest(TestCase):
         scale_units = self.scale_description_no_events.get_scale_units()
         self.assertEqual(scale_units, 1)
 
-    def test_get_scale_length(self):
-        scale_length = self.scale_description.get_scale_length()
-        self.assertEqual(scale_length, 600)
+    def test_get_scale_unit_length(self):
+        scale_unit_length = self.scale_description.get_scale_unit_length()
+        self.assertEqual(scale_unit_length, 600)
 
     def test_get_scale_label(self):
         scale_label = self.scale_description.get_scale_label(0)

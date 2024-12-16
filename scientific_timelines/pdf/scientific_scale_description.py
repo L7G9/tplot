@@ -27,7 +27,7 @@ class ScientificScaleDescription(ScaleDescription):
             self.end = ScientificYear(0, 1000)
 
         self.scale_units: int = self.__scale_units()
-        self.scale_length: int = self.__scale_length()
+        self.scale_unit_length: int = self.__scale_unit_length()
 
     def __scale_unit_as_scientific_year(self, scale_unit) -> ScientificYear:
         if scale_unit <= 50000:
@@ -71,15 +71,15 @@ class ScientificScaleDescription(ScaleDescription):
 
         return scale_units
 
-    def __scale_length(self) -> int:
+    def __scale_unit_length(self) -> int:
         """Calculate length of timeline scale in mm."""
-        return self.scale_units * self.timeline.scale_length * MM_PER_CM
+        return self.scale_units * self.timeline.scale_unit_length * MM_PER_CM
 
     def get_scale_units(self) -> int:
         return self.scale_units
 
-    def get_scale_length(self) -> int:
-        return self.scale_length
+    def get_scale_unit_length(self) -> int:
+        return self.scale_unit_length
 
     def get_scale_label(self, scale_index: int) -> str:
         """Get label to got on timeline string."""
@@ -95,7 +95,9 @@ class ScientificScaleDescription(ScaleDescription):
             years_from_start / self.scale_unit.years()
         )
         distance_from_start: float = (
-            scale_units_from_start * self.timeline.scale_length * MM_PER_CM
+            scale_units_from_start
+            * self.timeline.scale_unit_length
+            * MM_PER_CM
         )
 
         return distance_from_start

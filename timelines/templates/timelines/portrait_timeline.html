@@ -353,8 +353,8 @@
         {% endfor %}
 
 		<div class="wrapper_div">
-			<div id="scaleDiv" class="scale_area" style="height:{{ timeline.scale_length }}mm;">
-				<div id="scaleLine" class="scale_line" style="height:{{ timeline.scale_length }}mm; left:45mm;"></div>
+			<div id="scaleDiv" class="scale_area" style="height:{{ timeline.scale_unit_length }}mm;">
+				<div id="scaleLine" class="scale_line" style="height:{{ timeline.scale_unit_length }}mm; left:45mm;"></div>
 				{% for scale_unit in timeline.scale_units %}
 					<div class="scale_unit_line" style="top:{{ scale_unit.position }}mm; left:43mm;"></div>
 					<p class="scale_unit" style="top:{{ scale_unit.position }}mm; max-width:40mm; max-height:{{ timeline.scale_unit_max_size }}mm;">{{ scale_unit.unit_string }}</p>

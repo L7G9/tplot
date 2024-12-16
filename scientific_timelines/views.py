@@ -30,7 +30,7 @@ TIMELINE_FIELD_ORDER = [
     "title",
     "description",
     "scale_unit",
-    "scale_length",
+    "scale_unit_length",
     "page_size",
     "page_orientation",
     "page_scale_position",

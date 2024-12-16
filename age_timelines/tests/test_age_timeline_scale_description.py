@@ -20,7 +20,7 @@ class AgeTimelineScaleDescriptionTest(TestCase):
             title="Test Age Timeline Title",
             description="Test Age Timeline Description",
             scale_unit=5,
-            scale_length=1,
+            scale_unit_length=1,
             page_size="4",
             page_orientation="L",
             page_scale_position=0,
@@ -50,7 +50,7 @@ class AgeTimelineScaleDescriptionTest(TestCase):
             title="Test Age Timeline Title",
             description="Test Age Timeline Description",
             scale_unit=5,
-            scale_length=1,
+            scale_unit_length=1,
             page_size="4",
             page_orientation="L",
             page_scale_position=0,
@@ -75,9 +75,9 @@ class AgeTimelineScaleDescriptionTest(TestCase):
         scale_units = self.scale_description_no_events.get_scale_units()
         self.assertEqual(scale_units, 1)
 
-    def test_get_scale_length(self):
-        scale_length = self.scale_description.get_scale_length()
-        self.assertEqual(scale_length, 40)
+    def test_get_scale_unit_length(self):
+        scale_unit_length = self.scale_description.get_scale_unit_length()
+        self.assertEqual(scale_unit_length, 40)
 
     def test_get_scale_label(self):
         scale_label = self.scale_description.get_scale_label(1)

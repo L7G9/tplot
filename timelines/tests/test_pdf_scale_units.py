@@ -25,7 +25,7 @@ class TestPDFScaleUnits(TestCase):
             title="Test Age Timeline Title",
             description="Test Age Timeline Description",
             scale_unit=5,
-            scale_length=5,
+            scale_unit_length=5,
             page_size="4",
             page_orientation="L",
             page_scale_position=1,
@@ -58,7 +58,7 @@ class TestPDFScaleUnits(TestCase):
             title="Test Age Timeline Title",
             description="Test Age Timeline Description",
             scale_unit=1,
-            scale_length=10,
+            scale_unit_length=10,
             page_size="4",
             page_orientation="P",
             page_scale_position=1,
@@ -118,7 +118,7 @@ class TestPDFScaleUnits(TestCase):
             self.landscape_scale_description.get_scale_units() + 1
         )
         expected_width = (
-            self.landscape_scale_description.get_scale_length() * mm
+            self.landscape_scale_description.get_scale_unit_length() * mm
             + scale_units.unit_labels[0].width / 2
             + scale_units.unit_labels[-1].width / 2
         )
@@ -137,7 +137,7 @@ class TestPDFScaleUnits(TestCase):
 
         expected_labels = self.portrait_scale_description.get_scale_units() + 1
         expected_height = (
-            self.portrait_scale_description.get_scale_length() * mm
+            self.portrait_scale_description.get_scale_unit_length() * mm
             + scale_units.unit_labels[0].height / 2
             + scale_units.unit_labels[-1].height / 2
         )

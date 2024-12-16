@@ -71,6 +71,6 @@ class SecondsScaleDescription(DateTimeScaleDescription):
         scale_units_from_start: float = seconds / self.timeline.scale_unit
 
         distance_from_start: float = (
-            scale_units_from_start * self.timeline.scale_length * MM_PER_CM
+            scale_units_from_start * self.timeline.scale_unit_length * MM_PER_CM
         )
         return distance_from_start

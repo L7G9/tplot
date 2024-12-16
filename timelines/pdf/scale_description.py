@@ -27,7 +27,7 @@ class ScaleDescription(ABC):
         raise NotImplementedError("Subclasses should implement this")
 
     @abstractmethod
-    def get_scale_length(self) -> int:
+    def get_scale_unit_length(self) -> int:
         """Calculates length of timeline scale in mm."""
         raise NotImplementedError("Subclasses should implement this")
 

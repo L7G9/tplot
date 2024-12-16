@@ -24,7 +24,7 @@ class TestPDFScaleLine(TestCase):
             title="Test Age Timeline Title",
             description="Test Age Timeline Description",
             scale_unit=5,
-            scale_length=5,
+            scale_unit_length=5,
             page_size="4",
             page_orientation="L",
             page_scale_position=1,
@@ -57,7 +57,7 @@ class TestPDFScaleLine(TestCase):
             title="Test Age Timeline Title",
             description="Test Age Timeline Description",
             scale_unit=1,
-            scale_length=10,
+            scale_unit_length=10,
             page_size="4",
             page_orientation="P",
             page_scale_position=1,
@@ -104,7 +104,7 @@ class TestPDFScaleLine(TestCase):
         )
 
         expected_width = (
-            self.landscape_scale_description.get_scale_length() * mm
+            self.landscape_scale_description.get_scale_unit_length() * mm
         )
         expected_height = UNIT_LINE_LENGTH
         self.assertEqual(scale_line.width, expected_width)
@@ -119,7 +119,7 @@ class TestPDFScaleLine(TestCase):
 
         expected_width = UNIT_LINE_LENGTH
         expected_height = (
-            self.portrait_scale_description.get_scale_length() * mm
+            self.portrait_scale_description.get_scale_unit_length() * mm
         )
         self.assertEqual(scale_line.width, expected_width)
         self.assertEqual(scale_line.height, expected_height)

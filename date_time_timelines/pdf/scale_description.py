@@ -50,7 +50,7 @@ class DateTimeScaleDescription(ScaleDescription):
             self.end_date_time = DateTime(datetime.today())
 
         self.scale_units: int = self._scale_units()
-        self.scale_length: int = self.__scale_length()
+        self.scale_unit_length: int = self.__scale_unit_length()
 
     def __first_date_time(self) -> DateTime:
         """Finds the first datetime linked to an event in timeline."""
@@ -70,15 +70,15 @@ class DateTimeScaleDescription(ScaleDescription):
 
         return largest_date_time
 
-    def __scale_length(self) -> int:
+    def __scale_unit_length(self) -> int:
         """Calculate length of timeline scale in mm."""
-        return self.scale_units * self.timeline.scale_length * MM_PER_CM
+        return self.scale_units * self.timeline.scale_unit_length * MM_PER_CM
 
     def get_scale_units(self) -> int:
         return self.scale_units
 
-    def get_scale_length(self) -> int:
-        return self.scale_length
+    def get_scale_unit_length(self) -> int:
+        return self.scale_unit_length
 
     def round_datetime(
         self,

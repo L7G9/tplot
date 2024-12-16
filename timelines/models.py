@@ -10,10 +10,7 @@ class Timeline(models.Model):
     description = models.CharField(max_length=1000, blank=True)
 
     # scale
-    SCALE_LENGTHS = [
-        (1, "1cm"),
-        (2, "2cm"),
-        (3, "3cm"),
+    SCALE_UNIT_LENGTHS = [
         (4, "4cm"),
         (5, "5cm"),
         (6, "6cm"),
@@ -27,8 +24,8 @@ class Timeline(models.Model):
         (25, "25cm"),
         (30, "30cm"),
     ]
-    scale_length = models.PositiveSmallIntegerField(
-        choices=SCALE_LENGTHS, default=5
+    scale_unit_length = models.PositiveSmallIntegerField(
+        choices=SCALE_UNIT_LENGTHS, default=5
     )
 
     # display layout

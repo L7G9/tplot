@@ -55,7 +55,7 @@ class PDFScaleUnits(Area):
         self.unit_labels = []
         self.start_offset = 0
 
-        scale_line_length = scale_description.get_scale_length() * mm
+        scale_line_length = scale_description.get_scale_unit_length() * mm
         distance_between_label_centers = (
             scale_line_length / scale_description.get_scale_units()
         )
