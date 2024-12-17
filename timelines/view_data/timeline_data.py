@@ -9,7 +9,8 @@ START_ONLY_EVENT_MAX_SIZE = 100
 
 class EventData:
     def __init__(
-        self, position,
+        self,
+        position,
         heading,
         description,
         tag_string,
@@ -25,8 +26,20 @@ class EventData:
 
 
 class EventAreaData:
-    def __init__(self):
+    def __init__(
+        self,
+        display_event_time,
+        display_event_description,
+        display_event_image,
+        display_event_tags,
+        display_event_to_scale_line,
+    ):
         self.events = []
+        self.display_event_time = display_event_time
+        self.display_event_description = display_event_description
+        self.display_event_image = display_event_image
+        self.display_event_tags = display_event_tags
+        self.display_event_to_scale_line = display_event_to_scale_line
 
 
 class ScaleUnitData:
@@ -117,7 +130,13 @@ class TimelineData(ABC):
         raise NotImplementedError("Subclasses should implement this")
 
     def get_event_area(self, event_area, scale_description):
-        event_area_data = EventAreaData()
+        event_area_data = EventAreaData(
+            event_area.display_event_time,
+            event_area.display_event_description,
+            event_area.display_event_image,
+            event_area.display_event_tags,
+            event_area.display_event_to_scale_line,
+        )
         events = self._get_events(event_area)
         for event in events:
             start_position = scale_description.plot(

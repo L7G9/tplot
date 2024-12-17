@@ -317,18 +317,20 @@
             <div class="event_area" style="width:{{ timeline.initial_event_area_width }}mm;">
                 {% for event in event_area.events %}
                     {% if event.has_end %}
-                        <div class="event_box" style="left:{{ event.position }}mm; width:{{ event.size }}mm;">
-                            <p class="event_para h6">{{ event.heading }}</p>
-                            <p class="event_para">{{ event.description }}</p>
-                            <p class="event_para">{{ event.tag_string }}</p>
-                        </div>
+                    <div class="event_box" style="left:{{ event.position }}mm; width:{{ event.size }}mm;">
                     {% else %}
-                        <div class="event_box" style="left:{{ event.position }}mm; max-width:{{ timeline.start_only_event_max_size }}mm;">
-                            <p class="event_para h6">{{ event.heading }}</p>
-                            <p class="event_para">{{ event.description }}</p>
-                            <p class="event_para">{{ event.tag_string }}</p>
-                        </div>
+                    <div class="event_box" style="left:{{ event.position }}mm; max-width:{{ timeline.start_only_event_max_size }}mm;">
                     {% endif %}
+                        <p class="event_para h6">{{ event.heading }}</p>
+
+                        {% if event_area.display_event_description %}
+                        <p class="event_para">{{ event.description }}</p>
+                        {% endif %}
+
+                        {% if event_area.display_event_tags %}
+                        <p class="event_para">{{ event.tag_string }}</p>
+                        {% endif %}
+                    </div>
                     <div class="event_to_scale_line" style="left:{{ event.position }}mm;"></div>
                 {% endfor %}
             </div>

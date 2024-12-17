@@ -78,6 +78,13 @@ class EventArea(models.Model):
         default=1, validators=[MinValueValidator(1)],
     )
 
+    # what details to display in event box on timeline view
+    display_event_time = models.BooleanField(default=True)
+    display_event_description = models.BooleanField(default=True)
+    display_event_image = models.BooleanField(default=True)
+    display_event_tags = models.BooleanField(default=True)
+    display_event_to_scale_line = models.BooleanField(default=True)
+
     class Meta:
         ordering = ["name"]
         unique_together = ["timeline", "page_position"]
