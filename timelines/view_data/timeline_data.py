@@ -9,16 +9,17 @@ START_ONLY_EVENT_MAX_SIZE = 100
 
 class EventData:
     def __init__(
-        self,
-        position,
-        heading,
+        self, position,
+        time,
+        title,
         description,
         tag_string,
         has_end,
         size
     ):
         self.position = position
-        self.heading = heading
+        self.time = time
+        self.title = title
         self.description = description
         self.tag_string = tag_string
         self.has_end = has_end
@@ -152,7 +153,8 @@ class TimelineData(ABC):
 
             event_data = EventData(
                 position=start_position,
-                heading=event,
+                time=event.time_unit_description(),
+                title=event.title,
                 description=event.description,
                 tag_string=event.tag_string(True),
                 has_end=event.has_end,

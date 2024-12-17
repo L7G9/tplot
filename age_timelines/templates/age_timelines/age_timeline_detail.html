@@ -48,13 +48,13 @@
 {% for age_event in object.ageevent_set.all %}
     {% if user_role >= 2 %}
         <tr>
-            <td><a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-event-update' view.kwargs.pk age_event.id %}">{{ age_event.age_description }}</a></td>
+            <td><a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-event-update' view.kwargs.pk age_event.id %}">{{ age_event.time_unit_description }}</a></td>
             <td><a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-event-update' view.kwargs.pk age_event.id %}">{{ age_event.title }}</a></td>
             <td><a class="list-group-item list-group-item-action" href="{% url 'age_timelines:age-event-update' view.kwargs.pk age_event.id %}">{{ age_event.event_ptr.event_area }}</a></td>
         </tr>
     {% else %}
         <tr>
-            <td>{{ age_event.age_description }}</td>
+            <td>{{ age_event.time_unit_description }}</td>
             <td>{{ age_event.title }}</td>
             <td>{{ age_event.event_ptr.event_area }}</td>
         </tr>

@@ -34,9 +34,18 @@
         z-index: 1;
     }
 
+	.event_box:hover,
+	.event_box:focus {
+		cursor: pointer;
+	}
+
     .event_para {
         margin: 0px;
     }
+
+	.event_image {
+		border-radius: 50%;
+	}
 
     .scale_area {
         position: relative;
@@ -252,41 +261,71 @@
                 var eventToScaleLines = eventAreaDiv.getElementsByClassName('event_to_scale_line');
                 var eventIndex;
 
-                if (eventAreaDiv.offsetTop < scaleDiv.offsetTop) {
-                    var eventAreaToScaleDistance = scaleDiv.offsetTop - eventAreaDiv.offsetTop;
+				if (eventToScaleLines.length != 0) {
+					if (eventAreaDiv.offsetTop < scaleDiv.offsetTop) {
+						var eventAreaToScaleDistance = scaleDiv.offsetTop - eventAreaDiv.offsetTop;
 
-                    for (eventIndex = 0; eventIndex < eventToScaleLines.length; ++eventIndex) {
-                        var eventDiv = eventDivs[eventIndex];
-                        var eventToScaleLine = eventToScaleLines[eventIndex];
+						for (eventIndex = 0; eventIndex < eventToScaleLines.length; ++eventIndex) {
+							var eventDiv = eventDivs[eventIndex];
+							var eventToScaleLine = eventToScaleLines[eventIndex];
 
-                        var line_height = eventAreaToScaleDistance - eventDiv.offsetTop;
-                        eventToScaleLine.style.top = eventDiv.offsetTop + "px";
-                        eventToScaleLine.style.height = line_height + "px";
-                    }
-                }
-                else {
-                    var lineTop = (scaleDiv.offsetTop + scaleDiv.offsetHeight) - eventAreaDiv.offsetTop;
+							var line_height = eventAreaToScaleDistance - eventDiv.offsetTop;
+							eventToScaleLine.style.top = eventDiv.offsetTop + "px";
+							eventToScaleLine.style.height = line_height + "px";
+						}
+					}
+					else {
+						var lineTop = (scaleDiv.offsetTop + scaleDiv.offsetHeight) - eventAreaDiv.offsetTop;
 
-                    for (eventIndex = 0; eventIndex < eventToScaleLines.length; ++eventIndex) {
-                        var eventDiv = eventDivs[eventIndex];
-                        var eventToScaleLine = eventToScaleLines[eventIndex];
+						for (eventIndex = 0; eventIndex < eventToScaleLines.length; ++eventIndex) {
+							var eventDiv = eventDivs[eventIndex];
+							var eventToScaleLine = eventToScaleLines[eventIndex];
 
-                        var lineHeight = eventDiv.offsetTop - lineTop;
-                        eventToScaleLine.style.top = lineTop + "px";
-                        eventToScaleLine.style.height = lineHeight + "px";
+							var lineHeight = eventDiv.offsetTop - lineTop;
+							eventToScaleLine.style.top = lineTop + "px";
+							eventToScaleLine.style.height = lineHeight + "px";
 
-                    }
-                }
+						}
+					}
+				}
             }
         }
 
-        function onStart() {
+		function displayEventModal(time_title, description, image_src, image_alt, tags) {
+			var time_title_heading = document.getElementById("eventModalTimeAndTitle");
+			time_title_heading.innerHTML = time_title;
+
+			var description_paragraph = document.getElementById("eventModalDescription");
+			description_paragraph.innerText = description;
+
+			var image = document.getElementById("eventModalImage");
+			image.src = image_src;
+			image.alt = image_alt;
+
+			var tags_paragraph = document.getElementById("eventModalTags");
+			tags_paragraph.innerText = tags;
+
+			var event_modal = document.getElementById("eventModal");
+			event_modal.style.display = "block";
+		}
+
+		function closeEventModal() {
+			var event_modal = document.getElementById("eventModal");
+			event_modal.style.display = "none";
+		}
+
+        window.onload = function() {
             placeEvents();
             setScaleAreaHeight();
             connectEventsToScale();
         }
 
-        window.onload = onStart;
+		window.onclick = function(event) {
+			var event_modal = document.getElementById("eventModal");
+			if (event.target == event_modal) {
+				event_modal.style.display = "none";
+			}
+		}
 
     </script>
 {% endblock head_additional %}
@@ -317,21 +356,39 @@
             <div class="event_area" style="width:{{ timeline.initial_event_area_width }}mm;">
                 {% for event in event_area.events %}
                     {% if event.has_end %}
-                    <div class="event_box" style="left:{{ event.position }}mm; width:{{ event.size }}mm;">
+                    <div class="event_box"
+						onclick="displayEventModal('{{ event.time }} : {{ event.title}}', '{{ event.description }}', 'https://images.squarespace-cdn.com/content/v1/54fe412ce4b0c449f7369857/1561406015553-8ZP6D0V4BVI41ULG2B85/M2E_Pandora.png', '{{ event.title }}', '{{ event.tag_string }}')"
+						style="left:{{ event.position }}mm; width:{{ event.size }}mm;">
                     {% else %}
-                    <div class="event_box" style="left:{{ event.position }}mm; max-width:{{ timeline.start_only_event_max_size }}mm;">
+                    <div class="event_box"
+						onclick="displayEventModal('{{ event.time }} : {{ event.title}}', '{{ event.description }}', 'https://images.squarespace-cdn.com/content/v1/54fe412ce4b0c449f7369857/1561406015553-8ZP6D0V4BVI41ULG2B85/M2E_Pandora.png', '{{ event.title }}', '{{ event.tag_string }}')"
+						style="left:{{ event.position }}mm; max-width:{{ timeline.start_only_event_max_size }}mm;">
                     {% endif %}
-                        <p class="event_para h6">{{ event.heading }}</p>
+						{% if event_area.display_event_time %}
+                        <p class="event_para">{{ event.time }} : {{ event.title }}</p>
+						{% else %}
+						<p class="event_para">{{ event.title }}</p>
+                        {% endif %}
 
                         {% if event_area.display_event_description %}
                         <p class="event_para">{{ event.description }}</p>
+                        {% endif %}
+
+						{% if event_area.display_event_image and event.has_end %}
+						<img class="event_image" src="https://images.squarespace-cdn.com/content/v1/54fe412ce4b0c449f7369857/1561406015553-8ZP6D0V4BVI41ULG2B85/M2E_Pandora.png" alt="{{ event.title }}" style="max-height:25mm; max-width:{{ event.size }}mm;">
+                        {% endif %}
+
+                        {% if event_area.display_event_image and event.has_end is not True %}
+						<img class="event_image" src="https://images.squarespace-cdn.com/content/v1/54fe412ce4b0c449f7369857/1561406015553-8ZP6D0V4BVI41ULG2B85/M2E_Pandora.png" alt="{{ event.title }}" style="max-height:25mm;">
                         {% endif %}
 
                         {% if event_area.display_event_tags %}
                         <p class="event_para">{{ event.tag_string }}</p>
                         {% endif %}
                     </div>
-                    <div class="event_to_scale_line" style="left:{{ event.position }}mm;"></div>
+					{% if event_area.display_event_to_scale_line %}
+                        <div class="event_to_scale_line" style="left:{{ event.position }}mm;"></div>
+                    {% endif %}
                 {% endfor %}
             </div>
         {% endfor %}
@@ -348,19 +405,39 @@
             <div class="event_area" style="width:{{ timeline.initial_event_area_width }}mm;">
                 {% for event in event_area.events %}
                     {% if event.has_end %}
-                        <div class="event_box" style="left:{{ event.position }}mm; width:{{ event.size }}mm;">
-                            <p class="event_para h6">{{ event.heading }}</p>
-                            <p class="event_para">{{ event.description }}</p>
-                            <p class="event_para">{{ event.tag_string }}</p>
-                        </div>
+                    <div class="event_box"
+						onclick="displayEventModal('{{ event.time }} : {{ event.title}}', '{{ event.description }}', 'https://images.squarespace-cdn.com/content/v1/54fe412ce4b0c449f7369857/1561406015553-8ZP6D0V4BVI41ULG2B85/M2E_Pandora.png', '{{ event.title }}', '{{ event.tag_string }}')"
+						style="left:{{ event.position }}mm; width:{{ event.size }}mm;">
                     {% else %}
-                        <div class="event_box" style="left:{{ event.position }}mm; max-width:{{ timeline.start_only_event_max_size }}mm;">
-                            <p class="event_para h6">{{ event.heading }}</p>
-                            <p class="event_para">{{ event.description }}</p>
-                            <p class="event_para">{{ event.tag_string }}</p>
-                        </div>
+                    <div class="event_box"
+						onclick="displayEventModal('{{ event.time }} : {{ event.title}}', '{{ event.description }}', 'https://images.squarespace-cdn.com/content/v1/54fe412ce4b0c449f7369857/1561406015553-8ZP6D0V4BVI41ULG2B85/M2E_Pandora.png', '{{ event.title }}', '{{ event.tag_string }}')"
+						style="left:{{ event.position }}mm; max-width:{{ timeline.start_only_event_max_size }}mm;">
                     {% endif %}
-                    <div class="event_to_scale_line" style="left:{{ event.position }}mm;"></div>
+						{% if event_area.display_event_time %}
+                        <p class="event_para">{{ event.time }} : {{ event.title }}</p>
+						{% else %}
+						<p class="event_para">{{ event.title }}</p>
+                        {% endif %}
+
+                        {% if event_area.display_event_description %}
+                        <p class="event_para">{{ event.description }}</p>
+                        {% endif %}
+
+						{% if event_area.display_event_image and event.has_end %}
+						<img class="event_image" src="https://images.squarespace-cdn.com/content/v1/54fe412ce4b0c449f7369857/1561406015553-8ZP6D0V4BVI41ULG2B85/M2E_Pandora.png" alt="{{ event.title }}" style="max-height:25mm; max-width:{{ event.size }}mm;">
+                        {% endif %}
+
+                        {% if event_area.display_event_image and event.has_end is not True %}
+						<img class="event_image" src="https://images.squarespace-cdn.com/content/v1/54fe412ce4b0c449f7369857/1561406015553-8ZP6D0V4BVI41ULG2B85/M2E_Pandora.png" alt="{{ event.title }}" style="max-height:25mm;">
+                        {% endif %}
+
+                        {% if event_area.display_event_tags %}
+                        <p class="event_para">{{ event.tag_string }}</p>
+                        {% endif %}
+                    </div>
+					{% if event_area.display_event_to_scale_line %}
+                        <div class="event_to_scale_line" style="left:{{ event.position }}mm;"></div>
+                    {% endif %}
                 {% endfor %}
             </div>
         {% endfor %}
@@ -379,5 +456,25 @@
             {% endfor %}
         </div>
     {% endif %}
+
+	<!-- Modal -->
+	<div class="modal" id="eventModal">
+	  <div class="modal-dialog modal-md">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h3 class="modal-title" id="eventModalTimeAndTitle">Event Time : Event Title</h3>
+			  <button type="button" id="modalCloseButton" class="btn-close" aria-label="Close" onclick="closeEventModal()"></button>
+			</div>
+			<div class="modal-body">
+			  <p id="eventModalDescription">Event Description</p>
+			  <img id="eventModalImage"
+			  src="https://images.squarespace-cdn.com/content/v1/54fe412ce4b0c449f7369857/1561406015553-8ZP6D0V4BVI41ULG2B85/M2E_Pandora.png"
+			  alt="Timeline"
+			  style="width:100%;max-width:1000px">
+			  <p id="eventModalTags">(Tag Name 1, Tag Name 2)</p>
+			</div>
+		  </div>
+	  </div>
+	</div>
 
 {% endblock content %}

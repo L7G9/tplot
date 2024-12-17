@@ -61,11 +61,11 @@ class AgeEvent(timelines.Event):
         end = self.age_string(self.end_year, self.end_month)
         return f"{start} to {end}"
 
-    def age_description(self):
+    def time_unit_description(self):
         if self.has_end:
             return self.start_end_description()
         else:
             return self.start_description()
 
     def __str__(self):
-        return f"{self.age_description()} : {self.title}"
+        return f"{self.time_unit_description()} : {self.title}"

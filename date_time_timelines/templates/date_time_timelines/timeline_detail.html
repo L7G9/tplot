@@ -51,13 +51,13 @@ Updates to keyboard shortcuts … On Thursday 1 August 2024, Drive keyboard shor
 {% for date_time_event in object.datetimeevent_set.all %}
     {% if user_role >= 2 %}
         <tr>
-            <td><a class="list-group-item list-group-item-action" href="{% url 'date_time_timelines:date-time-event-update' view.kwargs.pk date_time_event.id %}">{{ date_time_event.date_time_description }}</a></td>
+            <td><a class="list-group-item list-group-item-action" href="{% url 'date_time_timelines:date-time-event-update' view.kwargs.pk date_time_event.id %}">{{ date_time_event.time_unit_description }}</a></td>
             <td><a class="list-group-item list-group-item-action" href="{% url 'date_time_timelines:date-time-event-update' view.kwargs.pk date_time_event.id %}">{{ date_time_event.title }}</a></td>
             <td><a class="list-group-item list-group-item-action" href="{% url 'date_time_timelines:date-time-event-update' view.kwargs.pk date_time_event.id %}">{{ date_time_event.event_ptr.event_area }}</a></td>
         </tr>
     {% else %}
         <tr>
-            <td>{{ date_time_event.age_description }}</td>
+            <td>{{ date_time_event.time_unit_description }}</td>
             <td>{{ date_time_event.title }}</td>
             <td>{{ date_time_event.event_ptr.event_area }}</td>
         </tr>
