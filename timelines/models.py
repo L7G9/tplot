@@ -122,6 +122,7 @@ class Event(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000, blank=True)
+    image = models.ImageField(upload_to='images/', blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
     event_area = models.ForeignKey(
         EventArea,

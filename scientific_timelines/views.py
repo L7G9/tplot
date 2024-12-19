@@ -113,6 +113,7 @@ class ScientificTimelineContextMixim:
 
 
 EVENT_FIELD_ORDER = [
+    "event_area",
     "start_year_fraction",
     "start_multiplier",
     "has_end",
@@ -120,7 +121,7 @@ EVENT_FIELD_ORDER = [
     "end_multiplier",
     "title",
     "description",
-    "event_area",
+    "image",
     "tags",
 ]
 

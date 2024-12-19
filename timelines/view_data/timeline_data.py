@@ -13,6 +13,7 @@ class EventData:
         time,
         title,
         description,
+        image,
         tag_string,
         has_end,
         size
@@ -21,6 +22,7 @@ class EventData:
         self.time = time
         self.title = title
         self.description = description
+        self.image = image
         self.tag_string = tag_string
         self.has_end = has_end
         self.size = size
@@ -151,11 +153,16 @@ class TimelineData(ABC):
                 )
                 size = end_position - start_position
 
+            image_url = ""
+            if event.image != "":
+                image_url = event.image.url
+
             event_data = EventData(
                 position=start_position,
                 time=event.time_unit_description(),
                 title=event.title,
                 description=event.description,
+                image=image_url,
                 tag_string=event.tag_string(True),
                 has_end=event.has_end,
                 size=size,

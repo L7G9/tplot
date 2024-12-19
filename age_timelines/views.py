@@ -126,6 +126,7 @@ class AgeTimelineContextMixim:
 
 
 AGE_EVENT_FIELD_ORDER = [
+    "event_area",
     "start_year",
     "start_month",
     "has_end",
@@ -133,7 +134,7 @@ AGE_EVENT_FIELD_ORDER = [
     "end_month",
     "title",
     "description",
-    "event_area",
+    "image",
     "tags",
 ]
 

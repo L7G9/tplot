@@ -115,6 +115,7 @@ class HistoricalTimelineContextMixin:
 
 
 EVENT_FIELD_ORDER = [
+    "event_area",
     "start_bc_ad",
     "start_year",
     "has_end",
@@ -122,7 +123,7 @@ EVENT_FIELD_ORDER = [
     "end_year",
     "title",
     "description",
-    "event_area",
+    "image",
     "tags",
 ]
 

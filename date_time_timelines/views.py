@@ -128,12 +128,13 @@ class DateTimeTimelineContextMixim:
 
 
 DATE_TIME_EVENT_FIELD_ORDER = [
+    "event_area",
     "start_date_time",
     "has_end",
     "end_date_time",
     "title",
     "description",
-    "event_area",
+    "image",
     "tags",
 ]
 

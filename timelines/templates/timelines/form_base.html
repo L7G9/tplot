@@ -5,13 +5,14 @@
 {% block content %}
 <div class="card mb-4">
     <div class="card-header">
-        <p class="h2">{% block heading %}Form Heading{% endblock %}</p>
+        <p class="h2">{% block heading %}Form Heading{% endblock heading %}</p>
     </div>
     <div class="card-body">
-        <form method="POST" class="post-form">{% csrf_token %}
+        <form method="POST" class="post-form" {% block enctype %}{% endblock enctype %}>
+			{% csrf_token %}
             {{ form|crispy }}
-            <button type="submit" class="btn btn-primary">{% block button_name %}Submit{% endblock %}</button>
+            <button type="submit" class="btn btn-primary">{% block button_name %}Submit{% endblock button_name %}</button>
         </form>
     </div>
 </div>
-{% endblock %}
+{% endblock content %}
