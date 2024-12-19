@@ -32,6 +32,7 @@
         margin: 0px;
         background-color: White;
         z-index: 1;
+        overflow: hidden;
     }
 
 	.event_box:hover,
@@ -365,9 +366,9 @@
 						style="left:{{ event.position }}mm; max-width:{{ timeline.start_only_event_max_size }}mm;">
                     {% endif %}
 						{% if event_area.display_event_time %}
-                        <p class="event_para">{{ event.time }} : {{ event.title }}</p>
+                        <p class="event_para h6">{{ event.time }} : {{ event.title }}</p>
 						{% else %}
-						<p class="event_para">{{ event.title }}</p>
+						<p class="event_para h6">{{ event.title }}</p>
                         {% endif %}
 
                         {% if event_area.display_event_description %}
@@ -414,9 +415,9 @@
 						style="left:{{ event.position }}mm; max-width:{{ timeline.start_only_event_max_size }}mm;">
                     {% endif %}
 						{% if event_area.display_event_time %}
-                        <p class="event_para">{{ event.time }} : {{ event.title }}</p>
+                        <p class="event_para h6">{{ event.time }} : {{ event.title }}</p>
 						{% else %}
-						<p class="event_para">{{ event.title }}</p>
+						<p class="event_para h6">{{ event.title }}</p>
                         {% endif %}
 
                         {% if event_area.display_event_description %}
@@ -457,7 +458,6 @@
         </div>
     {% endif %}
 
-	<!-- Modal -->
 	<div class="modal" id="eventModal">
 	  <div class="modal-dialog modal-md">
 		  <div class="modal-content">
