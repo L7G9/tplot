@@ -39,7 +39,7 @@ class TimelineModel(TestCase):
     def test_scale_choices(self):
         timeline = Timeline.objects.get(id=self.timeline_id)
         choices = timeline._meta.get_field("scale_length").choices
-        self.assertEqual(choices, Timeline.SCALE_LENGTHS)
+        self.assertEqual(choices, Timeline.SCALE_UNIT_LENGTHS)
 
     def test_scale_default(self):
         timeline = Timeline.objects.get(id=self.timeline_id)

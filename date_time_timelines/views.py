@@ -43,10 +43,10 @@ DATE_TIME_TIMELINE_FIELD_ORDER = [
     "scale_unit",
     "scale_length",
     "scale_display_format",
-    "page_size",
     "page_orientation",
     "page_scale_position",
     "event_display_format",
+    "page_size",
 ]
 
 
@@ -128,12 +128,13 @@ class DateTimeTimelineContextMixim:
 
 
 DATE_TIME_EVENT_FIELD_ORDER = [
+    "event_area",
     "start_date_time",
     "has_end",
     "end_date_time",
     "title",
     "description",
-    "event_area",
+    "image",
     "tags",
 ]
 

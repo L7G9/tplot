@@ -10,23 +10,39 @@ START_ONLY_EVENT_MAX_SIZE = 100
 class EventData:
     def __init__(
         self, position,
-        heading,
+        time,
+        title,
         description,
+        image,
         tag_string,
         has_end,
         size
     ):
         self.position = position
-        self.heading = heading
+        self.time = time
+        self.title = title
         self.description = description
+        self.image = image
         self.tag_string = tag_string
         self.has_end = has_end
         self.size = size
 
 
 class EventAreaData:
-    def __init__(self):
+    def __init__(
+        self,
+        display_event_time,
+        display_event_description,
+        display_event_image,
+        display_event_tags,
+        display_event_to_scale_line,
+    ):
         self.events = []
+        self.display_event_time = display_event_time
+        self.display_event_description = display_event_description
+        self.display_event_image = display_event_image
+        self.display_event_tags = display_event_tags
+        self.display_event_to_scale_line = display_event_to_scale_line
 
 
 class ScaleUnitData:
@@ -71,9 +87,9 @@ class TimelineData(ABC):
         )
         self.start_only_event_max_size = START_ONLY_EVENT_MAX_SIZE
 
-        self.scale_length = scale_description.scale_length
+        self.scale_unit_length = scale_description.scale_length
         self.scale_units = self.get_scale_units(scale_description)
-        self.scale_unit_max_size = timeline.scale_unit * MM_PER_CM
+        self.scale_unit_max_size = timeline.scale_length * MM_PER_CM
 
         self.tags = self.get_tags(timeline.tag_set.filter(display=True))
         self.has_tags = len(self.tags) != 0
@@ -117,7 +133,13 @@ class TimelineData(ABC):
         raise NotImplementedError("Subclasses should implement this")
 
     def get_event_area(self, event_area, scale_description):
-        event_area_data = EventAreaData()
+        event_area_data = EventAreaData(
+            event_area.display_event_time,
+            event_area.display_event_description,
+            event_area.display_event_image,
+            event_area.display_event_tags,
+            event_area.display_event_to_scale_line,
+        )
         events = self._get_events(event_area)
         for event in events:
             start_position = scale_description.plot(
@@ -131,10 +153,16 @@ class TimelineData(ABC):
                 )
                 size = end_position - start_position
 
+            image_url = ""
+            if event.image != "":
+                image_url = event.image.url
+
             event_data = EventData(
                 position=start_position,
-                heading=event,
+                time=event.time_unit_description(),
+                title=event.title,
                 description=event.description,
+                image=image_url,
                 tag_string=event.tag_string(True),
                 has_end=event.has_end,
                 size=size,

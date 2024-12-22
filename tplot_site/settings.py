@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "cloudinary_storage",
+    "cloudinary",
     "bootstrap5",
     "crispy_forms",
     "crispy_bootstrap5",
@@ -179,6 +181,11 @@ STATICFILES_DIRS = [
 ]
 STATIC_URL = "static/"
 
+# Media files
+# https://learndjango.com/tutorials/django-file-and-image-uploads-tutorial
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -187,6 +194,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 if 'HEROKU_ENV' in os.environ:
     import django_heroku
     django_heroku.settings(locals())
+    # https://pypi.org/project/django-cloudinary-storage/
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Email settings for use with email confirmation of user registration
 EMAIL_USE_TLS = True

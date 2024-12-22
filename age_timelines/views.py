@@ -42,9 +42,9 @@ AGE_TIMELINE_FIELD_ORDER = [
     "description",
     "scale_unit",
     "scale_length",
-    "page_size",
     "page_orientation",
     "page_scale_position",
+    "page_size",
 ]
 
 
@@ -126,6 +126,7 @@ class AgeTimelineContextMixim:
 
 
 AGE_EVENT_FIELD_ORDER = [
+    "event_area",
     "start_year",
     "start_month",
     "has_end",
@@ -133,7 +134,7 @@ AGE_EVENT_FIELD_ORDER = [
     "end_month",
     "title",
     "description",
-    "event_area",
+    "image",
     "tags",
 ]
 
@@ -308,6 +309,18 @@ class EventAreaValidateMixim(object):
             return super().form_valid(form)
 
 
+EVENT_AREA_FIELD_ORDER = [
+    "name",
+    "page_position",
+    "display_event_time",
+    "display_event_description",
+    "display_event_image",
+    "display_event_tags",
+    "display_event_to_scale_line",
+    "weight",
+]
+
+
 class EventAreaCreateView(
     LoginRequiredMixin,
     AgeTimelineRoleMixin,
@@ -317,7 +330,7 @@ class EventAreaCreateView(
     CreateView,
 ):
     model = EventArea
-    fields = ["name", "page_position", "weight"]
+    fields = EVENT_AREA_FIELD_ORDER
     template_name = "age_timelines/event_area_add_form.html"
     required_role = ROLE_TIMELINE_EDITOR
 
@@ -331,7 +344,7 @@ class EventAreaUpdateView(
     UpdateView,
 ):
     model = EventArea
-    fields = ["name", "page_position", "weight"]
+    fields = EVENT_AREA_FIELD_ORDER
     template_name = "age_timelines/event_area_edit_form.html"
     required_role = ROLE_TIMELINE_EDITOR
 

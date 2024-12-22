@@ -171,12 +171,12 @@ class AgeEventModel(TestCase):
 
     def test_age_description(self):
         event = AgeEvent.objects.get(id=self.start_age_event_id)
-        description = event.age_description()
+        description = event.time_unit_description()
         self.assertEqual(description, "1 Years")
 
     def test_age_description_has_end(self):
         event = AgeEvent.objects.get(id=self.end_age_event_id)
-        description = event.age_description()
+        description = event.time_unit_description()
         self.assertEqual(description, "6 Months to 2 Years")
 
     def test_object_name_no_end(self):

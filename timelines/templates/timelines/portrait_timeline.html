@@ -1,3 +1,6 @@
+
+
+
 {% extends "user_guide/user_guide_base.html" %}
 
 {% block head_additional %}
@@ -40,6 +43,12 @@
 	max-width: 50mm;
 	background-color: White;
     z-index: 1;
+    overflow: hidden;
+}
+
+.event_box:hover,
+.event_box:focus {
+    cursor: pointer;
 }
 
 .event_para {
@@ -272,39 +281,70 @@
 			var eventToScaleLines = eventAreaDiv.getElementsByClassName('event_to_scale_line');
 			var eventIndex;
 
-			if (eventAreaDiv.offsetLeft < scaleDiv.offsetLeft) {
-				var eventAreaToScaleDistance = scaleDiv.offsetLeft - eventAreaDiv.offsetLeft;
+			if (eventToScaleLines.length != 0) {
+				if (eventAreaDiv.offsetLeft < scaleDiv.offsetLeft) {
+					var eventAreaToScaleDistance = scaleDiv.offsetLeft - eventAreaDiv.offsetLeft;
 
-				for (eventIndex = 0; eventIndex < eventToScaleLines.length; ++eventIndex) {
-					var eventDiv = eventDivs[eventIndex];
-					var eventToScaleLine = eventToScaleLines[eventIndex];
-					var line_length = eventAreaToScaleDistance - eventDiv.offsetLeft - eventDiv.offsetWidth;
-					var line_left = eventDiv.offsetLeft + eventDiv.offsetWidth;
-					eventToScaleLine.style.left = line_left + "px";
-					eventToScaleLine.style.width = line_length + "px";
+					for (eventIndex = 0; eventIndex < eventToScaleLines.length; ++eventIndex) {
+						var eventDiv = eventDivs[eventIndex];
+						var eventToScaleLine = eventToScaleLines[eventIndex];
+						var line_length = eventAreaToScaleDistance - eventDiv.offsetLeft - eventDiv.offsetWidth;
+						var line_left = eventDiv.offsetLeft + eventDiv.offsetWidth;
+						eventToScaleLine.style.left = line_left + "px";
+						eventToScaleLine.style.width = line_length + "px";
+					}
 				}
-			}
-			else {
-				var eventAreaToScaleDistance = (scaleDiv.offsetLeft + scaleDiv.offsetWidth) - eventAreaDiv.offsetLeft;
-				for (eventIndex = 0; eventIndex < eventToScaleLines.length; ++eventIndex) {
-					var eventDiv = eventDivs[eventIndex];
-					var eventToScaleLine = eventToScaleLines[eventIndex];
-					var line_length = -eventAreaToScaleDistance + eventDiv.offsetLeft;
-					var line_left = eventAreaToScaleDistance;
-					eventToScaleLine.style.left = line_left + "px";
-					eventToScaleLine.style.width = line_length + "px";
+				else {
+					var eventAreaToScaleDistance = (scaleDiv.offsetLeft + scaleDiv.offsetWidth) - eventAreaDiv.offsetLeft;
+					for (eventIndex = 0; eventIndex < eventToScaleLines.length; ++eventIndex) {
+						var eventDiv = eventDivs[eventIndex];
+						var eventToScaleLine = eventToScaleLines[eventIndex];
+						var line_length = -eventAreaToScaleDistance + eventDiv.offsetLeft;
+						var line_left = eventAreaToScaleDistance;
+						eventToScaleLine.style.left = line_left + "px";
+						eventToScaleLine.style.width = line_length + "px";
+					}
 				}
 			}
 		}
 	}
 
-	function onStart() {
-		placeEvents();
-		initScale();
-		connectEventsToScale();
+    function displayEventModal(time_title, description, image_src, image_alt, tags) {
+        var time_title_heading = document.getElementById("eventModalTimeAndTitle");
+        time_title_heading.innerHTML = time_title;
+
+        var description_paragraph = document.getElementById("eventModalDescription");
+        description_paragraph.innerText = description;
+
+        var image = document.getElementById("eventModalImage");
+        image.src = image_src;
+        image.alt = image_alt;
+        image.style.display = 'block'
+
+        var tags_paragraph = document.getElementById("eventModalTags");
+        tags_paragraph.innerText = tags;
+
+        var event_modal = document.getElementById("eventModal");
+        event_modal.style.display = "block";
     }
 
-	window.onload = onStart;
+    function closeEventModal() {
+        var event_modal = document.getElementById("eventModal");
+        event_modal.style.display = "none";
+    }
+
+    window.onload = function() {
+        placeEvents();
+        initScale();
+        connectEventsToScale();
+    }
+
+    window.onclick = function(event) {
+        var event_modal = document.getElementById("eventModal");
+        if (event.target == event_modal) {
+            event_modal.style.display = "none";
+        }
+    }
 
 </script>
 
@@ -334,27 +374,47 @@
 				<div class="event_area" style="height:{{ timeline.initial_event_area_width }}mm;">
 					{% for event in event_area.events %}
 						{% if event.has_end %}
-							<div class="event_box" style="top:{{ event.position }}mm; height:{{ event.size }}mm;">
-								<p class="event_para h6">{{ event.heading }}</p>
-								<p class="event_para">{{ event.description }}</p>
-								<p class="event_para">{{ event.tag_string }}</p>
-							</div>
+						<div class="event_box"
+							onclick="displayEventModal('{{ event.time }} : {{ event.title}}', '{{ event.description }}', '{{ event.image }}', '{{ event.title }}', '{{ event.tag_string }}')"
+							style="top:{{ event.position }}mm; height:{{ event.size }}mm;">
 						{% else %}
-							<div class="event_box" style="top:{{ event.position }}mm;">
-								<p class="event_para h6">{{ event.heading }}</p>
-								<p class="event_para">{{ event.description }}</p>
-								<p class="event_para">{{ event.tag_string }}</p>
-							</div>
+						<div class="event_box"
+							onclick="displayEventModal('{{ event.time }} : {{ event.title}}', '{{ event.description }}', '{{ event.image }}', '{{ event.title }}', '{{ event.tag_string }}')"
+							style="top:{{ event.position }}mm;">
 						{% endif %}
-						<div class="event_to_scale_line" style="top:{{ event.position }}mm;"></div>
+							{% if event_area.display_event_time %}
+							<p class="event_para h6">{{ event.time }} : {{ event.title }}</p>
+							{% else %}
+							<p class="event_para h6">{{ event.title }}</p>
+							{% endif %}
+
+							{% if event_area.display_event_description %}
+							<p class="event_para">{{ event.description }}</p>
+							{% endif %}
+
+							{% if event.image != "" and event_area.display_event_image and event.has_end %}
+							<img class="event_image" src="{{ event.image }}" alt="{{ event.title }}" style="max-height:{{ event.size }}mm; max-width:25mm;">
+							{% endif %}
+
+							{% if event.image != "" and event_area.display_event_image and event.has_end is not True %}
+							<img class="event_image" src="{{ event.image }}" alt="{{ event.title }}" style="max-width:25mm;">
+							{% endif %}
+
+							{% if event_area.display_event_tags %}
+							<p class="event_para">{{ event.tag_string }}</p>
+							{% endif %}
+						</div>
+						{% if event_area.display_event_to_scale_line %}
+							<div class="event_to_scale_line" style="top:{{ event.position }}mm;"></div>
+						{% endif %}
 					{% endfor %}
 				</div>
 			</div>
         {% endfor %}
 
 		<div class="wrapper_div">
-			<div id="scaleDiv" class="scale_area" style="height:{{ timeline.scale_length }}mm;">
-				<div id="scaleLine" class="scale_line" style="height:{{ timeline.scale_length }}mm; left:45mm;"></div>
+			<div id="scaleDiv" class="scale_area" style="height:{{ timeline.scale_unit_length }}mm;">
+				<div id="scaleLine" class="scale_line" style="height:{{ timeline.scale_unit_length }}mm; left:45mm;"></div>
 				{% for scale_unit in timeline.scale_units %}
 					<div class="scale_unit_line" style="top:{{ scale_unit.position }}mm; left:43mm;"></div>
 					<p class="scale_unit" style="top:{{ scale_unit.position }}mm; max-width:40mm; max-height:{{ timeline.scale_unit_max_size }}mm;">{{ scale_unit.unit_string }}</p>
@@ -367,35 +427,75 @@
 				<div class="event_area" style="height:{{ timeline.initial_event_area_width }}mm;">
 					{% for event in event_area.events %}
 						{% if event.has_end %}
-							<div class="event_box" style="top:{{ event.position }}mm; height:{{ event.size }}mm;">
-								<p class="event_para h6">{{ event.heading }}</p>
-								<p class="event_para">{{ event.description }}</p>
-								<p class="event_para">{{ event.tag_string }}</p>
-							</div>
+						<div class="event_box"
+							onclick="displayEventModal('{{ event.time }} : {{ event.title}}', '{{ event.description }}', '{{ event.image }}', '{{ event.title }}', '{{ event.tag_string }}')"
+							style="top:{{ event.position }}mm; height:{{ event.size }}mm;">
 						{% else %}
-							<div class="event_box" style="top:{{ event.position }}mm;">
-								<p class="event_para h6">{{ event.heading }}</p>
-								<p class="event_para">{{ event.description }}</p>
-								<p class="event_para">{{ event.tag_string }}</p>
-							</div>
+						<div class="event_box"
+							onclick="displayEventModal('{{ event.time }} : {{ event.title}}', '{{ event.description }}', '{{ event.image }}', '{{ event.title }}', '{{ event.tag_string }}')"
+							style="top:{{ event.position }}mm;">
 						{% endif %}
-						<div class="event_to_scale_line" style="top:{{ event.position }}mm;"></div>
+							{% if event_area.display_event_time %}
+							<p class="event_para h6">{{ event.time }} : {{ event.title }}</p>
+							{% else %}
+							<p class="event_para h6h">{{ event.title }}</p>
+							{% endif %}
+
+							{% if event_area.display_event_description %}
+							<p class="event_para">{{ event.description }}</p>
+							{% endif %}
+
+							{% if event.image != "" and event_area.display_event_image and event.has_end %}
+							<img class="event_image" src="{{ event.image }}" alt="{{ event.title }}" style="max-height:{{ event.size }}mm; max-width:25mm;">
+							{% endif %}
+
+							{% if event.image != "" and event_area.display_event_image and event.has_end is not True %}
+							<img class="event_image" src="{{ event.image }}" alt="{{ event.title }}" style="max-width:25mm;">
+							{% endif %}
+
+							{% if event_area.display_event_tags %}
+							<p class="event_para">{{ event.tag_string }}</p>
+							{% endif %}
+						</div>
+						{% if event_area.display_event_to_scale_line %}
+							<div class="event_to_scale_line" style="top:{{ event.position }}mm;"></div>
+						{% endif %}
 					{% endfor %}
 				</div>
 			</div>
         {% endfor %}
     </div>
 
-{% if timeline.has_tags %}
-    <div class="tag_key_area">
-        <p class="title_para h5">Tag Key</p>
-        {% for tag in timeline.tags %}
-        <div class="tag_box">
-            <p class="tag_title h6">{{ tag.name }}</p>
-            <p class="tag_description">{{ tag.description }}</p>
-        </div>
-        {% endfor %}
-    </div>
-{% endif %}
+	{% if timeline.has_tags %}
+		<div class="tag_key_area">
+			<p class="title_para h5">Tag Key</p>
+			{% for tag in timeline.tags %}
+			<div class="tag_box">
+				<p class="tag_title h6">{{ tag.name }}</p>
+				<p class="tag_description">{{ tag.description }}</p>
+			</div>
+			{% endfor %}
+		</div>
+	{% endif %}
+
+	<div class="modal" id="eventModal">
+	  <div class="modal-dialog modal-md">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h3 class="modal-title" id="eventModalTimeAndTitle">Event Time : Event Title</h3>
+			  <button type="button" id="modalCloseButton" class="btn-close" aria-label="Close" onclick="closeEventModal()"></button>
+			</div>
+			<div class="modal-body">
+			  <p id="eventModalDescription">Event Description</p>
+			  <img id="eventModalImage"
+			  src=""
+			  alt=""
+			  style="width:100%;max-width:1000px"
+              onerror="this.style.display='none'">
+			  <p id="eventModalTags">(Tag Name 1, Tag Name 2)</p>
+			</div>
+		  </div>
+	  </div>
+	</div>
 
 {% endblock content %}

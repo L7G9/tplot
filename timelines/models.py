@@ -10,10 +10,7 @@ class Timeline(models.Model):
     description = models.CharField(max_length=1000, blank=True)
 
     # scale
-    SCALE_LENGTHS = [
-        (1, "1cm"),
-        (2, "2cm"),
-        (3, "3cm"),
+    SCALE_UNIT_LENGTHS = [
         (4, "4cm"),
         (5, "5cm"),
         (6, "6cm"),
@@ -28,12 +25,18 @@ class Timeline(models.Model):
         (30, "30cm"),
     ]
     scale_length = models.PositiveSmallIntegerField(
-        choices=SCALE_LENGTHS, default=5
+        choices=SCALE_UNIT_LENGTHS, default=5
+    )
+
+    # pdf specific display layout
+    PAGE_SIZES = [("3", "A3"), ("4", "A4"), ("5", "A5")]
+    page_size = models.CharField(
+        max_length=1,
+        choices=PAGE_SIZES,
+        default="4"
     )
 
     # display layout
-    PAGE_SIZES = [("3", "A3"), ("4", "A4"), ("5", "A5")]
-    page_size = models.CharField(max_length=1, choices=PAGE_SIZES, default="4")
     PAGE_ORIENTATIONS = [
         ("L", "Landscape"),
         ("P", "Portrait"),
@@ -75,6 +78,13 @@ class EventArea(models.Model):
         default=1, validators=[MinValueValidator(1)],
     )
 
+    # what details to display in event box on timeline view
+    display_event_time = models.BooleanField(default=True)
+    display_event_description = models.BooleanField(default=True)
+    display_event_image = models.BooleanField(default=True)
+    display_event_tags = models.BooleanField(default=True)
+    display_event_to_scale_line = models.BooleanField(default=True)
+
     class Meta:
         ordering = ["name"]
         unique_together = ["timeline", "page_position"]
@@ -112,6 +122,7 @@ class Event(models.Model):
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000, blank=True)
+    image = models.ImageField(upload_to='images/', blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
     event_area = models.ForeignKey(
         EventArea,

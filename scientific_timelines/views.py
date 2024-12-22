@@ -1,3 +1,4 @@
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.http import FileResponse, HttpResponseForbidden
@@ -34,6 +35,7 @@ TIMELINE_FIELD_ORDER = [
     "page_size",
     "page_orientation",
     "page_scale_position",
+    "page_size",
 ]
 
 
@@ -112,6 +114,7 @@ class ScientificTimelineContextMixim:
 
 
 EVENT_FIELD_ORDER = [
+    "event_area",
     "start_year_fraction",
     "start_multiplier",
     "has_end",
@@ -119,7 +122,7 @@ EVENT_FIELD_ORDER = [
     "end_multiplier",
     "title",
     "description",
-    "event_area",
+    "image",
     "tags",
 ]
 
